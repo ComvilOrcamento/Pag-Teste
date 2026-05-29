@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comvil Orçamentos</title>
+    <title>Comvil Orçamentos e Catálogo</title>
     <style>
         :root {
             --primary: #003366;
@@ -20,8 +20,8 @@
         h1 { font-size: 24px; color: var(--primary); margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; text-align: center; }
 
         /* ABAS AJUSTADAS PARA CELULAR */
-        .tabs { display: flex; gap: 8px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; width: 100%; justify-content: center; }
-        .tab-btn { flex: 1; max-width: 150px; text-align: center; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px 6px 0 0; background: #f8fafc; cursor: pointer; font-weight: bold; color: var(--text-muted); margin-bottom: -2px; font-size: 14px; transition: all 0.2s; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; width: 100%; justify-content: center; flex-wrap: wrap; }
+        .tab-btn { flex: 1; min-width: 110px; max-width: 150px; text-align: center; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px 6px 0 0; background: #f8fafc; cursor: pointer; font-weight: bold; color: var(--text-muted); margin-bottom: -2px; font-size: 14px; transition: all 0.2s; }
         .tab-btn.active { background: white; color: var(--primary); border-bottom-color: transparent; position: relative; z-index: 2; }
 
         /* CONTEÚDOS */
@@ -54,7 +54,6 @@
         .logo-box img { max-height: 55px; max-width: 150px; object-fit: contain; display: block; }
         .secao-preview { margin-bottom: 15px; background: #fafafa; padding: 12px; border-radius: 6px; border-left: 3px solid #0056b3; font-size: 13px; line-height: 1.5; }
         .preview-titulo { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #777; margin-bottom: 5px; }
-        
         .rodape-contato-preview { margin-top: 15px; border: 1px solid #dddddd; padding: 12px; border-radius: 6px; background-color: #fafafa; text-align: center; font-size: 11px; color: #555555; line-height: 1.5; word-break: break-word; }
 
         /* AJUSTES CRÍTICOS PARA CELULARES */
@@ -66,10 +65,39 @@
             .logo-box { justify-content: center; width: 100%; }
             #preview-numeracao-topo_sacola, #preview-numeracao-topo_mao { text-align: center; width: 100%; font-size: 14px; }
         }
+        /* CONFIGURAÇÕES DE INTERFACE DO MOCKUP INTERNO */
+        .papel-triplo-wrapper { display: flex; gap: 10px; align-items: center; width: 100%; }
+        .picker-container { display: flex; flex-direction: column; width: 33.33%; }
+        .picker-label { font-size: 9px; font-weight: 700; color: #777777; text-transform: uppercase; margin-bottom: 4px; text-align: center; }
+        input[type="color"] { -webkit-appearance: none; border: 1px solid #cccccc; width: 100%; height: 38px; border-radius: 6px; cursor: pointer; background: none; padding: 0; }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 5px; }
+        .btn-kraft { width: 33.33%; height: 38px; background-color: #c2a67a; color: #ffffff; border: none; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; align-self: flex-end; }
+        .btn-kraft:hover { background-color: #b09468; }
+        .btn-kraft.active { border: 2px solid #003366; background-color: #9e8257; }
+        .cordao-grid { display: grid; grid-template-columns: repeat(9, 1fr); gap: 5px; background-color: #f8fafc; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .cordao-box { aspect-ratio: 1 / 1; border-radius: 4px; cursor: pointer; border: 2px solid #cbd5e1; transition: all 0.1s ease-in-out; }
+        .cordao-box:hover { transform: scale(1.1); border-color: #64748b; }
+        .cordao-box.active { border-color: #003366; box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.15); }
+        input[type="range"] { width: 100%; height: 5px; background: #e2e8f0; border-radius: 4px; outline: none; accent-color: #003366; cursor: pointer; }
+        .file-input-wrapper { position: relative; display: flex; align-items: center; border: 1px solid #cccccc; border-radius: 6px; padding: 5px; background-color: #ffffff; overflow: hidden; }
+        .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        .btn-file { background-color: #efefef; border: 1px solid #dddddd; padding: 5px 10px; border-radius: 4px; font-size: 12px; pointer-events: none; }
+        .file-text { font-size: 12px; color: #666666; margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .btn-action { width: 100%; border: none; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-generate { background-color: #28a745; color: #ffffff; }
+        .btn-generate:hover { background-color: #218838; }
+        .btn-download { background-color: #003366; color: #ffffff; }
+        .btn-download:hover { background-color: #002244; }
+        .btn-download:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        .preview-container { flex-grow: 1; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .preview-box { width: 100%; flex-grow: 1; display: flex; justify-content: center; align-items: center; background: #e8e8e8; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); border: 1px solid rgba(226, 232, 240, 0.8); touch-action: none; }
+        .preview-buttons-wrapper { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        canvas { max-width: 100%; max-height: 72vh; height: auto !important; object-fit: contain; display: block; border-radius: 8px; }
+        .hint-text { font-size: 11px; color: #888888; margin-top: 4px; font-weight: 500; text-align: center; }
     </style>
 </head>
 <body>
-
 <div class="orcamento-box">
     <h1>Comvil Orçamentos</h1>
     
@@ -80,7 +108,6 @@
         <button class="tab-btn" onclick="switchTab(event, 'tab-admin')">Painel Admin</button>
     </div>
 
-    
     <!-- ABA SACOLA -->
     <div id="tab-sacola" class="tab-content active">
         <div class="box-conteudo">
@@ -132,7 +159,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="field" style="margin-bottom: 12px;">
                 <label>Quantidade Mínima *</label>
                 <select id="qtd_sacola"></select>
@@ -170,6 +196,7 @@
             </div>
         </div>
     </div>
+
     <!-- ABA MÃO -->
     <div id="tab-mao" class="tab-content">
         <div class="box-conteudo">
@@ -182,7 +209,6 @@
                 <div class="field"><label>Telefone / WhatsApp *</label><input type="text" id="telCliente_mao" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" maxlength="15" required></div>
                 <div class="field"><label>E-mail</label><input type="email" id="emailCliente_mao" placeholder="email@exemplo.com"></div>
             </div>
-
             <h2>Itens do orçamento</h2>
             <div class="field" style="margin-bottom: 12px;">
                 <label>Modelo Comercial *</label>
@@ -206,7 +232,6 @@
             <div class="row">
                 <div class="field">
                     <label>Quantidade Mínima *</label>
-                    <!-- CHAMADA DA ATUALIZAÇÃO DA TAXA DA QUANTIDADE -->
                     <select id="selectQuantidade" onchange="verificarQuantidadeVariavel(this); atualizarTaxaQuantidadeMao();">
                         <option value="100">100 un</option>
                         <option value="200">200 un</option>
@@ -220,12 +245,10 @@
                 </div>
                 <div class="field" id="campoQtdVariavel" style="display: none;">
                     <label>Digite a Quantidade *</label>
-                    <!-- SE EDITAR MANUALMENTE, ATUALIZA A TAXA TAMBÉM -->
                     <input type="number" id="qtdManual" min="1" placeholder="Ex: 750" oninput="atualizarTaxaQuantidadeMao()">
                 </div>
             </div>
 
-            <!-- CAMPO OCULTO (INVISÍVEL) PARA ADICIONAR VALOR POR QUANTIDADE -->
             <input type="hidden" id="taxaOcultaQuantidadeMao" value="0">
 
             <h2>Dados de Atendimento</h2>
@@ -260,855 +283,195 @@
             </div>
         </div>
     </div>
-        <!-- ABA MOCKUP SACOLA -->
+    <!-- ABA MOCKUP SACOLA -->
     <div id="tab-mockup" class="tab-content">
         <div class="box-conteudo">
-            
-            <!-- COLE O SEU CÓDIGO DA NOVA ABA EXATAMENTE AQUI DENTRO -->
-            
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mockup Premium - Comvil Brindes</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #f3f6f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            display: flex;
-            width: 100%;
-            max-width: 1350px;
-            gap: 25px;
-            align-items: stretch;
-        }
-
-        /* CORREÇÃO: Coluna esquerda reduzida em mais 15% (De 35% para 20%) */
-        .form-container {
-            background-color: #ffffff;
-            padding: 20px 22px;
-            border-radius: 12px;
-            width: 20%; 
-            min-width: 280px; /* Reduzido o mínimo para permitir o encolhimento visual */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            max-height: 95vh;
-            overflow-y: auto;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #555555;
-            margin-bottom: 5px;
-        }
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 6px;
-            background-color: #ffffff;
-            color: #333333;
-            font-size: 13px;
-            outline: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 14px;
-        }
-
-        .papel-triplo-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .picker-container {
-            display: flex;
-            flex-direction: column;
-            width: 33.33%;
-        }
-
-        .picker-label {
-            font-size: 9px;
-            font-weight: 700;
-            color: #777777;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-            text-align: center;
-        }
-
-        input[type="color"] {
-            -webkit-appearance: none;
-            border: 1px solid #cccccc;
-            width: 100%;
-            height: 38px;
-            border-radius: 6px;
-            cursor: pointer;
-            background: none;
-            padding: 0;
-        }
-
-        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 5px; }
-
-        .btn-kraft {
-            width: 33.33%;
-            height: 38px;
-            background-color: #c2a67a;
-            color: #ffffff;
-            border: none;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            align-self: flex-end;
-        }
-
-        .btn-kraft:hover { background-color: #b09468; }
-        .btn-kraft.active { border: 2px solid #003366; background-color: #9e8257; }
-
-        .cordao-grid {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 5px;
-            background-color: #f8fafc;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .cordao-box {
-            aspect-ratio: 1 / 1;
-            border-radius: 4px;
-            cursor: pointer;
-            border: 2px solid #cbd5e1;
-            transition: all 0.1s ease-in-out;
-        }
-
-        .cordao-box:hover { transform: scale(1.1); border-color: #64748b; }
-        .cordao-box.active { border-color: #003366; box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.15); }
-
-        input[type="range"] {
-            width: 100%;
-            height: 5px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            outline: none;
-            accent-color: #003366;
-            cursor: pointer;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            border: 1px solid #cccccc;
-            border-radius: 6px;
-            padding: 5px;
-            background-color: #ffffff;
-            overflow: hidden;
-        }
-
-        .file-input-wrapper input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .btn-file {
-            background-color: #efefef;
-            border: 1px solid #dddddd;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            pointer-events: none;
-        }
-
-        .file-text {
-            font-size: 12px;
-            color: #666666;
-            margin-left: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .btn-action {
-            width: 100%;
-            border: none;
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-generate { background-color: #28a745; color: #ffffff; }
-        .btn-generate:hover { background-color: #218838; }
-
-        .btn-download { background-color: #003366; color: #ffffff; }
-        .btn-download:hover { background-color: #002244; }
-        .btn-download:disabled { background-color: #bdc3c7; cursor: not-allowed; }
-
-        /* CORREÇÃO: Coluna direita expandida compensando os 15% tirados da esquerda (De 65% para 80%) */
-        .preview-container {
-            flex-grow: 1;
-            width: 80%; 
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .preview-box {
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #e8e8e8; 
-            border-radius: 16px;
-            padding: 25px; 
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            touch-action: none;
-        }
-
-        .preview-buttons-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        canvas {
-            max-width: 100%;
-            max-height: 72vh; 
-            height: auto !important;
-            object-fit: contain;
-            display: block;
-            border-radius: 8px;
-        }
-
-        .hint-text {
-            font-size: 11px;
-            color: #888888;
-            margin-top: 4px;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        @media (max-width: 820px) {
-            .container { flex-direction: column; gap: 20px; }
-            .form-container { width: 100%; max-height: none; min-width: 100%; }
-            .preview-container { width: 100%; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- COLUNA DA ESQUERDA: APENAS CONFIGURAÇÕES (REDUZIDA) -->
-        <div class="form-container">
-            <!-- REMOVIDO: TÍTULO MOCKUP DE SACOLA DAQUI -->
-            <form id="mockupForm">
-                <div class="form-group">
-                    <label for="modelo">Variação *</label>
-                    <select id="modelo">
-                        <option value="vertical">Vertical</option>
-                        <option value="horizontal">Horizontal</option>
-                    </select>
+            <div style="display: flex; width: 100%; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 260px;">
+                    <form id="mockupForm">
+                        <div class="field" style="margin-bottom: 12px;">
+                            <label for="modelo">Variação *</label>
+                            <select id="modelo">
+                                <option value="vertical">Vertical</option>
+                                <option value="horizontal">Horizontal</option>
+                            </select>
+                        </div>
+                        <div class="field" style="margin-bottom: 12px;">
+                            <label>Configuração da Cor de Papel *</label>
+                            <div class="papel-triplo-wrapper">
+                                <div class="picker-container">
+                                    <span class="picker-label">Frente</span>
+                                    <input type="color" id="cor-frente" value="#ffffff">
+                                </div>
+                                <div class="picker-container">
+                                    <span class="picker-label">Lateral</span>
+                                    <input type="color" id="cor-lateral" value="#ffffff">
+                                </div>
+                                <button type="button" id="btnKraft" class="btn-kraft">Kraft</button>
+                            </div>
+                        </div>
+                        <div class="field" style="margin-bottom: 12px;">
+                            <label>Cordão *</label>
+                            <div class="cordao-grid" id="cordaoGrid"></div>
+                        </div>
+                        <div class="field" style="margin-bottom: 12px;">
+                            <label>Logotipo do Cliente (PNG Transparente) *</label>
+                            <div class="file-input-wrapper">
+                                <button type="button" class="btn-file">Escolher ficheiro</button>
+                                <span id="file-text" class="file-text">Nenhum ficheiro selecionado</span>
+                                <input type="file" id="logo" accept="image/png">
+                            </div>
+                        </div>
+                        <div class="field" style="margin-bottom: 12px;">
+                            <label for="logo-zoom">Tamanho do Logotipo (Zoom)</label>
+                            <input type="range" id="logo-zoom" min="10" max="70" value="35">
+                        </div>
+                        <div class="field" style="margin-bottom: 12px;">
+                            <label for="logo-giro">Giro do Logotipo (Rotação)</label>
+                            <input type="range" id="logo-giro" min="-15" max="15" value="0" step="0.5">
+                        </div>
+                    </form>
                 </div>
-
-                <div class="form-group">
-                    <label>Configuração da Cor de Papel *</label>
-                    <div class="papel-triplo-wrapper">
-                        <div class="picker-container">
-                            <span class="picker-label">Frente</span>
-                            <input type="color" id="cor-frente" value="#ffffff">
-                        </div>
-                        <div class="picker-container">
-                            <span class="picker-label">Lateral</span>
-                            <input type="color" id="cor-lateral" value="#ffffff">
-                        </div>
-                        <button type="button" id="btnKraft" class="btn-kraft">Kraft</button>
+                <div class="preview-container" style="flex: 2; min-width: 320px;">
+                    <div class="preview-box">
+                        <canvas id="mockupCanvas"></canvas>
+                    </div>
+                    <div class="preview-buttons-wrapper">
+                        <button type="button" id="btnGenerateJPEG" class="btn-action btn-generate">⚙️ Gerar Mockup (JPEG)</button>
+                        <button type="button" id="btnDownloadLayout" class="btn-action btn-download" disabled>💾 Descarregar Layout</button>
+                        <span class="hint-text">💡 Arraste na tela para mover / Use as barras para zoom e giro</span>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Cordão *</label>
-                    <div class="cordao-grid" id="cordaoGrid"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>Logotipo do Cliente (PNG Transparente) *</label>
-                    <div class="file-input-wrapper">
-                        <button type="button" class="btn-file">Escolher ficheiro</button>
-                        <span id="file-text" class="file-text">Nenhum ficheiro selecionado</span>
-                        <input type="file" id="logo" accept="image/png">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="logo-zoom">Tamanho do Logotipo (Zoom)</label>
-                    <input type="range" id="logo-zoom" min="10" max="70" value="35">
-                </div>
-
-                <div class="form-group">
-                    <label for="logo-giro">Giro do Logotipo (Rotação)</label>
-                    <input type="range" id="logo-giro" min="-15" max="15" value="0" step="0.5">
-                </div>
-            </form>
-            <!-- REMOVIDO: BLOCO CONFIGURAÇÕES DO MOCKUP DAQUI -->
-        </div>
-
-        <!-- COLUNA DA DIREITA: CANVAS E BOTÕES (ALARGADA) -->
-        <div class="preview-container">
-            <div class="preview-box">
-                <canvas id="mockupCanvas"></canvas>
-            </div>
-            
-            <div class="preview-buttons-wrapper">
-                <button type="button" id="btnGenerateJPEG" class="btn-action btn-generate">⚙️ Gerar Mockup (JPEG)</button>
-                <button type="button" id="btnDownloadLayout" class="btn-action btn-download" disabled>💾 Descarregar Layout</button>
-                <span class="hint-text">💡 Arraste na tela para mover / Use as barras para zoom e giro</span>
             </div>
         </div>
     </div>
-    <script>
-        const canvas = document.getElementById('mockupCanvas');
-        const ctx = canvas.getContext('2d');
 
-        const elModelo = document.getElementById('modelo');
-        const elCorFrente = document.getElementById('cor-frente');
-        const elCorLateral = document.getElementById('cor-lateral');
-        const elBtnKraft = document.getElementById('btnKraft');
-        const elInputLogo = document.getElementById('logo');
-        const elFileText = document.getElementById('file-text');
-        const elCordaoGrid = document.getElementById('cordaoGrid');
-        
-        const elLogoZoom = document.getElementById('logo-zoom');
-        const elLogoGiro = document.getElementById('logo-giro');
-        const btnGenerateJPEG = document.getElementById('btnGenerateJPEG');
-        const btnDownloadLayout = document.getElementById('btnDownloadLayout');
-
-        let imgBase = new Image();       
-        let imgFrente = new Image();     
-        let imgLateral = new Image();    
-        let imgCordao = new Image();     
-        let imgLogo = new Image();
-        let imgEmpresa = new Image(); 
-        
-        let modoKraftAtivo = false;
-        let logoCarregada = false;
-        let logoEmpresaPronta = false;
-        let mockupGeradoComRodape = false;
-        let corCordaoSelecionada = "#ffffff"; 
-
-        let logoX = 0; 
-        let logoY = 0; 
-        let arrastandoLogo = false;
-        let offsetMouseX = 0;
-        let offsetMouseY = 0;
-        
-        let logoAtualWidth = 0;
-        let logoAtualHeight = 0;
-
-        const mostruarioCordao = [
-            { nome: "Branco", hex: "#ffffff" }, { nome: "Preto", hex: "#000000" },
-            { nome: "Cinza Claro", hex: "#8c8c8c" }, { nome: "Azul Caneta", hex: "#0b2bc6" },
-            { nome: "Azul Claro", hex: "#7ec8e3" }, { nome: "Verde Escuro", hex: "#006129" },
-            { nome: "Verde Pistache", hex: "#74b74b" }, { nome: "Vermelho", hex: "#e5121c" },
-            { nome: "Rosa BB", hex: "#ffa3cc" }, { nome: "Pink", hex: "#cb1661" },
-            { nome: "Laranja", hex: "#ff5100" }, { nome: "Amarelo Ouro", hex: "#ffc800" },
-            { nome: "Amarelo Limão", hex: "#fff700" }, { nome: "Roxo", hex: "#520188" },
-            { nome: "Violeta Claro", hex: "#8700ff" }, { nome: "Vinho Escuro", hex: "#510224" },
-            { nome: "Marrom Café", hex: "#86725e" }, { nome: "Bege Kraft", hex: "#cba277" }
-        ];
-
-        imgEmpresa.crossOrigin = "anonymous";
-        imgEmpresa.onload = function() { logoEmpresaPronta = true; };
-        imgEmpresa.src = 'logo-empresa.png';
-
-        function renderizarGradeCordoes() {
-            elCordaoGrid.innerHTML = "";
-            mostruarioCordao.forEach(cor => {
-                const box = document.createElement('div');
-                box.className = "cordao-box";
-                box.style.backgroundColor = cor.hex;
-                box.title = cor.nome;
-                if (cor.hex === corCordaoSelecionada) box.classList.add('active');
-                box.addEventListener('click', function() {
-                    document.querySelectorAll('.cordao-box').forEach(b => b.classList.remove('active'));
-                    box.classList.add('active');
-                    corCordaoSelecionada = cor.hex;
-                    mockupGeradoComRodape = false;
-                    btnDownloadLayout.disabled = true;
-                    processarETingirMockup(false);
-                });
-                elCordaoGrid.appendChild(box);
-            });
-        }
-
-        function criarCamadaColorida(imgMascara, corHex) {
-            const buffer = document.createElement('canvas');
-            buffer.width = canvas.width;
-            buffer.height = canvas.height;
-            const bCtx = buffer.getContext('2d');
-            if (imgMascara.complete && imgMascara.naturalWidth !== 0) {
-                bCtx.drawImage(imgMascara, 0, 0);
-                bCtx.globalCompositeOperation = 'source-in';
-                bCtx.fillStyle = corHex;
-                bCtx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-            return buffer;
-        }
-
-        function processarETingirMockup(incluirRodape = false) {
-            if (!imgBase.complete || imgBase.naturalWidth === 0) return;
-
-            canvas.width = imgBase.naturalWidth;
-            canvas.height = incluirRodape ? imgBase.naturalHeight + 110 : imgBase.naturalHeight;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#e8e8e8";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.save();
-            ctx.shadowColor = "rgba(0, 0, 0, 0.38)"; 
-            ctx.shadowBlur = imgBase.naturalWidth * 0.04;    
-            ctx.shadowOffsetX = imgBase.naturalWidth * 0.015; 
-            ctx.shadowOffsetY = imgBase.naturalHeight * 0.025; 
-            ctx.drawImage(imgBase, 0, 0);
-            ctx.restore();
-
-            if (imgFrente.complete && imgFrente.naturalWidth > 0) {
-                const corFinalFrente = modoKraftAtivo ? "#c2a67a" : elCorFrente.value;
-                const camadaFrente = criarCamadaColorida(imgFrente, corFinalFrente);
-                ctx.drawImage(camadaFrente, 0, 0);
-            }
-
-            if (imgLateral.complete && imgLateral.naturalWidth > 0) {
-                const corFinalLateral = modoKraftAtivo ? "#c2a67a" : elCorLateral.value;
-                const camadaLateral = criarCamadaColorida(imgLateral, corFinalLateral);
-                ctx.drawImage(camadaLateral, 0, 0);
-            }
-
-            if (logoCarregada && imgLogo.complete && imgLogo.naturalWidth > 0) {
-                ctx.save();
-                let percentualZoom = elLogoZoom.value / 100;
-                logoAtualWidth = imgBase.naturalWidth * percentualZoom;
-                let proporcao = (imgLogo.naturalHeight / imgLogo.naturalWidth);
-                logoAtualHeight = proporcao * logoAtualWidth;
-                
-                ctx.translate(logoX, logoY);
-                let giroManualRad = (parseFloat(elLogoGiro.value) * Math.PI) / 180;
-                ctx.rotate(giroManualRad);
-
-                if (elModelo.value === 'horizontal') {
-                    ctx.transform(1, 0, -0.200, 1, 0, 0); 
-                } else {
-                    ctx.transform(1, 0, -0.080, 1, 0, 0); 
-                }
-                ctx.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
-                ctx.restore();
-            }
-
-            if (imgCordao.complete && imgCordao.naturalWidth > 0) {
-                const camadaCordao = criarCamadaColorida(imgCordao, corCordaoSelecionada);
-                ctx.drawImage(camadaCordao, 0, 0);
-            }
-
-            ctx.save();
-            ctx.globalCompositeOperation = 'multiply';
-            ctx.drawImage(imgBase, 0, 0);
-            ctx.restore();
-
-            if (incluirRodape) {
-                ctx.save();
-                ctx.fillStyle = "#e8e8e8";
-                ctx.fillRect(0, imgBase.naturalHeight, canvas.width, 110);
-
-                ctx.strokeStyle = "rgba(0, 0, 0, 0.05)";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(30, imgBase.naturalHeight);
-                ctx.lineTo(canvas.width - 30, imgBase.naturalHeight);
-                ctx.stroke();
-
-                let altDesejada = 34; 
-                let centroCanvasX = canvas.width / 2;
-
-                ctx.textAlign = "center";
-
-                if (logoEmpresaPronta && imgEmpresa.naturalWidth > 0) {
-                    let largCalculada = (imgEmpresa.naturalWidth / imgEmpresa.naturalHeight) * altDesejada;
-                    ctx.drawImage(imgEmpresa, centroCanvasX - (largCalculada / 2), imgBase.naturalHeight + 15, largCalculada, altDesejada);
-                }
-
-                ctx.fillStyle = "#1e293b";
-                ctx.font = "bold 13.5px sans-serif";
-                ctx.fillText("COMVIL BRINDES", centroCanvasX, imgBase.naturalHeight + 64);
-                
-                ctx.font = "10.5px sans-serif";
-                ctx.fillStyle = "#475569";
-                ctx.fillText("CNPJ: 36.206.286/0001-03  |  ✉ comvil@comvil.com.br", centroCanvasX, imgBase.naturalHeight + 80);
-                ctx.fillText("☎ Fixo: 11 3461-0813  |  📱 WhatsApp: 11 97024-3064", centroCanvasX, imgBase.naturalHeight + 94);
-                ctx.restore();
-            }
-        }
-        function resetarPosicaoLogoPadrao() {
-            if (!imgBase.naturalWidth) return;
-            if (elModelo.value === 'horizontal') {
-                logoX = imgBase.naturalWidth * 0.48;
-                logoY = imgBase.naturalHeight * 0.54;
-            } else {
-                logoX = imgBase.naturalWidth * 0.50;
-                logoY = imgBase.naturalHeight * 0.53;
-            }
-        }
-
-        function carregarArquivosDoServidor() {
-            const sentido = elModelo.value;
-            let carregadas = 0;
-            function verificarPronto() {
-                carregadas++;
-                if (carregadas === 4) {
-                    resetarPosicaoLogoPadrao();
-                    mockupGeradoComRodape = false;
-                    btnDownloadLayout.disabled = true;
-                    processarETingirMockup(false);
-                }
-            }
-            imgBase.crossOrigin = "anonymous"; imgFrente.crossOrigin = "anonymous";
-            imgLateral.crossOrigin = "anonymous"; imgCordao.crossOrigin = "anonymous";
-            imgBase.onload = verificarPronto; imgFrente.onload = verificarPronto;
-            imgLateral.onload = verificarPronto; imgCordao.onload = verificarPronto;
-            imgBase.src = `sacola_${sentido}_base.png?v=${Date.now()}`;
-            imgFrente.src = `sacola_${sentido}_frente.png?v=${Date.now()}`;
-            imgLateral.src = `sacola_${sentido}_lateral.png?v=${Date.now()}`;
-            imgCordao.src = `sacola_${sentido}_cordao.png?v=${Date.now()}`;
-        }
-
-        elInputLogo.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                elFileText.textContent = e.target.files[0].name;
-                const leitorBase64 = new FileReader();
-                leitorBase64.onload = function(evt) {
-                    logoCarregada = false; imgLogo = new Image();
-                    imgLogo.onload = function() {
-                        logoCarregada = true; resetarPosicaoLogoPadrao();
-                        mockupGeradoComRodape = false; btnDownloadLayout.disabled = true;
-                        processarETingirMockup(false); 
-                    };
-                    imgLogo.src = evt.target.result;
-                };
-                leitorBase64.readAsDataURL(e.target.files[0]);
-            }
-        });
-
-        function obterCoordenadasPointer(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: (e.clientX - rect.left) * (canvas.width / rect.width),
-                y: (e.clientY - rect.top) * (canvas.height / rect.height)
-            };
-        }
-
-        canvas.addEventListener('pointerdown', function(e) {
-            if (!logoCarregada) return;
-            canvas.setPointerCapture(e.pointerId); 
-            const mouse = obterCoordenadasPointer(e);
-            if (mouse.x >= logoX - logoAtualWidth/2 && mouse.x <= logoX + logoAtualWidth/2 &&
-                mouse.y >= logoY - logoAtualHeight/2 && mouse.y <= logoY + logoAtualHeight/2) {
-                arrastandoLogo = true;
-                offsetMouseX = mouse.x - logoX; offsetMouseY = mouse.y - logoY;
-                canvas.style.cursor = "grabbing"; mockupGeradoComRodape = false; btnDownloadLayout.disabled = true;
-            }
-        });
-
-        canvas.addEventListener('pointermove', function(e) {
-            if (!logoCarregada) return;
-            const mouse = obterCoordenadasPointer(e);
-            if (arrastandoLogo) {
-                logoX = mouse.x - offsetMouseX; logoY = mouse.y - offsetMouseY;
-                processarETingirMockup(false); 
-            } else {
-                if (mouse.x >= logoX - logoAtualWidth/2 && mouse.x <= logoX + logoAtualWidth/2 &&
-                    mouse.y >= logoY - logoAtualHeight/2 && mouse.y <= logoY + logoAtualHeight/2) {
-                    canvas.style.cursor = "pointer";
-                } else { canvas.style.cursor = "default"; }
-            }
-        });
-
-        canvas.addEventListener('pointerup', function(e) {
-            if (arrastandoLogo) { canvas.releasePointerCapture(e.pointerId); arrastandoLogo = false; canvas.style.cursor = "default"; }
-        });
-
-        btnGenerateJPEG.addEventListener('click', function() {
-            processarETingirMockup(true); mockupGeradoComRodape = true; btnDownloadLayout.disabled = false; 
-        });
-
-        btnDownloadLayout.addEventListener('click', function() {
-            if (!mockupGeradoComRodape) return;
-            const link = document.createElement('a');
-            const sentido = elModelo.value;
-            link.download = `proposta-comvil-${sentido}.jpg`;
-            link.href = canvas.toDataURL("image/jpeg", 1.0);
-            link.click();
-        });
-
-        elBtnKraft.addEventListener('click', function() {
-            modoKraftAtivo = !modoKraftAtivo;
-            if (modoKraftAtivo) this.classList.add('active'); else this.classList.remove('active');
-            mockupGeradoComRodape = false; btnDownloadLayout.disabled = true; processarETingirMockup(false);
-        });
-
-        elCorFrente.addEventListener('input', () => { modoKraftAtivo = false; elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; btnDownloadLayout.disabled = true; processarETingirMockup(false); });
-        elCorLateral.addEventListener('input', () => { modoKraftAtivo = false; elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; btnDownloadLayout.disabled = true; processarETingirMockup(false); });
-        elLogoZoom.addEventListener('input', () => { mockupGeradoComRodape = false; btnDownloadLayout.disabled = true; processarETingirMockup(false); });
-        elLogoGiro.addEventListener('input', () => { mockupGeradoComRodape = false; btnDownloadLayout.disabled = true; processarETingirMockup(false); });
-        elModelo.addEventListener('change', carregarArquivosDoServidor);
-
-        window.addEventListener('DOMContentLoaded', () => { renderizarGradeCordoes(); carregarArquivosDoServidor(); });
-    </script>
-
-            <!-- FIM ABA MOCKUP SACOLA -->
-
-        <!-- ABA PAINEL ADMIN -->
-    
+    <!-- ABA PAINEL ADMIN -->
     <div id="tab-admin" class="tab-content">
         <div class="box-conteudo">
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field w-nome" style="width: 60%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
-        <input type="text" id="prodNome" onclick="this.select()" placeholder="Ex: Sacola Offset 180g - 18x24x8" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-preco" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Base (R$)</label>
-        <input type="number" id="prodPreco" min="0" step="0.01" onclick="this.select()" placeholder="0.78" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-acao" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <button class="btn-add" onclick="adicionarProdutoAdmin()" style="background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; width: 100%; height: 38px; display: flex; align-items: center; justify-content: center;">Adicionar</button>
-    </div>
-</div>
-<div class="table-container" style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 15px; margin-bottom: 25px;">
-    <table class="data-table" id="tableProdutosAdmin" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed;">
-        <thead>
-            <tr style="background: #f8fafc; color: #334155;">
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 60%;">Nome Comercial</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Preço Base (R$)</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Cordões / Alças</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field w-nome" style="width: 60%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Tipo de Alça / Cordão</label>
-        <input type="text" id="cordaoNomeAdmin" onclick="this.select()" placeholder="Ex: Nylon, Gorgurão, Fita" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-preco" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço (R$)</label>
-        <input type="number" id="cordaoPrecoAdmin" min="0" step="0.01" onclick="this.select()" placeholder="0.20" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-acao" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <button class="btn-add" onclick="adicionarCordaoAdmin()" style="background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; width: 100%; height: 38px; display: flex; align-items: center; justify-content: center;">Adicionar</button>
-    </div>
-</div>
-<div class="table-container" style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 15px; margin-bottom: 25px;">
-    <table class="data-table" id="tableCordoesAdmin" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed;">
-        <thead>
-            <tr style="background: #f8fafc; color: #334155;">
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 60%;">Tipo de Alça</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Preço Unitário (R$)</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos de Acabamentos e Furos</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Adicionar Ilhós?</label>
-        <select id="statusIlhosAdmin" onchange="toggleCustoCampoAdmin('statusIlhosAdmin', 'fixoIlhosAdmin')" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-        </select>
-    </div>
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Custo Ilhós (R$)</label>
-        <input type="number" id="fixoIlhosAdmin" min="0" step="0.01" onclick="this.select()" placeholder="0.20" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Adicionar Furo Laço?</label>
-        <select id="statusFuroAdmin" onchange="toggleCustoCampoAdmin('statusFuroAdmin', 'fixoFuroAdmin')" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-        </select>
-    </div>
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Custo Furo Laço (R$)</label>
-        <input type="number" id="fixoFuroAdmin" min="0" step="0.01" onclick="this.select()" placeholder="0.15" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-</div>
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custo Adicional Fixo de Cores (Sacola)</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;"><label style="font-size: 12px; font-weight: bold; color: #475569;">Custo Cores 1x0 (R$)</label><input type="number" id="cor1x0Admin" min="0" step="0.01" onclick="this.select()" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;"></div>
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;"><label style="font-size: 12px; font-weight: bold; color: #475569;">Custo Cores 2x0 (R$)</label><input type="number" id="cor2x0Admin" min="0" step="0.01" onclick="this.select()" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;"></div>
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;"><label style="font-size: 12px; font-weight: bold; color: #475569;">Custo Cores 4x0 (R$)</label><input type="number" id="cor4x0Admin" min="0" step="0.01" onclick="this.select()" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;"></div>
-    <div class="field" style="width: 25%; display: flex; flex-direction: column; gap: 4px;"><label style="font-size: 12px; font-weight: bold; color: #475569;">Custo Cores 4x1 (R$)</label><input type="number" id="cor4x1Admin" min="0" step="0.01" onclick="this.select()" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;"></div>
-</div>
+            <div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
+            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                <div class="field" style="width: 60%;">
+                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
+                    <input type="text" id="prodNome" placeholder="Ex: Sacola Offset 180g - 18x24x8">
+                </div>
+                <div class="field" style="width: 20%;">
+                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Base (R$)</label>
+                    <input type="number" id="prodPreco" min="0" step="0.01" placeholder="0.78">
+                </div>
+                <div class="field" style="width: 20%;">
+                    <button class="btn-principal" onclick="adicionarProdutoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
+                </div>
+            </div>
+            <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                <table id="tableProdutosAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Nome</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Cordões / Alças</div>
+            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                <div class="field" style="width: 60%;">
+                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Tipo de Alça / Cordão</label>
+                    <input type="text" id="cordaoNomeAdmin" placeholder="Ex: Nylon, Gorgurão">
+                </div>
+                <div class="field" style="width: 20%;">
+                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço (R$)</label>
+                    <input type="number" id="cordaoPrecoAdmin" min="0" step="0.01" placeholder="0.20">
+                </div>
+                <div class="field" style="width: 20%;">
+                    <button class="btn-principal" onclick="adicionarCordaoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
+                </div>
+            </div>
+            <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                <table id="tableCordoesAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Alça</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
 
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos Fixos de Configuração (Mão de Torcida)</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field" style="width: 100%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Valor Start Mão de Torcida (R$)</label>
-        <input type="number" id="valorStartMaoAdmin" min="0" step="0.01" onclick="this.select()" placeholder="150.00" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-</div>
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Modelos de Mão (E.V.A)</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field w-nome" style="width: 60%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial do Modelo de Mão</label>
-        <input type="text" id="maoNomeAdmin" onclick="this.select()" placeholder="Ex: Mão Tradicional 40cm" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-preco" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Base (R$)</label>
-        <input type="number" id="maoPrecoAdmin" min="0" step="0.01" onclick="this.select()" placeholder="2.50" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-acao" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <button class="btn-add" onclick="adicionarModeloMaoAdmin()" style="background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; width: 100%; height: 38px; display: flex; align-items: center; justify-content: center;">Adicionar</button>
-    </div>
-</div>
-<div class="table-container" style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 15px; margin-bottom: 25px;">
-    <table class="data-table" id="tableModelosMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed;">
-        <thead>
-            <tr style="background: #f8fafc; color: #334155;">
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 60%;">Modelo de Mão</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Preço Base (R$)</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Cores de Impressão</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field w-nome" style="width: 60%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome della Cor de Impressão</label>
-        <input type="text" id="evaCorNomeAdmin" onclick="this.select()" placeholder="Ex: Azul Comercial, Amarelo" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-preco" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Extra (R$)</label>
-        <input type="number" id="evaCorPrecoAdmin" min="0" step="0.01" onclick="this.select()" placeholder="0.00" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-acao" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <button class="btn-add" onclick="adicionarCorEvaAdmin()" style="background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; width: 100%; height: 38px; display: flex; align-items: center; justify-content: center;">Adicionar</button>
-    </div>
-</div>
-<div class="table-container" style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 15px; margin-bottom: 25px;">
-    <table class="data-table" id="tableCoresEvaAdmin" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed;">
-        <thead>
-            <tr style="background: #f8fafc; color: #334155;">
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 60%;">Cores Disponíveis</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Preço Extra (R$)</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-<div class="sub-titulo-secao" style="font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Taxas Adicionais por Lote de Quantidade (Mão)</div>
-<div class="form-row" style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-    <div class="field w-nome" style="width: 60%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Lote de Quantidade (Unidades)</label>
-        <select id="taxaMaoQtdAlvoAdmin" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-            <option value="100">100 un</option>
-            <option value="200">200 un</option>
-            <option value="300">300 un</option>
-            <option value="500">500 un</option>
-            <option value="1000">1000 un</option>
-            <option value="2000">2000 un</option>
-            <option value="5000">5000 un</option>
-            <option value="Variavel">Outra Quantidade (Variável)</option>
-        </select>
-    </div>
-    <div class="field w-preco" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <label style="font-size: 12px; font-weight: bold; color: #475569;">Valor Adicional (R$)</label>
-        <input type="number" id="taxaMaoValorAdmin" min="0" step="0.01" onclick="this.select()" placeholder="0.00" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px;">
-    </div>
-    <div class="field w-acao" style="width: 20%; display: flex; flex-direction: column; gap: 4px;">
-        <button class="btn-add" onclick="atualizarObjetoTaxaMaoAdmin()" style="background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; width: 100%; height: 38px; display: flex; align-items: center; justify-content: center;">Definir</button>
-    </div>
-</div>
-<div class="table-container" style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 15px; margin-bottom: 25px;">
-    <table class="data-table" id="tableTaxasQuantidadeMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed;">
-        <thead>
-            <tr style="background: #f8fafc; color: #334155;">
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 60%;">Lote do Menu</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Taxa Injetada (R$)</th>
-                <th style="border-bottom: 2px solid #cbd5e1; padding: 10px; text-align: left; font-weight: bold; width: 20%;">Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
+            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos de Acabamentos e Cores (Sacola)</div>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Ilhós?</label><select id="statusIlhosAdmin" onchange="toggleCustoCampoAdmin('statusIlhosAdmin', 'fixoIlhosAdmin')"><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Valor Ilhós</label><input type="number" id="fixoIlhosAdmin" step="0.01"></div>
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Furo?</label><select id="statusFuroAdmin" onchange="toggleCustoCampoAdmin('statusFuroAdmin', 'fixoFuroAdmin')"><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Valor Furo</label><input type="number" id="fixoFuroAdmin" step="0.01"></div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 1x0</label><input type="number" id="cor1x0Admin" step="0.01"></div>
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 2x0</label><input type="number" id="cor2x0Admin" step="0.01"></div>
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x0</label><input type="number" id="cor4x0Admin" step="0.01"></div>
+                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x1</label><input type="number" id="cor4x1Admin" step="0.01"></div>
+            </div>
+            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração Mão de Torcida (E.V.A.)</div>
+            <div class="field" style="margin-bottom: 12px;">
+                <label>Valor Start Lote Mão (R$)</label>
+                <input type="number" id="valorStartMaoAdmin" step="0.01">
+            </div>
+            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                <div class="field" style="width: 60%;"><label>Modelo Mão</label><input type="text" id="maoNomeAdmin" placeholder="Ex: Modelo Rock"></div>
+                <div class="field" style="width: 20%;"><label>Preço</label><input type="number" id="maoPrecoAdmin" step="0.01"></div>
+                <div class="field" style="width: 20%;"><button class="btn-principal" onclick="adicionarModeloMaoAdmin()" style="margin:0; height:38px; padding:0;">Add</button></div>
+            </div>
+            <div style="max-height: 130px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                <table id="tableModelosMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Modelo</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
 
-<div class="action-zone" style="border-top: 2px solid #e2e8f0; padding-top: 20px; margin-top: 25px; display: flex; gap: 15px;">
-    <button class="btn-save" onclick="salvarAlteracoesAdminLocais()" style="flex: 1; background: #003366; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0, 51, 102, 0.2);">Salvar no Sistema</button>
-    <button class="btn-export" onclick="exportarJsonAdminAtualizado()" style="flex: 1; background: #10b981; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);">Baixar dados.json</button>
-</div>
+            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                <div class="field" style="width: 60%;"><label>Nome da Cor de Estampa</label><input type="text" id="evaCorNomeAdmin" placeholder="Ex: Vermelho"></div>
+                <div class="field" style="width: 20%;"><label>Preço Extra</label><input type="number" id="evaCorPrecoAdmin" step="0.01"></div>
+                <div class="field" style="width: 20%;"><button class="btn-principal" onclick="adicionarCorEvaAdmin()" style="margin:0; height:38px; padding:0;">Add</button></div>
+            </div>
+            <div style="max-height: 130px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                <table id="tableCoresEvaAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Cor</th><th style="padding: 8px; text-align: left; width: 20%;">Extra</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
 
+            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Taxas Adicionais por Lote (Mão)</div>
+            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                <div class="field" style="width: 60%;">
+                    <label>Selecione o Lote</label>
+                    <select id="taxaMaoQtdAlvoAdmin">
+                        <option value="100">100 un</option><option value="200">200 un</option><option value="300">300 un</option>
+                        <option value="500">500 un</option><option value="1000">1000 un</option><option value="2000">2000 un</option>
+                        <option value="5000">5000 un</option><option value="Variavel">Variável</option>
+                    </select>
+                </div>
+                <div class="field" style="width: 20%;"><label>Taxa (R$)</label><input type="number" id="taxaMaoValorAdmin" step="0.01"></div>
+                <div class="field" style="width: 20%;"><button class="btn-principal" onclick="atualizarObjetoTaxaMaoAdmin()" style="margin:0; height:38px; padding:0;">Definir</button></div>
+            </div>
+            <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 25px;">
+                <table id="tableTaxasQuantidadeMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Lote do Sistema</th><th style="padding: 8px; text-align: left; width: 20%;">Taxa</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div style="display: flex; gap: 15px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
+                <button class="btn-principal" onclick="salvarAlteracoesAdminLocais()" style="margin:0; background: #003366; flex:1;">Salvar no Sistema</button>
+                <button class="btn-principal" onclick="exportarJsonAdminAtualizado()" style="margin:0; background: #10b981; flex:1;">Baixar dados.json</button>
+            </div>
         </div>
     </div>
 
 </div>
-<script>
 
+<script>
+// INÍCIO DA ENGENHARIA LOGICA E PERSISTÊNCIA DO ADMINISTRADOR INTEGRADO
 let ultimoCustoIlhosValidoAdmin = 0.20;
 let ultimoCustoFuroValidoAdmin = 0.15;
 
-// Executa a atualização das tabelas sempre que o usuário entra na aba Admin
 function verificarAberturaTabAdmin(idConteudo) {
     if (idConteudo === 'tab-admin') {
         renderAllAdmin();
     }
 }
 
-// Lógica de ativação/desativação e retenção de valor dos campos de acabamento
 function toggleCustoCampoAdmin(selectId, inputId) {
     const status = document.getElementById(selectId).value;
     const inputCampo = document.getElementById(inputId);
@@ -1128,68 +491,21 @@ function toggleCustoCampoAdmin(selectId, inputId) {
         }
     }
 }
-function renderAllAdmin() {
-    // 1. MONTAGEM DINÂMICA DA TABELA DE PRODUTOS BASE DA SACOLA
-    const tbodyProd = document.querySelector('#tableProdutosAdmin tbody');
-    if (tbodyProd) {
-        tbodyProd.innerHTML = '';
-        databaseSacola.produtosConfigurados.forEach((p, idx) => {
-            tbodyProd.innerHTML += `<tr>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="text" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${p.nomeCompleto}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'nomeCompleto', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="number" min="0" step="0.01" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${p.precoBase}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'precoBase', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px; display:flex; gap:4px;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; height:30px; width:65px;" onclick="removerItemAdmin('produtosConfigurados', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
-    }
-
-    // 2. MONTAGEM DINÂMICA DA TABELA DE TIPOS DE ALÇA / CORDÕES
-    const tbodyCord = document.querySelector('#tableCordoesAdmin tbody');
-    if (tbodyCord) {
-        tbodyCord.innerHTML = '';
-        databaseSacola.cordoes.forEach((c, idx) => {
-            tbodyCord.innerHTML += `<tr>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="text" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${c.nome}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'nome', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="number" min="0" step="0.01" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${c.preco}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'preco', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px; display:flex; gap:4px;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; height:30px; width:65px;" onclick="removerItemAdmin('cordoes', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
-    }
-    
-    // Executa a continuação do renderizador dividida no próximo bloco
-    renderAllAdminParteDois();
-}
 function renderAllAdminParteDois() {
-    // 3. MONTAGEM DINÂMICA DA TABELA DE MODELOS COMERCIAIS DE MÃO
-    const tbodyMao = document.querySelector('#tableModelosMaoAdmin tbody');
-    if (tbodyMao) {
-        tbodyMao.innerHTML = '';
-        databaseMao.modelosMao.forEach((m, idx) => {
-            tbodyMao.innerHTML += `<tr>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="text" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${m.nome}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'nome', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="number" min="0" step="0.01" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${m.precoBase}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'precoBase', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px; display:flex; gap:4px;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; height:30px; width:65px;" onclick="removerItemAdmin('modelosMao', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
-    }
-
-    // 4. MONTAGEM DINÂMICA DA TABELA DE CORES DE IMPRESSÃO (E.V.A)
+    // 4. PREENCHE TABELA DE CORES DE IMPRESSÃO DA MÃO (E.V.A)
     const tbodyCoresEva = document.querySelector('#tableCoresEvaAdmin tbody');
     if (tbodyCoresEva) {
         tbodyCoresEva.innerHTML = '';
         databaseMao.coresEva.forEach((cor, idx) => {
             tbodyCoresEva.innerHTML += `<tr>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="text" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${cor.nome}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'nome', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="number" min="0" step="0.01" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${cor.preco}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'preco', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px; display:flex; gap:4px;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; height:30px; width:65px;" onclick="removerItemAdmin('coresEva', ${idx})">Excluir</button></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${cor.nome}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'nome', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${cor.preco}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'preco', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('coresEva', ${idx})">Excluir</button></td>
             </tr>`;
         });
     }
-    
-    // Executa o preenchimento das taxas operacionais localizado no bloco seguinte
-    renderAllAdminParteTres();
-}
-function renderAllAdminParteTres() {
-    // 5. MONTAGEM OPERACIONAL DA TABELA DE TAXAS ADICIONAIS POR LOTE
+
+    // 5. PREENCHE TABELA OPERACIONAL DE TAXAS ADICIONAIS POR LOTE
     const tbodyTaxasQtd = document.querySelector('#tableTaxasQuantidadeMaoAdmin tbody');
     if (tbodyTaxasQtd) {
         tbodyTaxasQtd.innerHTML = '';
@@ -1199,14 +515,14 @@ function renderAllAdminParteTres() {
         Object.keys(databaseMao.taxasQuantidade).forEach((key) => {
             let labelExibido = key === "Variavel" ? "Outra Qtd (Variável)" : key + " un";
             tbodyTaxasQtd.innerHTML += `<tr>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="text" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${labelExibido}" disabled></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px;"><input type="number" min="0" step="0.01" style="width:100%; padding:6px; border:1px solid transparent; background:transparent; font-size:14px;" value="${databaseMao.taxasQuantidade[key]}" onchange="atualizarTaxaInlineMaoAdmin('${key}', this.value)"></td>
-                <td style="border-bottom: 1px solid #e2e8f0; padding: 10px; display:flex; gap:4px;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; height:30px; width:65px;" onclick="resetarTaxaMaoAdmin('${key}')">Zerar</button></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${labelExibido}" disabled></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${databaseMao.taxasQuantidade[key]}" onchange="atualizarTaxaInlineMaoAdmin('${key}', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#64748b; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="resetarTaxaMaoAdmin('${key}')">Zerar</button></td>
             </tr>`;
         });
     }
 
-    // SINCRONIZAÇÃO EM TEMPO REAL DOS INPUTS DE CUSTOS FIXOS
+    // SINCRONIZA ESTADO DOS INPUTS FIXOS DO PAINEL
     document.getElementById('valorStartMaoAdmin').value = databaseMao.valorStartMao || 0;
 
     if (databaseSacola.valoresAcabamento) {
@@ -1228,10 +544,53 @@ function renderAllAdminParteTres() {
         }
     }
 }
+function renderAllAdmin() {
+    // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA
+    const tbodyProd = document.querySelector('#tableProdutosAdmin tbody');
+    if (tbodyProd) {
+        tbodyProd.innerHTML = '';
+        databaseSacola.produtosConfigurados.forEach((p, idx) => {
+            tbodyProd.innerHTML += `<tr>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${p.nomeCompleto}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'nomeCompleto', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${p.precoBase}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'precoBase', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('produtosConfigurados', ${idx})">Excluir</button></td>
+            </tr>`;
+        });
+    }
+
+    // 2. PREENCHE TABELA DE CORDÕES / ALÇAS DA SACOLA
+    const tbodyCord = document.querySelector('#tableCordoesAdmin tbody');
+    if (tbodyCord) {
+        tbodyCord.innerHTML = '';
+        databaseSacola.cordoes.forEach((c, idx) => {
+            tbodyCord.innerHTML += `<tr>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${c.nome}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'nome', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${c.preco}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'preco', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('cordoes', ${idx})">Excluir</button></td>
+            </tr>`;
+        });
+    }
+
+    // 3. PREENCHE TABELA DE MODELOS COMERCIAIS DE MÃO (E.V.A)
+    const tbodyMao = document.querySelector('#tableModelosMaoAdmin tbody');
+    if (tbodyMao) {
+        tbodyMao.innerHTML = '';
+        databaseMao.modelosMao.forEach((m, idx) => {
+            tbodyMao.innerHTML += `<tr>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${m.nome}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'nome', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${m.precoBase}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'precoBase', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('modelosMao', ${idx})">Excluir</button></td>
+            </tr>`;
+        });
+    }
+    
+    // Chama a renderização da segunda metade do painel administrativo
+    renderAllAdminParteDois();
+}
+
 function atualizarTaxaInlineMaoAdmin(chave, valor) {
     databaseMao.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
 }
-
 function atualizarObjetoTaxaMaoAdmin() {
     const chave = document.getElementById('taxaMaoQtdAlvoAdmin').value;
     const valor = Math.max(0, parseFloat(document.getElementById('taxaMaoValorAdmin').value) || 0);
@@ -1254,10 +613,12 @@ function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
         db[tipo][index][propriedade] = novoValor.trim();
     }
 }
+
 function adicionarProdutoAdmin() {
     const nome = document.getElementById('prodNome').value.trim();
     const preco = Math.max(0, parseFloat(document.getElementById('prodPreco').value) || 0);
     if(!nome) return;
+    if (!databaseSacola.produtosConfigurados) databaseSacola.produtosConfigurados = [];
     const novoId = databaseSacola.produtosConfigurados.length > 0 ? Math.max(...databaseSacola.produtosConfigurados.map(p => p.id)) + 1 : 1;
     databaseSacola.produtosConfigurados.push({ "id": novoId, "nomeCompleto": nome, "precoBase": preco });
     document.getElementById('prodNome').value = ''; document.getElementById('prodPreco').value = '';
@@ -1268,6 +629,7 @@ function adicionarCordaoAdmin() {
     const nome = document.getElementById('cordaoNomeAdmin').value.trim();
     const preco = Math.max(0, parseFloat(document.getElementById('cordaoPrecoAdmin').value) || 0);
     if(!nome) return;
+    if (!databaseSacola.cordoes) databaseSacola.cordoes = [];
     databaseSacola.cordoes.push({ "nome": nome, "preco": preco });
     document.getElementById('cordaoNomeAdmin').value = ''; document.getElementById('cordaoPrecoAdmin').value = '';
     renderAllAdmin();
@@ -1277,16 +639,17 @@ function adicionarModeloMaoAdmin() {
     const nome = document.getElementById('maoNomeAdmin').value.trim();
     const preco = Math.max(0, parseFloat(document.getElementById('maoPrecoAdmin').value) || 0);
     if(!nome) return;
+    if (!databaseMao.modelosMao) databaseMao.modelosMao = [];
     const novoId = databaseMao.modelosMao.length > 0 ? Math.max(...databaseMao.modelosMao.map(m => m.id)) + 1 : 1;
     databaseMao.modelosMao.push({ "id": novoId, "nome": nome, "precoBase": preco });
     document.getElementById('maoNomeAdmin').value = ''; document.getElementById('maoPrecoAdmin').value = '';
     renderAllAdmin();
 }
-
 function adicionarCorEvaAdmin() {
     const nome = document.getElementById('evaCorNomeAdmin').value.trim();
     const preco = Math.max(0, parseFloat(document.getElementById('evaCorPrecoAdmin').value) || 0);
     if(!nome) return;
+    if (!databaseMao.coresEva) databaseMao.coresEva = [];
     databaseMao.coresEva.push({ "nome": nome, "preco": preco });
     document.getElementById('evaCorNomeAdmin').value = ''; document.getElementById('evaCorPrecoAdmin').value = '';
     renderAllAdmin();
@@ -1297,9 +660,9 @@ function removerItemAdmin(tipo, index) {
     db[tipo].splice(index, 1); 
     renderAllAdmin(); 
 }
+
 function sincronizarFormularioObjetoAdmin() {
     databaseMao.valorStartMao = Math.max(0, parseFloat(document.getElementById('valorStartMaoAdmin').value) || 0);
-    
     if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {} };
     
     const ilhosStatus = document.getElementById('statusIlhosAdmin').value;
@@ -1318,12 +681,10 @@ function sincronizarFormularioObjetoAdmin() {
 function salvarAlteracoesAdminLocais() {
     sincronizarFormularioObjetoAdmin();
     
-    // Atualiza instantaneamente os menus selects das abas de orçamento com os novos preços
     if (typeof carregarMenusSacola === "function") carregarMenusSacola();
     if (typeof carregarMenusMao === "function") carregarMenusMao();
     if (typeof atualizarTaxaQuantidadeMao === "function") atualizarTaxaQuantidadeMao();
     
-    // Une os bancos de dados vivos para persistência local no cache do navegador
     let objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
     localStorage.setItem('comvil_catalogo_cache', JSON.stringify(objetoUnificado));
     
@@ -1340,8 +701,6 @@ function exportarJsonAdminAtualizado() {
     link.download = "dados.json"; 
     link.click();
 }
-
-    
 /* ==========================================================================
    BANCOS DE DADOS E CARREGAMENTO UNIFICADO (DADOS.JSON)
    ========================================================================== */
@@ -1355,7 +714,6 @@ let objImgMinha = new Image();
 objImgMinha.src = "logo-empresa.png";
 objImgMinha.onerror = function() { objImgMinha.src = "https://placehold.co"; };
 
-// CORREÇÃO: Preenchida a propriedade "quantidades" que estava vazia e quebrava o script
 const bancoReservaSacola = {
   "produtosConfigurados": [
     { "id": 2, "nomeCompleto": "05 Sacolas 17x18x8 - Offset 180g - sem revestimento", "precoBase": 0.68 },
@@ -1378,39 +736,53 @@ const bancoReservaMao = {
   "valorStartMao": 100,
   "taxasQuantidade": { "100": 0, "200": 0, "300": 0, "500": 0, "1000": 0, "2000": 0, "5000": 0, "Variavel": 0 }
 };
-
 window.onload = function() {
+    const cacheLocal = localStorage.getItem('comvil_catalogo_cache');
+    if (cacheLocal) {
+        try {
+            const data = JSON.parse(cacheLocal);
+            processarDadosCarregados(data);
+            return;
+        } catch(e) { console.warn("Erro ao ler cache local, tentando dados.json", e); }
+    }
+    
     fetch('dados.json?t=' + new Date().getTime())
         .then(response => {
             if (!response.ok) throw new Error("Falha ao abrir dados.json");
             return response.json();
         })
         .then(data => { 
-            if (data.produtosConfigurados || data.valoresAcabamento) { databaseSacola = data; } 
-            else { databaseSacola = JSON.parse(JSON.stringify(bancoReservaSacola)); }
-
-            if (data.modelosMao || data.coresEva) { databaseMao = data; } 
-            else { databaseMao = JSON.parse(JSON.stringify(bancoReservaMao)); }
-            
-            let logoDefinida = data.logoEmpresa || databaseSacola.logoEmpresa || databaseMao.logoEmpresa;
-            if(logoDefinida && logoDefinida.trim() !== "") {
-                objImgMinha.src = logoDefinida;
-                if(document.getElementById('img-minha-preview_sacola')) document.getElementById('img-minha-preview_sacola').src = logoDefinida;
-                if(document.getElementById('img-minha-preview_mao')) document.getElementById('img-minha-preview_mao').src = logoDefinida;
-            }
-            carregarMenusSacola(); 
-            carregarMenusMao(); 
-            atualizarTaxaQuantidadeMao();
+            processarDadosCarregados(data);
         })
         .catch(err => { 
             console.warn("Utilizando bancos de reserva integrados:", err);
-            databaseSacola = JSON.parse(JSON.stringify(bancoReservaSacola));
-            databaseMao = JSON.parse(JSON.stringify(bancoReservaMao));
-            carregarMenusSacola(); 
-            carregarMenusMao(); 
-            atualizarTaxaQuantidadeMao();
+            processarDadosCarregados(null);
         });
 };
+
+function processarDadosCarregados(data) {
+    if (data) {
+        if (data.produtosConfigurados || data.valoresAcabamento) { databaseSacola = data; } 
+        else { databaseSacola = JSON.parse(JSON.stringify(bancoReservaSacola)); }
+
+        if (data.modelosMao || data.coresEva) { databaseMao = data; } 
+        else { databaseMao = JSON.parse(JSON.stringify(bancoReservaMao)); }
+        
+        let logoDefinida = data.logoEmpresa || databaseSacola.logoEmpresa || databaseMao.logoEmpresa;
+        if(logoDefinida && logoDefinida.trim() !== "") {
+            objImgMinha.src = logoDefinida;
+            if(document.getElementById('img-minha-preview_sacola')) document.getElementById('img-minha-preview_sacola').src = logoDefinida;
+            if(document.getElementById('img-minha-preview_mao')) document.getElementById('img-minha-preview_mao').src = logoDefinida;
+        }
+    } else {
+        databaseSacola = JSON.parse(JSON.stringify(bancoReservaSacola));
+        databaseMao = JSON.parse(JSON.stringify(bancoReservaMao));
+    }
+    carregarMenusSacola(); 
+    carregarMenusMao(); 
+    atualizarTaxaQuantidadeMao();
+}
+
 function mascaraTelefone(input) {
     let v = input.value.replace(/\D/g, "");
     if (v.length > 11) v = v.substring(0, 11);
@@ -1424,7 +796,6 @@ function mascaraTelefone(input) {
 function formatarMoeda(valor) {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
-
 /* ==========================================================================
    LÓGICA DA ABA SACOLA
    ========================================================================== */
@@ -1462,6 +833,7 @@ function carregarMenusSacola() {
         }
     }
 }
+
 function calcularValoresAtuaisSacola() {
     const idProdutoSelected = parseInt(document.getElementById("selectProdutoConfigurado_sacola").value);
     const nomeCordaoSelected = document.getElementById("selectCordao_sacola").value;
@@ -1495,11 +867,10 @@ function calcularValoresAtuaisSacola() {
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
     
     return { 
-        custoUnitario: precoUnitarioDeVenda, qtd, total: totalLoteComMargemLucro, 
-        detalhesBase, nomeCordao: nomeCordaoSelected, corSelecionada, temFuroLaco, temIlhos 
+        custoUnitario: precoUnitarioDeVenda, qtd: qtd, total: totalLoteComMargemLucro, 
+        detalhesBase: detalhesBase, nomeCordao: nomeCordaoSelected, corSelecionada: corSelecionada, temFuroLaco: temFuroLaco, temIlhos: temIlhos 
     };
 }
-
 function obterNumeroIdentificadorSacola() {
     if(numeroOrcamentoSacola) return numeroOrcamentoSacola;
     const d = new Date();
@@ -1511,7 +882,7 @@ function gerarVisualizacaoTelaSacola() {
     const nome = document.getElementById("nomeCliente_sacola").value.trim();
     const tel = document.getElementById("telCliente_sacola").value.trim();
     if(!nome || !tel) { alert("Erro: Nome e Telefone são obrigatórios!"); return; }
-    
+
     const dCom = calcularValoresAtuaisSacola();
     const telVendedor = document.getElementById("telVendedor_sacola").value.trim();
     const numeroFinal = obterNumeroIdentificadorSacola();
@@ -1555,15 +926,17 @@ function carregarMenusMao() {
         }
     }
 }
-
 function verificarQuantidadeVariavel(select) {
     const campoManual = document.getElementById("campoQtdVariavel");
-    campoManual.style.display = (select.value === "Variavel") ? "flex" : "none";
+    if(campoManual) {
+        campoManual.style.display = (select.value === "Variavel") ? "flex" : "none";
+    }
 }
 
-// ATUALIZA O VALOR DO CAMPO INVISÍVEL CONFORME A QUANTIDADE DO JSON
 function atualizarTaxaQuantidadeMao() {
-    const selectQtd = document.getElementById("selectQuantidade").value;
+    const selectElement = document.getElementById("selectQuantidade");
+    if(!selectElement) return;
+    const selectQtd = selectElement.value;
     let taxaEncontrada = 0;
     if(databaseMao.taxasQuantidade) {
         if(selectQtd === "Variavel") {
@@ -1572,8 +945,12 @@ function atualizarTaxaQuantidadeMao() {
             taxaEncontrada = parseFloat(databaseMao.taxasQuantidade[selectQtd] || 0);
         }
     }
-    document.getElementById("taxaOcultaQuantidadeMao").value = taxaEncontrada;
+    const taxaOculta = document.getElementById("taxaOcultaQuantidadeMao");
+    if(taxaOculta) {
+        taxaOculta.value = taxaEncontrada;
+    }
 }
+
 function calcularValoresAtuaisMao() {
     const idModeloSelected = parseInt(document.getElementById("selectModeloMao").value);
     const tipoEncaixe = document.getElementById("selectTipoEncaixe").value;
@@ -1596,30 +973,25 @@ function calcularValoresAtuaisMao() {
     
     let startLoteFixo = parseFloat(databaseMao.valorStartMao || 0);
     
-    // Captura a taxa extra por quantidade vinda de forma oculta do dados.json
-    let taxaQuantidadeAdicional = parseFloat(document.getElementById("taxaOcultaQuantidadeMao").value || 0);
+    let taxaQuantidadeAdicional = 0;
+    const taxaOculta = document.getElementById("taxaOcultaQuantidadeMao");
+    if(taxaOculta) {
+        taxaQuantidadeAdicional = parseFloat(taxaOculta.value || 0);
+    }
     
-    // REGRA NOVA: (Modelo + Cor)
     let somaInsumosUnitarios = precoModeloBase + precoAdicionalCor;
-    
-    // REGRA NOVA: * quantidade
     let subtotalTiragem = somaInsumosUnitarios * qtd;
     
-    // REGRA NOVA: * Argola (1.5) e Luva (2)
     let multiplicadorEncaixe = (tipoEncaixe === "Luva") ? 2 : 1.5;
     let subtotalComEncaixe = subtotalTiragem * multiplicadorEncaixe;
     
-    // REGRA NOVA: + extra + start = Custo total de fabricação do lote
     let custoTotalFinalDoLote = subtotalComEncaixe + taxaQuantidadeAdicional + startLoteFixo;
-    
-    // REGRA NOVA: + 70% de lucro em cima do custo total
     let totalLoteComMargemLucro = custoTotalFinalDoLote * 1.70; 
-    
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
     
     return { 
-        custoUnitario: precoUnitarioDeVenda, qtd, total: totalLoteComMargemLucro, 
-        detalhesBase, tipoEncaixe, corEva: nomeCorEvaSelected
+        custoUnitario: precoUnitarioDeVenda, qtd: qtd, total: totalLoteComMargemLucro, 
+        detalhesBase: detalhesBase, tipoEncaixe: tipoEncaixe, corEva: nomeCorEvaSelected
     };
 }
 function obterNumeroIdentificadorMao() {
@@ -1633,7 +1005,7 @@ function gerarVisualizacaoTelaMao() {
     const nome = document.getElementById("nomeCliente_mao").value.trim();
     const tel = document.getElementById("telCliente_mao").value.trim();
     if(!nome || !tel) { alert("Erro: Nome e Telefone são obrigatórios!"); return; }
-    
+
     const dCom = calcularValoresAtuaisMao();
     const telVendedor = document.getElementById("telVendedor_mao").value.trim();
     const numeroFinal = obterNumeroIdentificadorMao();
@@ -1710,6 +1082,7 @@ function exportarOrcamentoGenerico(config) {
     ctx.fillStyle = "#333333"; ctx.font = "12px Arial";
     ctx.fillText("Nome / Razão Social: " + nome, 50, 185); 
     ctx.fillText("Telefone: " + telFormulario, 50, 203);
+    
     desenharCaixaPdf(ctx, 35, 235, 530, 105, "Especificações Técnicas do Pedido");
     ctx.fillStyle = "#333333"; ctx.font = "bold 11px Arial"; ctx.fillText(config.labelModelo, 50, 270); ctx.font = "11px Arial";
     
@@ -1717,7 +1090,6 @@ function exportarOrcamentoGenerico(config) {
     let partes = detalhesTexto.split(" | ");
     ctx.fillText("• " + partes.slice(0, 4).join(" | "), 50, 290);
     if(partes.length > 4) ctx.fillText("• " + partes.slice(4).join(" | "), 50, 306);
-    
     ctx.font = "bold 11px Arial"; ctx.fillText(config.labelMontagem, 50, 324); ctx.font = "11px Arial";
     ctx.fillText(config.textoLinhaInsumos(dadosComerciais), 50, 338);
     
@@ -1732,15 +1104,14 @@ function exportarOrcamentoGenerico(config) {
     ctx.fillStyle = "#f0f7ff"; ctx.fillRect(35, 450, 530, 135); ctx.strokeStyle = "#0056b3"; ctx.lineWidth = 1; ctx.strokeRect(35, 450, 530, 135);
     ctx.fillStyle = "#0056b3"; ctx.font = "bold 11px Arial"; ctx.textAlign = "left"; ctx.fillText("⚠️ CONDIÇÕES COMERCIAIS DE CONTRATAÇÃO", 45, 472);
     ctx.fillStyle = "#444444"; ctx.font = "11px Arial";
+    
     let startY = 495; const maxTextWidth = 510; const lineSpacing = 16;
     startY = wrapText(ctx, "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em " + dataValidade.toLocaleDateString('pt-BR') + ").", 45, startY, maxTextWidth, lineSpacing);
     startY = wrapText(ctx, "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.", 45, startY, maxTextWidth, lineSpacing);
     startY = wrapText(ctx, "• Prazo de Produção: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.", 45, startY, maxTextWidth, lineSpacing);
     wrapText(ctx, "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB).", 45, startY, maxTextWidth, lineSpacing);
 
-    // TRAVA CRÍTICA MOBILE: Força alinhamento centralizado no rodapé (X = 300)
     ctx.strokeStyle = "#dddddd"; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(35, 635); ctx.lineTo(565, 635); ctx.stroke();
-    
     ctx.textAlign = "center";
     let nomeAssinaturaVendedor = vendedor || 'Equipe Comercial Comvil';
     ctx.fillStyle = "#777777"; ctx.font = "10px Arial"; 
@@ -1753,7 +1124,7 @@ function exportarOrcamentoGenerico(config) {
     if (telVendedor) stringTelefones += `  |  📞 Vendedor: ${telVendedor}`;
     ctx.fillText(stringTelefones, 300, 703);
     
-    ctx.textAlign = "left"; // Restaura contexto base
+    ctx.textAlign = "left"; 
     const novaAba = window.open("", "_blank");
     if (novaAba) {
         const dataUrl = canvas.toDataURL("image/jpeg", 0.98);
@@ -1781,7 +1152,7 @@ function exportarOrcamentoGenerico(config) {
                 <img src="' + dataUrl + '" />\
                 <div class="btn-container">\
                     <a href="' + dataUrl + '" download="' + nomeArquivo + '" class="btn-download">Baixar Imagem</a>\
-                    <a href="https://api.whatsapp.com/send?phone=55' + telefoneLimpo + '&text=' + textoInjetado + '" target="_blank" class="btn-whatsapp">Abrir WhatsApp</a>\
+                    <a href="https://whatsapp.com' + telefoneLimpo + '&text=' + textoInjetado + '" target="_blank" class="btn-whatsapp">Abrir WhatsApp</a>\
                 </div>\
             </body>\
             </html>\
@@ -1810,64 +1181,6 @@ function abrirImagemNovaAbaMao() {
         }
     });
 }
-let numeroOrcamentoAdmin = "";
-
-function obterNumeroIdentificadorAdmin() {
-    if(numeroOrcamentoAdmin) return numeroOrcamentoAdmin;
-    const d = new Date();
-    numeroOrcamentoAdmin = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
-    return numeroOrcamentoAdmin;
-}
-
-function calcularValoresAtuaisAdmin() {
-    const qtd = parseInt(document.getElementById("qtd_admin").value) || 1;
-    const precoUnitario = parseFloat(document.getElementById("preco_admin").value) || 0;
-    const totalLote = qtd * precoUnitario;
-    const descricao = document.getElementById("descricao_admin").value.trim() || "Painel Admin";
-
-    return { 
-        custoUnitario: precoUnitario, 
-        qtd: qtd, 
-        total: totalLote, 
-        detalhesBase: descricao 
-    };
-}
-
-function gerarVisualizacaoTelaAdmin() {
-    const nome = document.getElementById("nomeCliente_admin").value.trim();
-    const tel = document.getElementById("telCliente_admin").value.trim();
-    if(!nome || !tel) { alert("Erro: Nome e Telefone são obrigatórios!"); return; }
-
-    const dCom = calcularValoresAtuaisAdmin();
-    const telVendedor = document.getElementById("telVendedor_admin").value.trim();
-    const numeroFinal = obterNumeroIdentificadorAdmin();
-    
-    document.getElementById("preview-numeracao-topo_admin").innerText = "Nº " + numeroFinal;
-    document.getElementById("text-dados-cliente_admin").innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
-    document.getElementById("text-dados-produto_admin").innerHTML = `<strong>Item:</strong> ${dCom.detalhesBase}`;
-    document.getElementById("text-dados-financeiro_admin").innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
-    
-    let textoVendedor = telVendedor ? ` | 📞 Vendedor: ${telVendedor}` : '';
-    document.getElementById("preview-contato-rodape_admin").innerHTML = `<strong>COMVIL BRINDES</strong><br>CNPJ: 36.206.286/0001-03 | ✉️ comvil@comvil.com.br<br>☎️ Fixo: 11 3461-0813 | 📱 WhatsApp: 11 97024-3064${textoVendedor}`;
-
-    document.getElementById("area-orcamento_admin").style.display = "block";
-    document.getElementById("bloco-resultado_admin").style.display = "block";
-}
-
-function abrirImagemNovaAbaAdmin() {
-    exportarOrcamentoGenerico({
-        sufixo: "admin", 
-        tituloProposta: "PROPOSTA COMERCIAL DE ESTRUTURAS E PAINÉIS", 
-        prefixoArquivo: "Admin",
-        labelModelo: "Especificação técnica do item:", 
-        labelMontagem: "Configuração do lote:",
-        funcaoCalculo: calcularValoresAtuaisAdmin, 
-        funcaoNumero: obterNumeroIdentificadorAdmin,
-        textoLinhaInsumos: function(d) {
-            return "• Descrição: " + d.detalhesBase + "  |  • Categoria: Produção Especial";
-        }
-    });
-}
 
 function desenharCaixaPdf(ctx, x, y, w, h, titulo) {
     ctx.fillStyle = "#fafafa"; ctx.fillRect(x, y, w, h);
@@ -1876,22 +1189,319 @@ function desenharCaixaPdf(ctx, x, y, w, h, titulo) {
     ctx.fillText(titulo.toUpperCase(), x + 15, y + 18);
     ctx.strokeStyle = "#0056b3"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h); ctx.stroke();
 }
+/* ==========================================================================
+   LÓGICA E MOTOR GRÁFICO DO MOCKUP INTERATIVO (CANVAS)
+   ========================================================================== */
+imgEmpresa.crossOrigin = "anonymous";
+imgEmpresa.onload = function() { logoEmpresaPronta = true; };
+imgEmpresa.src = 'logo-empresa.png';
 
-function switchTab(e, idConteudo) {
-    // 1. Esconde todas as abas e desativa os botões
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
-    
-    // 2. Ativa o botão atual e mostra a aba clicada
-    e.target.classList.add('active');
-    document.getElementById(idConteudo).classList.add('active');
-    
-    // 3. SE FOR A ABA ADMIN, ESSA LINHA ADICIONAL DESENHA AS TABELAS NA TELA
-    if (idConteudo === 'tab-admin' && typeof renderAllAdmin === "function") {
-        renderAllAdmin();
+function renderizarGradeCordoes() {
+    const elGrid = document.getElementById('cordaoGrid');
+    if(!elGrid) return;
+    elGrid.innerHTML = "";
+    mostruarioCordao.forEach(cor => {
+        const box = document.createElement('div');
+        box.className = "cordao-box";
+        box.style.backgroundColor = cor.hex;
+        box.title = cor.nome;
+        if (cor.hex === corCordaoSelecionada) box.classList.add('active');
+        box.addEventListener('click', function() {
+            document.querySelectorAll('.cordao-box').forEach(b => b.classList.remove('active'));
+            box.classList.add('active');
+            corCordaoSelecionada = cor.hex;
+            mockupGeradoComRodape = false;
+            const btnDownload = document.getElementById('btnDownloadLayout');
+            if(btnDownload) btnDownload.disabled = true;
+            processarETingirMockup(false);
+        });
+        elGrid.appendChild(box);
+    });
+}
+
+function criarCamadaColorida(imgMascara, corHex) {
+    const buffer = document.createElement('canvas');
+    const canvasRef = document.getElementById('mockupCanvas');
+    buffer.width = canvasRef ? canvasRef.width : 600;
+    buffer.height = canvasRef ? canvasRef.height : 600;
+    const bCtx = buffer.getContext('2d');
+    if (imgMascara.complete && imgMascara.naturalWidth !== 0) {
+        bCtx.drawImage(imgMascara, 0, 0);
+        bCtx.globalCompositeOperation = 'source-in';
+        bCtx.fillStyle = corHex;
+        bCtx.fillRect(0, 0, buffer.width, buffer.height);
+    }
+    return buffer;
+}
+
+function processarETingirMockup(incluirRodape = false) {
+    const canvasRef = document.getElementById('mockupCanvas');
+    if(!canvasRef) return;
+    const ctxRef = canvasRef.getContext('2d');
+    if (!imgBase.complete || imgBase.naturalWidth === 0) return;
+
+    canvasRef.width = imgBase.naturalWidth;
+    canvasRef.height = incluirRodape ? imgBase.naturalHeight + 110 : imgBase.naturalHeight;
+
+    ctxRef.clearRect(0, 0, canvasRef.width, canvasRef.height);
+    ctxRef.fillStyle = "#e8e8e8";
+    ctxRef.fillRect(0, 0, canvasRef.width, canvasRef.height);
+
+    ctxRef.save();
+    ctxRef.shadowColor = "rgba(0, 0, 0, 0.38)"; 
+    ctxRef.shadowBlur = imgBase.naturalWidth * 0.04;    
+    ctxRef.shadowOffsetX = imgBase.naturalWidth * 0.015; 
+    ctxRef.shadowOffsetY = imgBase.naturalHeight * 0.025; 
+    ctxRef.drawImage(imgBase, 0, 0);
+    ctxRef.restore();
+    const elModelo = document.getElementById('modelo');
+    const elCorFrente = document.getElementById('cor-frente');
+    const elCorLateral = document.getElementById('cor-lateral');
+    const elLogoZoom = document.getElementById('logo-zoom');
+    const elLogoGiro = document.getElementById('logo-giro');
+
+    if (imgFrente.complete && imgFrente.naturalWidth > 0) {
+        const corFinalFrente = modoKraftAtivo ? "#c2a67a" : (elCorFrente ? elCorFrente.value : "#ffffff");
+        const camadaFrente = criarCamadaColorida(imgFrente, corFinalFrente);
+        ctxRef.drawImage(camadaFrente, 0, 0);
+    }
+
+    if (imgLateral.complete && imgLateral.naturalWidth > 0) {
+        const corFinalLateral = modoKraftAtivo ? "#c2a67a" : (elCorLateral ? elCorLateral.value : "#ffffff");
+        const camadaLateral = criarCamadaColorida(imgLateral, corFinalLateral);
+        ctxRef.drawImage(camadaLateral, 0, 0);
+    }
+
+    if (logoCarregada && imgLogo.complete && imgLogo.naturalWidth > 0) {
+        ctxRef.save();
+        let valZoom = elLogoZoom ? elLogoZoom.value : 35;
+        let percentualZoom = valZoom / 100;
+        logoAtualWidth = imgBase.naturalWidth * percentualZoom;
+        let proporcao = (imgLogo.naturalHeight / imgLogo.naturalWidth);
+        logoAtualHeight = proporcao * logoAtualWidth;
+        
+        ctxRef.translate(logoX, logoY);
+        let valGiro = elLogoGiro ? elLogoGiro.value : 0;
+        let giroManualRad = (parseFloat(valGiro) * Math.PI) / 180;
+        ctxRef.rotate(giroManualRad);
+
+        if (elModelo && elModelo.value === 'horizontal') {
+            ctxRef.transform(1, 0, -0.200, 1, 0, 0); 
+        } else {
+            ctxRef.transform(1, 0, -0.080, 1, 0, 0); 
+        }
+        ctxRef.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
+        ctxRef.restore();
+    }
+
+    if (imgCordao.complete && imgCordao.naturalWidth > 0) {
+        const camadaCordao = criarCamadaColorida(imgCordao, corCordaoSelecionada);
+        ctxRef.drawImage(camadaCordao, 0, 0);
+    }
+
+    ctxRef.save();
+    ctxRef.globalCompositeOperation = 'multiply';
+    ctxRef.drawImage(imgBase, 0, 0);
+    ctxRef.restore();
+    if (incluirRodape) {
+        ctxRef.save();
+        ctxRef.fillStyle = "#e8e8e8";
+        ctxRef.fillRect(0, imgBase.naturalHeight, canvasRef.width, 110);
+
+        ctxRef.strokeStyle = "rgba(0, 0, 0, 0.05)";
+        ctxRef.lineWidth = 1;
+        ctxRef.beginPath();
+        ctxRef.moveTo(30, imgBase.naturalHeight);
+        ctxRef.lineTo(canvasRef.width - 30, imgBase.naturalHeight);
+        ctxRef.stroke();
+
+        let altDesejada = 34; 
+        let centroCanvasX = canvasRef.width / 2;
+
+        ctxRef.textAlign = "center";
+
+        if (logoEmpresaPronta && imgEmpresa.naturalWidth > 0) {
+            let largCalculada = (imgEmpresa.naturalWidth / imgEmpresa.naturalHeight) * altDesejada;
+            ctxRef.drawImage(imgEmpresa, centroCanvasX - (largCalculada / 2), imgBase.naturalHeight + 15, largCalculada, altDesejada);
+        }
+
+        ctxRef.fillStyle = "#1e293b";
+        ctxRef.font = "bold 13.5px sans-serif";
+        ctxRef.fillText("COMVIL BRINDES", centroCanvasX, imgBase.naturalHeight + 64);
+        
+        ctxRef.font = "10.5px sans-serif";
+        ctxRef.fillStyle = "#475569";
+        ctxRef.fillText("CNPJ: 36.206.286/0001-03  |  ✉ comvil@comvil.com.br", centroCanvasX, imgBase.naturalHeight + 80);
+        ctxRef.fillText("☎ Fixo: 11 3461-0813  |  📱 WhatsApp: 11 97024-3064", centroCanvasX, imgBase.naturalHeight + 94);
+        ctxRef.restore();
     }
 }
 
+function resetarPosicaoLogoPadrao() {
+    if (!imgBase.naturalWidth) return;
+    const elModelo = document.getElementById('modelo');
+    if (elModelo && elModelo.value === 'horizontal') {
+        logoX = imgBase.naturalWidth * 0.48;
+        logoY = imgBase.naturalHeight * 0.54;
+    } else {
+        logoX = imgBase.naturalWidth * 0.50;
+        logoY = imgBase.naturalHeight * 0.53;
+    }
+}
+
+function carregarArquivosDoServidor() {
+    const elModelo = document.getElementById('modelo');
+    if (!elModelo) return;
+    const sentido = elModelo.value;
+    let carregadas = 0;
+    function verificarPronto() {
+        carregadas++;
+        if (carregadas === 4) {
+            resetarPosicaoLogoPadrao();
+            mockupGeradoComRodape = false;
+            const btnDownload = document.getElementById('btnDownloadLayout');
+            if(btnDownload) btnDownload.disabled = true;
+            processarETingirMockup(false);
+        }
+    }
+    imgBase.crossOrigin = "anonymous"; imgFrente.crossOrigin = "anonymous";
+    imgLateral.crossOrigin = "anonymous"; imgCordao.crossOrigin = "anonymous";
+    imgBase.onload = verificarPronto; imgFrente.onload = verificarPronto;
+    imgLateral.onload = verificarPronto; imgCordao.onload = verificarPronto;
+    imgBase.src = `sacola_${sentido}_base.png?v=${Date.now()}`;
+    imgFrente.src = `sacola_${sentido}_frente.png?v=${Date.now()}`;
+    imgLateral.src = `sacola_${sentido}_lateral.png?v=${Date.now()}`;
+    imgCordao.src = `sacola_${sentido}_cordao.png?v=${Date.now()}`;
+}
+const elInputLogo = document.getElementById('logo');
+const elFileText = document.getElementById('file-text');
+const canvasRef = document.getElementById('mockupCanvas');
+
+if (elInputLogo) {
+    elInputLogo.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            if (elFileText) elFileText.textContent = e.target.files[0].name;
+            const leitorBase64 = new FileReader();
+            leitorBase64.onload = function(evt) {
+                logoCarregada = false; imgLogo = new Image();
+                imgLogo.onload = function() {
+                    logoCarregada = true; resetarPosicaoLogoPadrao();
+                    mockupGeradoComRodape = false;
+                    const btnDownload = document.getElementById('btnDownloadLayout');
+                    if (btnDownload) btnDownload.disabled = true;
+                    processarETingirMockup(false); 
+                };
+                imgLogo.src = evt.target.result;
+            };
+            leitorBase64.readAsDataURL(e.target.files[0]);
+        }
+    });
+}
+
+function obterCoordenadasPointer(e) {
+    if (!canvasRef) return { x: 0, y: 0 };
+    const rect = canvasRef.getBoundingClientRect();
+    return {
+        x: (e.clientX - rect.left) * (canvasRef.width / rect.width),
+        y: (e.clientY - rect.top) * (canvasRef.height / rect.height)
+    };
+}
+
+if (canvasRef) {
+    canvasRef.addEventListener('pointerdown', function(e) {
+        if (!logoCarregada) return;
+        canvasRef.setPointerCapture(e.pointerId); 
+        const mouse = obterCoordenadasPointer(e);
+        if (mouse.x >= logoX - logoAtualWidth/2 && mouse.x <= logoX + logoAtualWidth/2 &&
+            mouse.y >= logoY - logoAtualHeight/2 && mouse.y <= logoY + logoAtualHeight/2) {
+            arrastandoLogo = true;
+            offsetMouseX = mouse.x - logoX; offsetMouseY = mouse.y - logoY;
+            canvasRef.style.cursor = "grabbing"; mockupGeradoComRodape = false;
+            const btnDownload = document.getElementById('btnDownloadLayout');
+            if (btnDownload) btnDownload.disabled = true;
+        }
+    });
+
+    canvasRef.addEventListener('pointermove', function(e) {
+        if (!logoCarregada) return;
+        const mouse = obterCoordenadasPointer(e);
+        if (arrastandoLogo) {
+            logoX = mouse.x - offsetMouseX; logoY = mouse.y - offsetMouseY;
+            processarETingirMockup(false); 
+        } else {
+            if (mouse.x >= logoX - logoAtualWidth/2 && mouse.x <= logoX + logoAtualWidth/2 &&
+                mouse.y >= logoY - logoAtualHeight/2 && mouse.y <= logoY + logoAtualHeight/2) {
+                canvasRef.style.cursor = "pointer";
+            } else { canvasRef.style.cursor = "default"; }
+        }
+    });
+
+    canvasRef.addEventListener('pointerup', function(e) {
+        if (arrastandoLogo) { canvasRef.releasePointerCapture(e.pointerId); arrastandoLogo = false; canvasRef.style.cursor = "default"; }
+    });
+}
+const btnGenerateJPEG = document.getElementById('btnGenerateJPEG');
+const btnDownloadLayout = document.getElementById('btnDownloadLayout');
+const elBtnKraft = document.getElementById('btnKraft');
+const elCorFrente = document.getElementById('cor-frente');
+const elCorLateral = document.getElementById('cor-lateral');
+const elLogoZoom = document.getElementById('logo-zoom');
+const elLogoGiro = document.getElementById('logo-giro');
+const elModelo = document.getElementById('modelo');
+
+if (btnGenerateJPEG) {
+    btnGenerateJPEG.addEventListener('click', function() {
+        processarETingirMockup(true); 
+        mockupGeradoComRodape = true; 
+        if (btnDownloadLayout) btnDownloadLayout.disabled = false; 
+    });
+}
+
+if (btnDownloadLayout) {
+    btnDownloadLayout.addEventListener('click', function() {
+        if (!mockupGeradoComRodape || !canvasRef) return;
+        const link = document.createElement('a');
+        const sentido = elModelo ? elModelo.value : 'vertical';
+        link.download = `proposta-comvil-${sentido}.jpg`;
+        link.href = canvasRef.toDataURL("image/jpeg", 1.0);
+        link.click();
+    });
+}
+
+if (elBtnKraft) {
+    elBtnKraft.addEventListener('click', function() {
+        modoKraftAtivo = !modoKraftAtivo;
+        if (modoKraftAtivo) this.classList.add('active'); else this.classList.remove('active');
+        mockupGeradoComRodape = false; 
+        if (btnDownloadLayout) btnDownloadLayout.disabled = true; 
+        processarETingirMockup(false);
+    });
+}
+
+if (elCorFrente) elCorFrente.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
+if (elCorLateral) elCorLateral.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
+if (elLogoZoom) elLogoZoom.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
+if (elLogoGiro) elLogoGiro.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
+if (elModelo) elModelo.addEventListener('change', carregarArquivosDoServidor);
+
+window.addEventListener('DOMContentLoaded', () => { 
+    renderizarGradeCordoes(); 
+    carregarArquivosDoServidor(); 
+});
+
+// FUNÇÃO GLOBAL DE TROCA DE ABAS E ATIVAÇÃO DO CONTEÚDO ADMIN
+function switchTab(e, idConteudo) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
+    e.target.classList.add('active');
+    
+    const targetPanel = document.getElementById(idConteudo);
+    if (targetPanel) targetPanel.classList.add('active');
+    
+    if (typeof verificarAberturaTabAdmin === "function") {
+        verificarAberturaTabAdmin(idConteudo);
+    }
+}
 </script>
 </body>
 </html>
