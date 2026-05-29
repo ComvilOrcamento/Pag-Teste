@@ -904,68 +904,554 @@
             <!-- FIM ABA MOCKUP SACOLA -->
 
         <!-- ABA PAINEL ADMIN -->
+    
     <div id="tab-admin" class="tab-content">
         <div class="box-conteudo">
-            <h2>Dados do cliente (Painel Admin)</h2>
-            <div class="field" style="margin-bottom: 12px;">
-                <label>Nome *</label>
-                <input type="text" id="nomeCliente_admin" placeholder="Nome do cliente ou Empresa (Obrigatório)" required>
-            </div>
-            <div class="row">
-                <div class="field"><label>Telefone / WhatsApp *</label><input type="text" id="telCliente_admin" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" maxlength="15" required></div>
-                <div class="field"><label>E-mail</label><input type="email" id="emailCliente_admin" placeholder="email@exemplo.com"></div>
-            </div>
 
-            <h2>Itens do orçamento</h2>
-            <div class="field" style="margin-bottom: 12px;">
-                <label>Descrição do Produto / Serviço *</label>
-                <input type="text" id="descricao_admin" placeholder="Ex: Painel de Controle em ACM com Iluminação" value="Painel Administrativo Customizado">
-            </div>
-            
-            <div class="row">
-                <div class="field">
-                    <label>Quantidade Mínima *</label>
-                    <input type="number" id="qtd_admin" placeholder="Ex: 1" value="1" min="1">
-                </div>
-                <div class="field">
-                    <label>Preço Unitário de Venda (R$) *</label>
-                    <input type="number" id="preco_admin" placeholder="Ex: 1500.00" value="1250.00" step="0.01">
-                </div>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Catálogo Comvil</title>
+    <style>
+        * { box-sizing: border-box; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f1f5f9; padding: 30px; display: flex; justify-content: center; }
+        .admin-box { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
+        h1 { font-size: 22px; color: #0f172a; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { padding: 10px 20px; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; cursor: pointer; font-weight: bold; color: #64748b; }
+        .tab-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .tab-content { display: none; margin-bottom: 20px; }
+        .tab-content.active { display: block; }
+        
+        .form-row { display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%; }
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        label { font-size: 12px; font-weight: bold; color: #475569; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; height: 38px; }
+        input:focus, select:focus { border-color: #2563eb; }
+        input:disabled, select:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; border-color: #cbd5e1; }
+        
+        .w-nome { width: 60%; }
+        .w-preco { width: 20%; }
+        .w-acao { width: 20%; }
+        .w-quarto { width: 25%; }
+        
+        .btn-add { background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; width: 100%; height: 38px; display: flex; align-items: center; justify-content: center; }
+        .btn-add:hover { background: #1d4ed8; }
+        
+        .table-container { max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 15px; margin-bottom: 25px; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed; }
+        .data-table th, .data-table td { border-bottom: 1px solid #e2e8f0; padding: 10px; text-align: left; vertical-align: middle; overflow: hidden; }
+        .data-table th { background: #f8fafc; color: #334155; height: 38px; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #cbd5e1; }
+        
+        .table-input { width: 100%; padding: 6px; border: 1px solid transparent; background: transparent; font-size: 14px; cursor: text; }
+        .table-input:focus { border-color: #2563eb; background: #fff; outline: none; border-radius: 4px; }
+        
+        .actions-cell { display: flex; align-items: center; gap: 6px; width: 100%; justify-content: flex-start; }
+        .order-arrows-column { display: flex; flex-direction: column; gap: 2px; }
+        
+        .btn-control { border: 1px solid #cbd5e1; width: 24px; height: 14px; border-radius: 4px; cursor: pointer; font-size: 8px; font-weight: bold; background: #fff; display: flex; align-items: center; justify-content: center; line-height: 1; }
+        .btn-control:hover { background: #f1f5f9; border-color: #94a3b8; }
+        
+        .btn-del { background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; height: 30px; display: flex; align-items: center; justify-content: center; width: 65px; }
+        .btn-del:hover { background: #dc2626; }
 
-            <h2>Dados de Atendimento</h2>
-            <div class="row">
-                <div class="field">
-                    <label>Nome do Vendedor</label>
-                    <input type="text" id="nomeVendedor_admin" placeholder="Seu nome">
-                </div>
-                <div class="field">
-                    <label>Telefone do Vendedor</label>
-                    <input type="text" id="telVendedor_admin" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" maxlength="15">
+        .sub-titulo-secao { font-size: 15px; margin: 25px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px; }
+
+        .action-zone { border-top: 2px solid #e2e8f0; padding-top: 20px; margin-top: 25px; display: flex; gap: 15px; }
+        .btn-save { flex: 1; background: #003366; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0, 51, 102, 0.2); }
+        .btn-save:hover { background: #002244; }
+        .btn-export { flex: 1; background: #10b981; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
+        .btn-export:hover { background: #059669; }
+
+        .toast-notificacao {
+            position: fixed;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: #10b981;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: top 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #10b981;
+        }
+        .toast-notificacao.show { top: 20px; }
+    </style>
+</head>
+<body>
+<div id="toast" class="toast-notificacao">✓ Configurações salvas!</div>
+
+<div class="admin-box">
+    <h1>Gerenciador de Catálogo de Preços</h1>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-sacolas')">Sacola Personalizada</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-mao')">Mão de Torcida</button>
+    </div>
+
+    <!-- ABA 1: GERENCIAMENTO DE SACOLAS E ACABAMENTOS -->
+    <div id="tab-sacolas" class="tab-content active">
+        <div class="sub-titulo-secao">Configuração de Sacola Personalizada (Produto Base)</div>
+        <div class="form-row">
+            <div class="input-group w-nome">
+                <label>Nome Comercial Exibido no Menu</label>
+                <input type="text" id="prodNome" onclick="this.select()" placeholder="Ex: Sacola Offset 180g - 18x24x8">
+            </div>
+            <div class="row w-preco" style="margin-bottom:0px;">
+                <div class="input-group" style="width:100%;">
+                    <label>Preço Base (R$)</label>
+                    <input type="number" id="prodPreco" min="0" step="0.01" onclick="this.select()" placeholder="0.78">
                 </div>
             </div>
+            <div class="input-group w-acao">
+                <button class="btn-add" onclick="adicionarProduto()">Adicionar</button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="data-table" id="tableProdutos">
+                <thead>
+                    <tr>
+                        <th class="w-nome">Nome Comercial</th>
+                        <th class="w-preco">Preço Base (R$)</th>
+                        <th class="w-acao">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-            <button class="btn-principal" onclick="gerarVisualizacaoTelaAdmin()">Gerar Orçamento</button>
-
-            <div id="bloco-resultado_admin" style="display: none;">
-                <div id="area-orcamento_admin" class="area-orcamento">
-                    <div class="logos-header">
-                        <div class="logo-box"><img id="img-minha-preview_admin" src="logo-empresa.png" onerror="this.src='https://placehold.co'"></div>
-                        <div id="preview-numeracao-topo_admin" style="font-size: 14px; font-weight: bold; color: #333;"></div>
-                    </div>
-                    <div style="font-size:15px; font-weight:bold; color:#0056b3; margin-bottom:15px; text-transform:uppercase; text-align: center;">Pré-visualização Interna</div>
-                    <div class="secao-preview"><div class="preview-titulo">Dados do Formulário</div><div id="text-dados-cliente_admin"></div></div>
-                    <div class="secao-preview"><div class="preview-titulo">Especificações do Pedido</div><div id="text-dados-produto_admin"></div></div>
-                    <div class="secao-preview"><div class="preview-titulo">Financeiro</div><div id="text-dados-financeiro_admin"></div></div>
-                    <div class="rodape-contato-preview" id="preview-contato-rodape_admin"></div>
-                </div>
-                <div class="botoes-container">
-                    <button class="btn-exportar" onclick="abrirImagemNovaAbaAdmin()">Exportar Orçamento</button>
+        <div class="sub-titulo-secao">Configuração de Cordões / Alças</div>
+        <div class="form-row">
+            <div class="input-group w-nome">
+                <label>Tipo de Alça / Cordão</label>
+                <input type="text" id="cordaoNome" onclick="this.select()" placeholder="Ex: Nylon, Gorgurão, Fita">
+            </div>
+            <div class="row w-preco" style="margin-bottom:0px;">
+                <div class="input-group" style="width:100%;">
+                    <label>Preço (R$)</label>
+                    <input type="number" id="cordaoPreco" min="0" step="0.01" onclick="this.select()" placeholder="0.20">
                 </div>
             </div>
+            <div class="input-group w-acao">
+                <button class="btn-add" onclick="adicionarCordao()">Adicionar</button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="data-table" id="tableCordoes">
+                <thead>
+                    <tr>
+                        <th class="w-nome">Tipo de Alça</th>
+                        <th class="w-preco">Preço Unitário (R$)</th>
+                        <th class="w-acao">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="sub-titulo-secao">Custos de Acabamentos e Furos</div>
+        <div class="form-row">
+            <div class="input-group w-quarto">
+                <label>Adicionar Ilhós?</label>
+                <select id="statusIlhos" onchange="toggleCustoCampo('statusIlhos', 'fixoIlhos')">
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
+            <div class="input-group w-quarto">
+                <label>Custo Ilhós (R$)</label>
+                <input type="number" id="fixoIlhos" min="0" step="0.01" onclick="this.select()" placeholder="0.20">
+            </div>
+            <div class="input-group w-quarto">
+                <label>Adicionar Furo Laço?</label>
+                <select id="statusFuro" onchange="toggleCustoCampo('statusFuro', 'fixoFuro')">
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
+            <div class="input-group w-quarto">
+                <label>Custo Furo Laço (R$)</label>
+                <input type="number" id="fixoFuro" min="0" step="0.01" onclick="this.select()" placeholder="0.15">
+            </div>
+        </div>
+
+        <div class="sub-titulo-secao">Custo Adicional Fixo de Cores</div>
+        <div class="form-row">
+            <div class="input-group w-quarto"><label>Custo Cores 1x0 (R$)</label><input type="number" id="cor1x0" min="0" step="0.01" onclick="this.select()"></div>
+            <div class="input-group w-quarto"><label>Custo Cores 2x0 (R$)</label><input type="number" id="cor2x0" min="0" step="0.01" onclick="this.select()"></div>
+            <div class="input-group w-quarto"><label>Custo Cores 4x0 (R$)</label><input type="number" id="cor4x0" min="0" step="0.01" onclick="this.select()"></div>
+            <div class="input-group w-quarto"><label>Custo Cores 4x1 (R$)</label><input type="number" id="cor4x1" min="0" step="0.01" onclick="this.select()"></div>
+        </div>
+    </div>
+    <!-- ABA 2: GERENCIAMENTO DE MÃO DE TORCIDA EM E.V.A -->
+    <div id="tab-mao" class="tab-content">
+        <div class="sub-titulo-secao">Custos Fixos de Configuração</div>
+        <div class="form-row">
+            <div class="input-group" style="width: 100%;">
+                <label>Valor Start Mão de Torcida (R$)</label>
+                <input type="number" id="valorStartMao" min="0" step="0.01" onclick="this.select()" placeholder="150.00">
+            </div>
+        </div>
+
+        <div class="sub-titulo-secao">Configuração de Modelos de Mão (E.V.A)</div>
+        <div class="form-row">
+            <div class="input-group w-nome">
+                <label>Nome Comercial do Modelo de Mão</label>
+                <input type="text" id="maoNome" onclick="this.select()" placeholder="Ex: Mão Tradicional 40cm">
+            </div>
+            <div class="row w-preco" style="margin-bottom:0px;">
+                <div class="input-group" style="width:100%;">
+                    <label>Preço Base (R$)</label>
+                    <input type="number" id="maoPreco" min="0" step="0.01" onclick="this.select()" placeholder="2.50">
+                </div>
+            </div>
+            <div class="input-group w-acao">
+                <button class="btn-add" onclick="adicionarModeloMao()">Adicionar</button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="data-table" id="tableModelosMao">
+                <thead>
+                    <tr>
+                        <th class="w-nome">Modelo de Mão</th>
+                        <th class="w-preco">Preço Base (R$)</th>
+                        <th class="w-acao">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="sub-titulo-secao">Configuração de Cores de Impressão</div>
+        <div class="form-row">
+            <div class="input-group w-nome">
+                <label>Nome da Cor de Impressão</label>
+                <input type="text" id="evaCorNome" onclick="this.select()" placeholder="Ex: Azul Comercial, Amarelo">
+            </div>
+            <div class="row w-preco" style="margin-bottom:0px;">
+                <div class="input-group" style="width:100%;">
+                    <label>Preço Extra (R$)</label>
+                    <input type="number" id="evaCorPreco" min="0" step="0.01" onclick="this.select()" placeholder="0.00">
+                </div>
+            </div>
+            <div class="input-group w-acao">
+                <button class="btn-add" onclick="adicionarCorEva()">Adicionar</button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="data-table" id="tableCoresEva">
+                <thead>
+                    <tr>
+                        <th class="w-nome">Cores Disponíveis</th>
+                        <th class="w-preco">Preço Extra (R$)</th>
+                        <th class="w-acao">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- ADICIONADO: Nova Seção Operacional para Cadastrar Taxas Extras de Quantidade no dados.json -->
+        <div class="sub-titulo-secao">Taxas Adicionais por Lote de Quantidade</div>
+        <div class="form-row">
+            <div class="input-group w-nome">
+                <label>Lote de Quantidade (Unidades)</label>
+                <select id="taxaMaoQtdAlvo">
+                    <option value="100">100 un</option>
+                    <option value="200">200 un</option>
+                    <option value="300">300 un</option>
+                    <option value="500">500 un</option>
+                    <option value="1000">1000 un</option>
+                    <option value="2000">2000 un</option>
+                    <option value="5000">5000 un</option>
+                    <option value="Variavel">Outra Quantidade (Variável)</option>
+                </select>
+            </div>
+            <div class="row w-preco" style="margin-bottom:0px;">
+                <div class="input-group" style="width:100%;">
+                    <label>Valor Adicional (R$)</label>
+                    <input type="number" id="taxaMaoValor" min="0" step="0.01" onclick="this.select()" placeholder="0.00">
+                </div>
+            </div>
+            <div class="input-group w-acao">
+                <button class="btn-add" onclick="atualizarObjetoTaxaMao()">Definir</button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="data-table" id="tableTaxasQuantidadeMao">
+                <thead>
+                    <tr>
+                        <th class="w-nome">Lote do Menu</th>
+                        <th class="w-preco">Taxa Injetada (R$)</th>
+                        <th class="w-acao">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 
+    <div class="action-zone">
+        <button class="btn-save" onclick="salvarAlteracoesLocais()">Salvar no Sistema</button>
+        <button class="btn-export" onclick="exportarJsonAtualizado()">Baixar dados.json</button>
+    </div>
+</div>
+<script>
+    let databaseFallback = {
+        "logoEmpresa": "", 
+        "valorStartMao": 0.00,
+        "produtosConfigurados": [{ "id": 1, "nomeCompleto": "500 Sacolas 17x18x8 - Offset 180g", "precoBase": 0.78 }],
+        "cordoes": [{ "nome": "Nylon", "preco": 0.20 }],
+        "quantidades": [500, 1000, 2000, 3000, 4000, 5000],
+        "valoresAcabamento": { "ilhos": 0.20, "furoLaco": 0.15, "cores": { "1x0": 480.0, "2x0": 550.0, "4x0": 700.0, "4x1": 850.0 } },
+        "modelosMao": [{ "id": 1, "nome": "Mão de E.V.A - Modelo Tradicional 40cm", "precoBase": 2.50 }],
+        "coresEva": [{ "nome": "Azul Comercial", "preco": 0.00 }, { "nome": "Vermelho", "preco": 0.00 }],
+        // ADICIONADO NO FALLBACK: Estrutura inicial de taxas por lote
+        "taxasQuantidade": { "100": 0.00, "200": 0.00, "300": 0.00, "500": 0.00, "1000": 0.00, "2000": 0.00, "5000": 0.00, "Variavel": 0.00 }
+    };
+
+    let currentData = JSON.parse(JSON.stringify(databaseFallback));
+    let ultimoCustoIlhosValido = databaseFallback.valoresAcabamento.ilhos;
+    let ultimoCustoFuroValido = databaseFallback.valoresAcabamento.furoLaco;
+
+    window.onload = function() {
+        const cacheLocal = localStorage.getItem('comvil_catalogo_cache');
+        if (cacheLocal) {
+            currentData = JSON.parse(cacheLocal);
+            validarEstruturaMao();
+            renderAll();
+        } else {
+            fetch('dados.json')
+                .then(res => res.json())
+                .then(data => { 
+                    currentData = data; 
+                    validarEstruturaMao();
+                    renderAll(); 
+                })
+                .catch(() => { renderAll(); });
+        }
+    };
+
+    function validarEstruturaMao() {
+        if (!currentData.modelosMao) currentData.modelosMao = [];
+        if (!currentData.coresEva) currentData.coresEva = [];
+        if (currentData.valorStartMao === undefined) currentData.valorStartMao = 0.00;
+        // ADICIONADO: Garante que o objeto de taxas exista ao carregar
+        if (!currentData.taxasQuantidade) currentData.taxasQuantidade = { "100": 0, "200": 0, "300": 0, "500": 0, "1000": 0, "2000": 0, "5000": 0, "Variavel": 0 };
+    }
+
+    function switchTab(e, tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        e.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    function toggleCustoCampo(selectId, inputId) {
+        const status = document.getElementById(selectId).value;
+        const inputCampo = document.getElementById(inputId);
+        if (status === 'nao') {
+            if (inputId === 'fixoIlhos' && parseFloat(inputCampo.value) > 0) ultimoCustoIlhosValido = parseFloat(inputCampo.value);
+            if (inputId === 'fixoFuro' && parseFloat(inputCampo.value) > 0) ultimoCustoFuroValido = parseFloat(inputCampo.value);
+            inputCampo.value = '0.00';
+            inputCampo.disabled = true;
+        } else {
+            inputCampo.disabled = false;
+            if (parseFloat(inputCampo.value) === 0) {
+                inputCampo.value = inputId === 'fixoIlhos' ? ultimoCustoIlhosValido : ultimoCustoFuroValido;
+            }
+        }
+    }
+    function renderAll() {
+        // SACOLAS
+        const tbodyProd = document.querySelector('#tableProdutos tbody');
+        tbodyProd.innerHTML = '';
+        currentData.produtosConfigurados.forEach((p, idx) => {
+            tbodyProd.innerHTML += `<tr>
+                <td class="w-nome"><input type="text" class="table-input" value="${p.nomeCompleto}" onchange="atualizarDadosInline('produtosConfigurados', ${idx}, 'nomeCompleto', this.value)"></td>
+                <td class="w-preco"><input type="number" min="0" step="0.01" class="table-input" value="${p.precoBase}" onchange="atualizarDadosInline('produtosConfigurados', ${idx}, 'precoBase', this.value)"></td>
+                <td class="w-acao"><div class="actions-cell"><div class="order-arrows-column"><button class="btn-control" onclick="moverItem('produtosConfigurados', ${idx}, -1)">▲</button><button class="btn-control" onclick="moverItem('produtosConfigurados', ${idx}, 1)">▼</button></div><button class="btn-del" onclick="removerItem('produtosConfigurados', ${idx})">Excluir</button></div></td>
+            </tr>`;
+        });
+
+        // CORDÕES
+        const tbodyCord = document.querySelector('#tableCordoes tbody');
+        tbodyCord.innerHTML = '';
+        currentData.cordoes.forEach((c, idx) => {
+            tbodyCord.innerHTML += `<tr>
+                <td class="w-nome"><input type="text" class="table-input" value="${c.nome}" onchange="atualizarDadosInline('cordoes', ${idx}, 'nome', this.value)"></td>
+                <td class="w-preco"><input type="number" min="0" step="0.01" class="table-input" value="${c.preco}" onchange="atualizarDadosInline('cordoes', ${idx}, 'preco', this.value)"></td>
+                <td class="w-acao"><div class="actions-cell"><div class="order-arrows-column"><button class="btn-control" onclick="moverItem('cordoes', ${idx}, -1)">▲</button><button class="btn-control" onclick="moverItem('cordoes', ${idx}, 1)">▼</button></div><button class="btn-del" onclick="removerItem('cordoes', ${idx})">Excluir</button></div></td>
+            </tr>`;
+        });
+
+        // MODELOS MÃO
+        const tbodyMao = document.querySelector('#tableModelosMao tbody');
+        tbodyMao.innerHTML = '';
+        currentData.modelosMao.forEach((m, idx) => {
+            tbodyMao.innerHTML += `<tr>
+                <td class="w-nome"><input type="text" class="table-input" value="${m.nome}" onchange="atualizarDadosInline('modelosMao', ${idx}, 'nome', this.value)"></td>
+                <td class="w-preco"><input type="number" min="0" step="0.01" class="table-input" value="${m.precoBase}" onchange="atualizarDadosInline('modelosMao', ${idx}, 'precoBase', this.value)"></td>
+                <td class="w-acao"><div class="actions-cell"><div class="order-arrows-column"><button class="btn-control" onclick="moverItem('modelosMao', ${idx}, -1)">▲</button><button class="btn-control" onclick="moverItem('modelosMao', ${idx}, 1)">▼</button></div><button class="btn-del" onclick="removerItem('modelosMao', ${idx})">Excluir</button></div></td>
+            </tr>`;
+        });
+
+        // CORES IMPRESSÃO
+        const tbodyCoresEva = document.querySelector('#tableCoresEva tbody');
+        tbodyCoresEva.innerHTML = '';
+        currentData.coresEva.forEach((cor, idx) => {
+            tbodyCoresEva.innerHTML += `<tr>
+                <td class="w-nome"><input type="text" class="table-input" value="${cor.nome}" onchange="atualizarDadosInline('coresEva', ${idx}, 'nome', this.value)"></td>
+                <td class="w-preco"><input type="number" min="0" step="0.01" class="table-input" value="${cor.preco}" onchange="atualizarDadosInline('coresEva', ${idx}, 'preco', this.value)"></td>
+                <td class="w-acao"><div class="actions-cell"><div class="order-arrows-column"><button class="btn-control" onclick="moverItem('coresEva', ${idx}, -1)">▲</button><button class="btn-control" onclick="moverItem('coresEva', ${idx}, 1)">▼</button></div><button class="btn-del" onclick="removerItem('coresEva', ${idx})">Excluir</button></div></td>
+            </tr>`;
+        });
+
+        // ADICIONADO NA RENDERIZAÇÃO: Monta a tabela operacional que mostra e edita as taxas de quantidade
+        const tbodyTaxasQtd = document.querySelector('#tableTaxasQuantidadeMao tbody');
+        tbodyTaxasQtd.innerHTML = '';
+        Object.keys(currentData.taxasQuantidade).forEach((key) => {
+            let labelExibido = key === "Variavel" ? "Outra Qtd (Variável)" : key + " un";
+            tbodyTaxasQtd.innerHTML += `<tr>
+                <td class="w-nome"><input type="text" class="table-input" value="${labelExibido}" disabled></td>
+                <td class="w-preco"><input type="number" min="0" step="0.01" class="table-input" value="${currentData.taxasQuantidade[key]}" onchange="atualizarTaxaInlineMao('${key}', this.value)"></td>
+                <td class="w-acao"><div class="actions-cell"><button class="btn-del" onclick="resetarTaxaMao('${key}')">Zerar</button></div></td>
+            </tr>`;
+        });
+        // Sincroniza a exibição do novo campo operacional
+        document.getElementById('valorStartMao').value = currentData.valorStartMao || 0;
+        
+        const temIlhos = currentData.valoresAcabamento.ilhos > 0;
+        document.getElementById('statusIlhos').value = temIlhos ? 'sim' : 'nao';
+        document.getElementById('fixoIlhos').value = currentData.valoresAcabamento.ilhos;
+        document.getElementById('fixoIlhos').disabled = !temIlhos;
+
+        const temFuro = currentData.valoresAcabamento.furoLaco > 0;
+        document.getElementById('statusFuro').value = temFuro ? 'sim' : 'nao';
+        document.getElementById('fixoFuro').value = currentData.valoresAcabamento.furoLaco;
+        document.getElementById('fixoFuro').disabled = !temFuro;
+        
+        document.getElementById('cor1x0').value = currentData.valoresAcabamento.cores['1x0'] || 0;
+        document.getElementById('cor2x0').value = currentData.valoresAcabamento.cores['2x0'] || 0;
+        document.getElementById('cor4x0').value = currentData.valoresAcabamento.cores['4x0'] || 0;
+        document.getElementById('cor4x1').value = currentData.valoresAcabamento.cores['4x1'] || 0;
+    }
+
+    // ADICIONADO: Sincroniza alteração direta feita na tabela de taxas por lote
+    function atualizarTaxaInlineMao(chave, valor) {
+        currentData.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
+    }
+
+    // ADICIONADO: Adiciona ou atualiza a taxa do lote pelo menu superior da seção
+    function atualizarObjetoTaxaMao() {
+        const chave = document.getElementById('taxaMaoQtdAlvo').value;
+        const valor = Math.max(0, parseFloat(document.getElementById('taxaMaoValor').value) || 0);
+        currentData.taxasQuantidade[chave] = valor;
+        document.getElementById('taxaMaoValor').value = '';
+        renderAll();
+    }
+
+    // ADICIONADO: Reseta o valor de uma taxa específica para zero
+    function resetarTaxaMao(chave) {
+        currentData.taxasQuantidade[chave] = 0.00;
+        renderAll();
+    }
+
+    function moverItem(tipo, index, direcao) {
+        const novoIndex = index + direcao;
+        if (novoIndex < 0 || novoIndex >= currentData[tipo].length) return;
+        const temp = currentData[tipo][index];
+        currentData[tipo][index] = currentData[tipo][novoIndex];
+        currentData[tipo][novoIndex] = temp;
+        renderAll();
+    }
+
+    function atualizarDadosInline(tipo, index, propriedade, novoValor) {
+        if (propriedade === 'precoBase' || propriedade === 'preco') {
+            currentData[tipo][index][propriedade] = Math.max(0, parseFloat(novoValor) || 0); 
+        } else {
+            currentData[tipo][index][propriedade] = novoValor.trim();
+        }
+    }
+
+    function adicionarProduto() {
+        const nome = document.getElementById('prodNome').value.trim();
+        const preco = Math.max(0, parseFloat(document.getElementById('prodPreco').value) || 0);
+        if(!nome) return;
+        const novoId = currentData.produtosConfigurados.length > 0 ? Math.max(...currentData.produtosConfigurados.map(p => p.id)) + 1 : 1;
+        currentData.produtosConfigurados.push({ "id": novoId, "nomeCompleto": nome, "precoBase": preco });
+        document.getElementById('prodNome').value = ''; document.getElementById('prodPreco').value = '';
+        renderAll();
+    }
+    function adicionarCordao() {
+        const nome = document.getElementById('cordaoNome').value.trim();
+        const preco = Math.max(0, parseFloat(document.getElementById('cordaoPreco').value) || 0);
+        if(!nome) return;
+        currentData.cordoes.push({ "nome": nome, "preco": preco });
+        document.getElementById('cordaoNome').value = ''; document.getElementById('cordaoPreco').value = '';
+        renderAll();
+    }
+
+    function adicionarModeloMao() {
+        const nome = document.getElementById('maoNome').value.trim();
+        const preco = Math.max(0, parseFloat(document.getElementById('maoPreco').value) || 0);
+        if(!nome) return;
+        const novoId = currentData.modelosMao.length > 0 ? Math.max(...currentData.modelosMao.map(m => m.id)) + 1 : 1;
+        currentData.modelosMao.push({ "id": novoId, "nome": nome, "precoBase": preco });
+        document.getElementById('maoNome').value = ''; document.getElementById('maoPreco').value = '';
+        renderAll();
+    }
+
+    function adicionarCorEva() {
+        const nome = document.getElementById('evaCorNome').value.trim();
+        const preco = Math.max(0, parseFloat(document.getElementById('evaCorPreco').value) || 0);
+        if(!nome) return;
+        currentData.coresEva.push({ "nome": nome, "preco": preco });
+        document.getElementById('evaCorNome').value = ''; document.getElementById('evaCorPreco').value = '';
+        renderAll();
+    }
+
+    function removerItem(tipo, index) { currentData[tipo].splice(index, 1); renderAll(); }
+
+    function sincronizarFormularioObjeto() {
+        currentData.valorStartMao = Math.max(0, parseFloat(document.getElementById('valorStartMao').value) || 0);
+        
+        const ilhosStatus = document.getElementById('statusIlhos').value;
+        currentData.valoresAcabamento.ilhos = ilhosStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoIlhos').value) || 0) : 0.00;
+        const furoStatus = document.getElementById('statusFuro').value;
+        currentData.valoresAcabamento.furoLaco = furoStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoFuro').value) || 0) : 0.00;
+        
+        currentData.valoresAcabamento.cores['1x0'] = Math.max(0, parseFloat(document.getElementById('cor1x0').value) || 0);
+        currentData.valoresAcabamento.cores['2x0'] = Math.max(0, parseFloat(document.getElementById('cor2x0').value) || 0);
+        currentData.valoresAcabamento.cores['4x0'] = Math.max(0, parseFloat(document.getElementById('cor4x0').value) || 0);
+        currentData.valoresAcabamento.cores['4x1'] = Math.max(0, parseFloat(document.getElementById('cor4x1').value) || 0);
+        
+        // Mantém o objeto taxasQuantidade ativo estruturado na sincronização
+        if (!currentData.taxasQuantidade) currentData.taxasQuantidade = { "100": 0, "200": 0, "300": 0, "500": 0, "1000": 0, "Variavel": 0 };
+    }
+
+    function salvarAlteracoesLocais() {
+        sincronizarFormularioObjeto();
+        localStorage.setItem('comvil_catalogo_cache', JSON.stringify(currentData));
+        const toast = document.getElementById('toast'); toast.classList.add('show');
+        setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        renderAll();
+    }
+
+    function exportarJsonAtualizado() {
+        sincronizarFormularioObjeto();
+        const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: "application/json" });
+        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "dados.json"; link.click();
+    }
+</script>
+       
             
         </div>
     </div>
