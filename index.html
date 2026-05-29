@@ -1878,14 +1878,20 @@ function desenharCaixaPdf(ctx, x, y, w, h, titulo) {
 }
 
 function switchTab(e, idConteudo) {
+    // 1. Esconde todas as abas e desativa os botões
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
+    
+    // 2. Ativa o botão atual e mostra a aba clicada
     e.target.classList.add('active');
     document.getElementById(idConteudo).classList.add('active');
-    if (typeof verificarAberturaTabAdmin === "function") {
-    verificarAberturaTabAdmin(idConteudo);
+    
+    // 3. SE FOR A ABA ADMIN, ESSA LINHA ADICIONAL DESENHA AS TABELAS NA TELA
+    if (idConteudo === 'tab-admin' && typeof renderAllAdmin === "function") {
+        renderAllAdmin();
     }
 }
+
 </script>
 </body>
 </html>
