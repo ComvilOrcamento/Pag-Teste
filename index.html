@@ -1882,6 +1882,9 @@ function switchTab(e, idConteudo) {
     document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
     e.target.classList.add('active');
     document.getElementById(idConteudo).classList.add('active');
+    if (typeof verificarAberturaTabAdmin === "function") {
+    verificarAberturaTabAdmin(idConteudo);
+    }
 }
 </script>
 </body>
