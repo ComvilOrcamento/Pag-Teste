@@ -1319,12 +1319,12 @@ function processarETingirMockup(incluirRodape = false) {
         let cos = Math.cos(giroManualRad);
         let sin = Math.sin(giroManualRad);
 
-        
+        ctxRef.rotate(giroManualRad);
 
         if (elModelo && elModelo.value === 'horizontal') {
-            ctxRef.transform(1, -0.060, -0.25, 1, 0, 0); 
+            ctxRef.transform(1, -0.060, -0.25, 1, logoX, logoY); 
         } else {
-            ctxRef.transform(1, -0.020, -0.040, 1, 0, 0); 
+            ctxRef.transform(1, -0.020, -0.040, 1, logoX, logoY); 
         }
         ctxRef.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
         ctxRef.restore();
