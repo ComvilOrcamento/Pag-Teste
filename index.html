@@ -1315,7 +1315,11 @@ function processarETingirMockup(incluirRodape = false) {
         ctxRef.translate(logoX, logoY);
         let valGiro = elLogoGiro ? elLogoGiro.value : 0;
         let giroManualRad = (parseFloat(valGiro) * Math.PI) / 180;
-        ctxRef.rotate(giroManualRad);
+
+        let cos = Math.cos(giroManualRad);
+        let sin = Math.sin(giroManualRad);
+
+        
 
         if (elModelo && elModelo.value === 'horizontal') {
             ctxRef.transform(1, -0.060, -0.25, 1, 0, 0); 
