@@ -1316,15 +1316,12 @@ function processarETingirMockup(incluirRodape = false) {
         let valGiro = elLogoGiro ? elLogoGiro.value : 0;
         let giroManualRad = (parseFloat(valGiro) * Math.PI) / 180;
 
-        let cos = Math.cos(giroManualRad);
-        let sin = Math.sin(giroManualRad);
-
         ctxRef.rotate(giroManualRad);
 
         if (elModelo && elModelo.value === 'horizontal') {
-            ctxRef.transform(1, -0.060, -0.25, 1, 0, 0); 
+            ctxRef.transform(1, 0, -0.25, -0.200, 0, 0); 
         } else {
-            ctxRef.transform(1, -0.020, -0.040, 1, 0, 0); 
+            ctxRef.transform(1, 0, -0.040, 1, 0, 0); 
         }
         ctxRef.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
         ctxRef.restore();
