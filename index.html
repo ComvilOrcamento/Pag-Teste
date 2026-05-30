@@ -1322,9 +1322,9 @@ function processarETingirMockup(incluirRodape = false) {
         ctxRef.rotate(giroManualRad);
 
         if (elModelo && elModelo.value === 'horizontal') {
-            ctxRef.transform(1, -0.060, -0.25, 1, logoX, logoY); 
+            ctxRef.transform(1, -0.060, -0.25, 1, 0, 0); 
         } else {
-            ctxRef.transform(1, -0.020, -0.040, 1, logoX, logoY); 
+            ctxRef.transform(1, -0.020, -0.040, 1, 0, 0); 
         }
         ctxRef.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
         ctxRef.restore();
