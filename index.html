@@ -1320,7 +1320,7 @@ function processarETingirMockup(incluirRodape = false) {
         if (elModelo && elModelo.value === 'horizontal') {
             ctxRef.transform(1, 0, -0.25, 1, 0, 0); 
         } else {
-            ctxRef.transform(1, 0, -0.080, 1, 0, 0); 
+            ctxRef.transform(1, 0, 0, 1, 0, 0); 
         }
         ctxRef.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
         ctxRef.restore();
