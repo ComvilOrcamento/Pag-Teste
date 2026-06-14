@@ -91,7 +91,7 @@
         .btn-download:hover { background-color: #002244; }
         .btn-download:disabled { background-color: #bdc3c7; cursor: not-allowed; }
         .preview-container { flex-grow: 1; width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .preview-box { width: 100%; flex-grow: 1; display: flex; justify-content: center; align-items: center; background: #e8e8e8; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); border: 1px solid rgba(226, 232, 240, 0.8); touch-action: none; }
+        .preview-box { width: 100%; flex-grow: 1; display: flex; justify-content: center; align-items: center; background: #e8e8e8; border-radius: 16px; padding: 25px; position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10); touch-action: none; }
         .preview-buttons-wrapper { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         canvas { max-width: 100%; max-height: 72vh; height: auto !important; object-fit: contain; display: block; border-radius: 8px; }
         .hint-text { font-size: 11px; color: #888888; margin-top: 4px; font-weight: 500; text-align: center; }
@@ -323,12 +323,12 @@
                             </div>
                         </div>
                         <div class="field" style="margin-bottom: 12px;">
-                            <label for="logo-zoom">Tamanho do Logotipo (Zoom)</label>
-                            <input type="range" id="logo-zoom" min="10" max="70" value="35">
+                            <label for="logo-zoom">Tamanho do Logotipo</label>
+                            <input type="range" id="logo-zoom" min="10" max="90" value="40">
                         </div>
                         <div class="field" style="margin-bottom: 12px;">
-                            <label for="logo-giro">Giro do Logotipo (Rotação)</label>
-                            <input type="range" id="logo-giro" min="-15" max="15" value="0" step="0.5">
+                            <label for="logo-giro">Giro do Logotipo</label>
+                            <input type="range" id="logo-giro" min="-180" max="180" value="0" step="1">
                         </div>
                     </form>
                 </div>
@@ -339,7 +339,7 @@
                     <div class="preview-buttons-wrapper">
                         <button type="button" id="btnGenerateJPEG" class="btn-action btn-generate">⚙️ Gerar Mockup (JPEG)</button>
                         <button type="button" id="btnDownloadLayout" class="btn-action btn-download" disabled>💾 Descarregar Layout</button>
-                        <span class="hint-text">💡 Arraste na tela para mover / Use as barras para zoom e giro</span>
+<span class="hint-text">💡 Arraste o logo pela sacola / Use a barra para ajustar o tamanho</span>
                     </div>
                 </div>
             </div>
@@ -452,6 +452,20 @@
                 </table>
             </div>
 
+            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Calibração da Zona de Impressão (Mockup)</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 12px;">Arraste os 4 vértices sobre a imagem da sacola para definir a área imprimível de cada modelo.</div>
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+                <label style="font-size:12px; font-weight:bold; color:#475569;">Modelo:</label>
+                <select id="adminZonaModelo" onchange="adminZonaCarregarModelo()" style="height:34px; font-size:13px; border:1px solid #ccc; border-radius:6px; padding:0 8px;">
+                    <option value="vertical">Vertical</option>
+                    <option value="horizontal">Horizontal</option>
+                </select>
+            </div>
+            <div style="width:100%; max-width:420px; margin:0 auto 12px auto; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <canvas id="adminZonaCanvas" style="width:100%; display:block; cursor:crosshair; touch-action:none;"></canvas>
+            </div>
+            <button class="btn-principal" onclick="adminZonaSalvar()" style="margin:0 0 20px 0; background:#7c3aed;">Aplicar Zona ao Mockup</button>
+
             <div style="display: flex; gap: 15px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
                 <button class="btn-principal" onclick="salvarAlteracoesAdminLocais()" style="margin:0; background: #003366; flex:1;">Salvar no Sistema</button>
                 <button class="btn-principal" onclick="exportarJsonAdminAtualizado()" style="margin:0; background: #10b981; flex:1;">Baixar dados.json</button>
@@ -469,6 +483,15 @@ let ultimoCustoFuroValidoAdmin = 0.15;
 function verificarAberturaTabAdmin(idConteudo) {
     if (idConteudo === 'tab-admin') {
         renderAllAdmin();
+        adminZonaInit();
+    }
+    if (idConteudo === 'tab-mockup') {
+        // Re-aplica zona com as configurações persistidas (resolve race condition de cache de imagens)
+        // Só atua se a imagem base já carregou (naturalWidth > 0); caso contrário o onload já dispara
+        if (imgBase.naturalWidth > 0) {
+            zonaImpressao = zonaFallbackPorModelo();
+            processarETingirMockup(false);
+        }
     }
 }
 
@@ -659,6 +682,153 @@ function removerItemAdmin(tipo, index) {
     let db = (tipo === 'produtosConfigurados' || tipo === 'cordoes') ? databaseSacola : databaseMao;
     db[tipo].splice(index, 1); 
     renderAllAdmin(); 
+}
+
+/* ==========================================================================
+   EDITOR VISUAL DE ZONA DE IMPRESSÃO (PAINEL ADMIN)
+   ========================================================================== */
+let adminZonaCorners  = null;   // [TL,TR,BL,BR] em coords do canvas admin
+let adminZonaDragging = -1;
+let adminZonaOffX = 0, adminZonaOffY = 0;
+let adminZonaModelo   = 'vertical';
+let adminZonaImgRef   = new Image();
+
+const ADMIN_ZONA_DEFAULTS = {
+    vertical:   [[0.21,0.13],[0.79,0.13],[0.19,0.81],[0.81,0.81]],
+    horizontal: [[0.08,0.16],[0.70,0.13],[0.10,0.84],[0.72,0.81]]
+};
+
+function adminZonaInit() {
+    const canvas = document.getElementById('adminZonaCanvas');
+    if (!canvas) return;
+    adminZonaSetupEventos(canvas);
+    adminZonaCarregarModelo();
+}
+
+function adminZonaCarregarModelo() {
+    const sel = document.getElementById('adminZonaModelo');
+    if (sel) adminZonaModelo = sel.value;
+    const canvas = document.getElementById('adminZonaCanvas');
+    if (!canvas) return;
+
+    adminZonaImgRef = new Image();
+    adminZonaImgRef.onload = function() {
+        const MAX_W = canvas.parentElement ? canvas.parentElement.clientWidth : 420;
+        const escala = Math.min(1, MAX_W / adminZonaImgRef.naturalWidth);
+        canvas.width  = adminZonaImgRef.naturalWidth  * escala;
+        canvas.height = adminZonaImgRef.naturalHeight * escala;
+        adminZonaInicializarCantos(canvas);
+        adminZonaDesenhar(canvas);
+    };
+    adminZonaImgRef.onerror = function() {
+        canvas.width = 380; canvas.height = 480;
+        adminZonaInicializarCantos(canvas);
+        adminZonaDesenhar(canvas);
+    };
+    adminZonaImgRef.src = `sacola_${adminZonaModelo}_base.png`;
+}
+
+function adminZonaInicializarCantos(canvas) {
+    const W = canvas.width, H = canvas.height;
+    const salvo = databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
+    const src = salvo
+        ? [salvo.tl, salvo.tr, salvo.bl, salvo.br].map(p => [p[0], p[1]])
+        : ADMIN_ZONA_DEFAULTS[adminZonaModelo];
+    adminZonaCorners = src.map(([u, v]) => ({ x: u * W, y: v * H }));
+}
+
+function adminZonaDesenhar(canvas) {
+    if (!canvas) canvas = document.getElementById('adminZonaCanvas');
+    if (!canvas || !adminZonaCorners) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    if (adminZonaImgRef.complete && adminZonaImgRef.naturalWidth > 0) {
+        ctx.drawImage(adminZonaImgRef, 0, 0, W, H);
+    } else {
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center'; ctx.font = '13px Arial';
+        ctx.fillText('Acesse a aba Mockup primeiro para carregar a imagem', W / 2, H / 2);
+    }
+
+    const [tl, tr, bl, br] = adminZonaCorners;
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,83,166,0.10)';
+    ctx.beginPath();
+    ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
+    ctx.closePath(); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    const LABELS = ['TL','TR','BL','BR'];
+    const HR = Math.max(12, W * 0.028);
+    adminZonaCorners.forEach((c, i) => {
+        ctx.beginPath(); ctx.arc(c.x, c.y, HR, 0, Math.PI * 2);
+        ctx.fillStyle = '#003366'; ctx.fill();
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.font = `bold ${Math.max(9, HR * 0.7)}px Arial`;
+        ctx.fillText(LABELS[i], c.x, c.y);
+    });
+}
+
+function adminZonaSetupEventos(canvas) {
+    const coords = e => {
+        const r = canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - r.left) * (canvas.width / r.width),
+            y: (e.clientY - r.top)  * (canvas.height / r.height)
+        };
+    };
+    canvas.addEventListener('pointerdown', e => {
+        if (!adminZonaCorners) return;
+        const m = coords(e);
+        const HR = Math.max(12, canvas.width * 0.028) * 1.5;
+        for (let i = 0; i < 4; i++) {
+            const dx = m.x - adminZonaCorners[i].x, dy = m.y - adminZonaCorners[i].y;
+            if (Math.sqrt(dx*dx+dy*dy) <= HR) {
+                canvas.setPointerCapture(e.pointerId);
+                adminZonaDragging = i; adminZonaOffX = dx; adminZonaOffY = dy;
+                return;
+            }
+        }
+    });
+    canvas.addEventListener('pointermove', e => {
+        if (adminZonaDragging < 0 || !adminZonaCorners) return;
+        const m = coords(e);
+        adminZonaCorners[adminZonaDragging] = {
+            x: Math.max(0, Math.min(canvas.width,  m.x - adminZonaOffX)),
+            y: Math.max(0, Math.min(canvas.height, m.y - adminZonaOffY))
+        };
+        adminZonaDesenhar(canvas);
+    });
+    canvas.addEventListener('pointerup', e => {
+        if (adminZonaDragging >= 0) { canvas.releasePointerCapture(e.pointerId); adminZonaDragging = -1; }
+    });
+}
+
+function adminZonaSalvar() {
+    const canvas = document.getElementById('adminZonaCanvas');
+    if (!canvas || !adminZonaCorners) return;
+    const W = canvas.width, H = canvas.height;
+    if (!databaseSacola.zonasImpressao) databaseSacola.zonasImpressao = {};
+    const [tl, tr, bl, br] = adminZonaCorners;
+    databaseSacola.zonasImpressao[adminZonaModelo] = {
+        tl: [tl.x/W, tl.y/H], tr: [tr.x/W, tr.y/H],
+        bl: [bl.x/W, bl.y/H], br: [br.x/W, br.y/H]
+    };
+    zonaImpressao = zonaFallbackPorModelo();
+    resetarPosicaoLogoPadrao();
+    if (typeof processarETingirMockup === 'function') processarETingirMockup(false);
+    const objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
+    localStorage.setItem('comvil_catalogo_cache', JSON.stringify(objetoUnificado));
+    alert('Zona salva e aplicada ao mockup!');
 }
 
 function sincronizarFormularioObjetoAdmin() {
@@ -1064,18 +1234,18 @@ function exportarOrcamentoGenerico(config) {
     canvas.width = 600; canvas.height = 860;
     ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    try {
-        let maxAlturaLogo = 50;
-        let larguraOriginal = objImgMinha.naturalWidth || objImgMinha.width || 150;
-        let alturaOriginal = objImgMinha.naturalHeight || objImgMinha.height || 55;
-        let proporcaoLogo = larguraOriginal / alturaOriginal; 
-        let larguraCalculada = maxAlturaLogo * proporcaoLogo; 
-        if(larguraCalculada > 220) { 
-            larguraCalculada = 220; 
-            maxAlturaLogo = larguraCalculada / proporcaoLogo; 
-        }
-        ctx.drawImage(objImgMinha, 35, 30, larguraCalculada, maxAlturaLogo); 
-    } catch(e){}
+    // Só desenha se for data URL — imagens file:// contaminam o canvas e bloqueiam toDataURL
+    if (objImgMinha.naturalWidth > 0 && objImgMinha.src && objImgMinha.src.startsWith('data:')) {
+        try {
+            let maxAlturaLogo = 50;
+            let larguraOriginal = objImgMinha.naturalWidth || 150;
+            let alturaOriginal  = objImgMinha.naturalHeight || 55;
+            let proporcaoLogo   = larguraOriginal / alturaOriginal;
+            let larguraCalculada = maxAlturaLogo * proporcaoLogo;
+            if (larguraCalculada > 220) { larguraCalculada = 220; maxAlturaLogo = larguraCalculada / proporcaoLogo; }
+            ctx.drawImage(objImgMinha, 35, 30, larguraCalculada, maxAlturaLogo);
+        } catch(e) {}
+    }
 
     const numeroFinal = config.funcaoNumero();
     ctx.fillStyle = "#333333"; ctx.font = "bold 14px Arial"; ctx.textAlign = "right";
@@ -1113,10 +1283,17 @@ function exportarOrcamentoGenerico(config) {
     ctx.fillStyle = "#444444"; ctx.font = "11px Arial";
     
     let startY = 495; const maxTextWidth = 510; const lineSpacing = 16;
-    startY = wrapText(ctx, "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em " + dataValidade.toLocaleDateString('pt-BR') + ").", 45, startY, maxTextWidth, lineSpacing);
-    startY = wrapText(ctx, "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.", 45, startY, maxTextWidth, lineSpacing);
-    startY = wrapText(ctx, "• Prazo de Produção: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.", 45, startY, maxTextWidth, lineSpacing);
-    wrapText(ctx, "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB).", 45, startY, maxTextWidth, lineSpacing);
+    const condicoes = config.condicoesComerciais || [
+        "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em " + dataValidade.toLocaleDateString('pt-BR') + ").",
+        "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.",
+        "• Prazo de Produção: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.",
+        "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB)."
+    ];
+    condicoes.forEach((linha, i) => {
+        const texto = linha.replace('{dataValidade}', dataValidade.toLocaleDateString('pt-BR'));
+        if (i < condicoes.length - 1) startY = wrapText(ctx, texto, 45, startY, maxTextWidth, lineSpacing);
+        else wrapText(ctx, texto, 45, startY, maxTextWidth, lineSpacing);
+    });
 
     ctx.strokeStyle = "#dddddd"; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(35, 635); ctx.lineTo(565, 635); ctx.stroke();
     ctx.textAlign = "center";
@@ -1134,7 +1311,14 @@ function exportarOrcamentoGenerico(config) {
     ctx.textAlign = "left"; 
     const novaAba = window.open("", "_blank");
     if (novaAba) {
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.98);
+        let dataUrl;
+        try {
+            dataUrl = canvas.toDataURL("image/jpeg", 0.98);
+        } catch(e) {
+            novaAba.close();
+            alert("Erro ao exportar: o canvas foi contaminado por uma imagem externa.\nVerifique se o logotipo da empresa foi carregado via upload (não por caminho direto).");
+            return;
+        }
         const nomeArquivo = `Orcamento_${config.prefixoArquivo}_${numeroFinal}_${nome.replace(/\s+/g, '_')}.jpg`;
         const telefoneLimpo = telFormulario.replace(/\D/g, "");
         let assinaturaMensagem = vendedor ? vendedor.trim() : "Comvil Brindes";
@@ -1174,7 +1358,13 @@ function abrirImagemNovaAbaSacola() {
         funcaoCalculo: calcularValoresAtuaisSacola, funcaoNumero: obterNumeroIdentificadorSacola,
         textoLinhaInsumos: function(d) {
             return "• Cores: " + d.corSelecionada + "  |  • Ilhós: " + (d.temIlhos ? "Sim" : "Não") + "  |  • Alça: " + d.nomeCordao + "  |  • Furo Laço: " + (d.temFuroLaco ? "Sim" : "Não");
-        }
+        },
+        condicoesComerciais: [
+            "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em {dataValidade}).",
+            "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.",
+            "• Prazo de Produção: 30 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.",
+            "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB)."
+        ]
     });
 }
 
@@ -1185,7 +1375,13 @@ function abrirImagemNovaAbaMao() {
         funcaoCalculo: calcularValoresAtuaisMao, funcaoNumero: obterNumeroIdentificadorMao,
         textoLinhaInsumos: function(d) {
             return "• Tipo de Encaixe: " + d.tipoEncaixe + "  |  • Cor/Estampa: " + d.corEva;
-        }
+        },
+        condicoesComerciais: [
+            "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em {dataValidade}).",
+            "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.",
+            "• Prazo de Produção: 10 dias úteis a partir da aprovação do layout e pagamento do sinal de entrada.",
+            "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB)."
+        ]
     });
 }
 
@@ -1204,12 +1400,13 @@ let imgLateral = new Image(); let imgCordao = new Image();
 let imgLogo = new Image(); let imgEmpresa = new Image();
 
 let logoCarregada = false; let logoEmpresaPronta = false;
-let arrastandoLogo = false; let mockupGeradoComRodape = false;
+let mockupGeradoComRodape = false;
 let modoKraftAtivo = false;
 
-let logoX = 0; let logoY = 0;
-let offsetMouseX = 0; let offsetMouseY = 0;
-let logoAtualWidth = 0; let logoAtualHeight = 0;
+let zonaImpressao = null;       // {tl, tr, bl, br} em px — face frontal da sacola
+let logoUV = { u: 0.5, v: 0.5 }; // centro do logo no espaço UV da zona (0–1)
+let arrastandoLogo = false;
+let offsetUV = { u: 0, v: 0 };
 let corCordaoSelecionada = "#ffffff";
 
 // MATRIZ CORRIGIDA E COMPLETA DE CORES DO MOSTRUÁRIO DE CORDÕES
@@ -1225,7 +1422,6 @@ const mostruarioCordao = [
     { nome: "Marrom Café", hex: "#86725e" }, { nome: "Bege Kraft", hex: "#cba277" }
 ];
 
-imgEmpresa.crossOrigin = "anonymous";
 imgEmpresa.onload = function() { logoEmpresaPronta = true; };
 imgEmpresa.src = 'logo-empresa.png';
 
@@ -1266,6 +1462,221 @@ function criarCamadaColorida(imgMascara, corHex) {
     return buffer;
 }
 
+/* ---------- SISTEMA DE ZONA UV ---------- */
+function pontoDaZona(u, v) {
+    if (!zonaImpressao) return { x: 0, y: 0 };
+    const { tl, tr, bl, br } = zonaImpressao;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    return {
+        x: lerp(lerp(tl.x, tr.x, u), lerp(bl.x, br.x, u), v),
+        y: lerp(lerp(tl.y, tr.y, u), lerp(bl.y, br.y, u), v)
+    };
+}
+
+function canvasParaUV(cx, cy) {
+    let u = 0.5, v = 0.5;
+    for (let i = 0; i < 10; i++) {
+        const p  = pontoDaZona(u, v);
+        const pu = pontoDaZona(u + 0.001, v);
+        const pv = pontoDaZona(u, v + 0.001);
+        const dxdu = (pu.x - p.x) / 0.001, dydu = (pu.y - p.y) / 0.001;
+        const dxdv = (pv.x - p.x) / 0.001, dydv = (pv.y - p.y) / 0.001;
+        const ex = cx - p.x, ey = cy - p.y;
+        const det = dxdu * dydv - dxdv * dydu;
+        if (Math.abs(det) < 1e-10) break;
+        u += (dydv * ex - dxdv * ey) / det;
+        v += (dxdu * ey - dydu * ex) / det;
+    }
+    return { u: Math.max(0, Math.min(1, u)), v: Math.max(0, Math.min(1, v)) };
+}
+
+function calcularHV(hw) {
+    if (!zonaImpressao || !imgLogo.naturalWidth) return hw;
+    const { tl, tr, bl, br } = zonaImpressao;
+    const zonaW = (Math.hypot(tr.x-tl.x, tr.y-tl.y) + Math.hypot(br.x-bl.x, br.y-bl.y)) / 2;
+    const zonaH = (Math.hypot(bl.x-tl.x, bl.y-tl.y) + Math.hypot(br.x-tr.x, br.y-tr.y)) / 2;
+    return hw * (zonaW / zonaH) * (imgLogo.naturalHeight / imgLogo.naturalWidth);
+}
+
+function computarCantosLogo() {
+    if (!zonaImpressao || !imgLogo.naturalWidth) return null;
+    const elLogoZoom = document.getElementById('logo-zoom');
+    const elLogoGiro = document.getElementById('logo-giro');
+    const zoom    = elLogoZoom ? parseFloat(elLogoZoom.value) / 100 : 0.40;
+    const giroRad = elLogoGiro ? parseFloat(elLogoGiro.value) * Math.PI / 180 : 0;
+    const hw = zoom / 2;
+    const hv = calcularHV(hw);
+    const { u, v } = logoUV;
+
+    const { tl, tr, bl, br } = zonaImpressao;
+    const Wpx = (Math.hypot(tr.x-tl.x, tr.y-tl.y) + Math.hypot(br.x-bl.x, br.y-bl.y)) / 2;
+    const Hpx = (Math.hypot(bl.x-tl.x, bl.y-tl.y) + Math.hypot(br.x-tr.x, br.y-tr.y)) / 2;
+
+    const offsets = [
+        { du: -hw, dv: -hv },
+        { du:  hw, dv: -hv },
+        { du: -hw, dv:  hv },
+        { du:  hw, dv:  hv }
+    ];
+
+    if (giroRad === 0) {
+        return offsets.map(({ du, dv }) => pontoDaZona(u + du, v + dv));
+    }
+
+    // Rotação em espaço de superfície: logo gira como adesivo na sacola
+    const cos = Math.cos(giroRad), sin = Math.sin(giroRad);
+    return offsets.map(({ du, dv }) => {
+        const sx = du * Wpx, sy = dv * Hpx;
+        const rx = sx * cos - sy * sin;
+        const ry = sx * sin + sy * cos;
+        return pontoDaZona(u + rx / Wpx, v + ry / Hpx);
+    });
+}
+
+function detectarZonaDeImpressao() {
+    if (!imgFrente.complete || imgFrente.naturalWidth === 0) return null;
+    const W = imgFrente.naturalWidth, H = imgFrente.naturalHeight;
+    try {
+        const off = document.createElement('canvas');
+        off.width = W; off.height = H;
+        off.getContext('2d').drawImage(imgFrente, 0, 0);
+        const dados = off.getContext('2d').getImageData(0, 0, W, H).data; // lança SecurityError em file://
+        const alpha = (x, y) => dados[(y * W + x) * 4 + 3];
+        const LIMIAR = 40;
+
+        let tl = null, tr = null, bl = null, br = null;
+        outer1: for (let d = 0; d < W + H; d++) {
+            for (let x = 0; x <= Math.min(d, W-1); x++) {
+                const y = d - x;
+                if (y < 0 || y >= H) continue;
+                if (alpha(x, y) > LIMIAR) { tl = { x, y }; break outer1; }
+            }
+        }
+        outer2: for (let d = 0; d < W + H; d++) {
+            for (let x = W-1; x >= Math.max(W-1-d, 0); x--) {
+                const y = d - (W-1-x);
+                if (y < 0 || y >= H) continue;
+                if (alpha(x, y) > LIMIAR) { tr = { x, y }; break outer2; }
+            }
+        }
+        outer3: for (let d = 0; d < W + H; d++) {
+            for (let x = 0; x <= Math.min(d, W-1); x++) {
+                const y = H-1 - (d - x);
+                if (y < 0 || y >= H) continue;
+                if (alpha(x, y) > LIMIAR) { bl = { x, y }; break outer3; }
+            }
+        }
+        outer4: for (let d = 0; d < W + H; d++) {
+            for (let x = W-1; x >= Math.max(W-1-d, 0); x--) {
+                const y = H-1 - (d - (W-1-x));
+                if (y < 0 || y >= H) continue;
+                if (alpha(x, y) > LIMIAR) { br = { x, y }; break outer4; }
+            }
+        }
+        if (!tl || !tr || !bl || !br) return null;
+        const cx = (tl.x + tr.x + bl.x + br.x) / 4;
+        const cy = (tl.y + tr.y + bl.y + br.y) / 4;
+        const inset = p => ({ x: p.x + (cx - p.x) * 0.06, y: p.y + (cy - p.y) * 0.06 });
+        return { tl: inset(tl), tr: inset(tr), bl: inset(bl), br: inset(br) };
+    } catch(e) {
+        // SecurityError em file:// — usa coordenadas salvas no admin ou fallback geométrico
+        return null;
+    }
+}
+
+function zonaFallbackPorModelo() {
+    const elModelo = document.getElementById('modelo');
+    const horizontal = elModelo && elModelo.value === 'horizontal';
+    const W = imgBase.naturalWidth, H = imgBase.naturalHeight;
+    // Verifica se o admin já salvou coordenadas calibradas
+    const chave = horizontal ? 'horizontal' : 'vertical';
+    if (databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[chave]) {
+        const z = databaseSacola.zonasImpressao[chave];
+        return {
+            tl: { x: z.tl[0] * W, y: z.tl[1] * H },
+            tr: { x: z.tr[0] * W, y: z.tr[1] * H },
+            bl: { x: z.bl[0] * W, y: z.bl[1] * H },
+            br: { x: z.br[0] * W, y: z.br[1] * H }
+        };
+    }
+    // Fallback geométrico: retângulo centrado na face da sacola
+    if (horizontal) {
+        return {
+            tl: { x: W * 0.08, y: H * 0.16 },
+            tr: { x: W * 0.70, y: H * 0.13 },
+            bl: { x: W * 0.10, y: H * 0.84 },
+            br: { x: W * 0.72, y: H * 0.81 }
+        };
+    }
+    return {
+        tl: { x: W * 0.21, y: H * 0.13 },
+        tr: { x: W * 0.79, y: H * 0.13 },
+        bl: { x: W * 0.19, y: H * 0.81 },
+        br: { x: W * 0.81, y: H * 0.81 }
+    };
+}
+
+function desenharGridPerspectiva(ctx) {
+    if (!zonaImpressao) return;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0,83,166,0.18)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 6]);
+    const LINHAS = 4;
+    for (let i = 0; i <= LINHAS; i++) {
+        const t = i / LINHAS;
+        const top   = pontoDaZona(t, 0), bot  = pontoDaZona(t, 1);
+        const left  = pontoDaZona(0, t), right = pontoDaZona(1, t);
+        ctx.beginPath(); ctx.moveTo(top.x, top.y);   ctx.lineTo(bot.x, bot.y);   ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(left.x, left.y); ctx.lineTo(right.x, right.y); ctx.stroke();
+    }
+    // Borda da zona
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = 'rgba(0,83,166,0.45)';
+    ctx.lineWidth = 1.5;
+    const { tl, tr, bl, br } = zonaImpressao;
+    ctx.beginPath();
+    ctx.moveTo(tl.x, tl.y); ctx.lineTo(tr.x, tr.y);
+    ctx.lineTo(br.x, br.y); ctx.lineTo(bl.x, bl.y);
+    ctx.closePath(); ctx.stroke();
+    ctx.restore();
+}
+/* ---------------------------------------- */
+
+function desenharTrianguloPerspectiva(ctx, img, x0,y0, x1,y1, x2,y2, u0,v0, u1,v1, u2,v2) {
+    const denom = (u0*(v1-v2) + u1*(v2-v0) + u2*(v0-v1));
+    if (Math.abs(denom) < 1e-10) return;
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.lineTo(x2,y2); ctx.closePath(); ctx.clip();
+    const a = (x0*(v1-v2) + x1*(v2-v0) + x2*(v0-v1)) / denom;
+    const c = (x0*(u2-u1) + x1*(u0-u2) + x2*(u1-u0)) / denom;
+    const e = (x0*(u1*v2-u2*v1) + x1*(u2*v0-u0*v2) + x2*(u0*v1-u1*v0)) / denom;
+    const b = (y0*(v1-v2) + y1*(v2-v0) + y2*(v0-v1)) / denom;
+    const d = (y0*(u2-u1) + y1*(u0-u2) + y2*(u1-u0)) / denom;
+    const f = (y0*(u1*v2-u2*v1) + y1*(u2*v0-u0*v2) + y2*(u0*v1-u1*v0)) / denom;
+    ctx.transform(a,b,c,d,e,f);
+    ctx.drawImage(img, 0, 0);
+    ctx.restore();
+}
+
+function desenharLogoComPerspectiva(ctx, img, tl, tr, bl, br) {
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    const N = 32;
+    const lerp = (a,b,t) => a + (b-a)*t;
+    const bx = (u,v) => lerp(lerp(tl.x,tr.x,u), lerp(bl.x,br.x,u), v);
+    const by = (u,v) => lerp(lerp(tl.y,tr.y,u), lerp(bl.y,br.y,u), v);
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            const u0=i/N, u1=(i+1)/N, v0=j/N, v1=(j+1)/N;
+            const p00={x:bx(u0,v0),y:by(u0,v0)}, p10={x:bx(u1,v0),y:by(u1,v0)};
+            const p01={x:bx(u0,v1),y:by(u0,v1)}, p11={x:bx(u1,v1),y:by(u1,v1)};
+            const sx0=u0*iw, sy0=v0*ih, sx1=u1*iw, sy1=v1*ih;
+            desenharTrianguloPerspectiva(ctx,img, p00.x,p00.y, p10.x,p10.y, p01.x,p01.y, sx0,sy0, sx1,sy0, sx0,sy1);
+            desenharTrianguloPerspectiva(ctx,img, p10.x,p10.y, p11.x,p11.y, p01.x,p01.y, sx1,sy0, sx1,sy1, sx0,sy1);
+        }
+    }
+}
+
 function processarETingirMockup(incluirRodape = false) {
     const canvasRef = document.getElementById('mockupCanvas');
     if(!canvasRef) return;
@@ -1291,7 +1702,6 @@ function processarETingirMockup(incluirRodape = false) {
     const elCorFrente = document.getElementById('cor-frente');
     const elCorLateral = document.getElementById('cor-lateral');
     const elLogoZoom = document.getElementById('logo-zoom');
-    const elLogoGiro = document.getElementById('logo-giro');
 
     if (imgFrente.complete && imgFrente.naturalWidth > 0) {
         const corFinalFrente = modoKraftAtivo ? "#c2a67a" : (elCorFrente ? elCorFrente.value : "#ffffff");
@@ -1304,26 +1714,25 @@ function processarETingirMockup(incluirRodape = false) {
         ctxRef.drawImage(camadaLateral, 0, 0);
     }
 
-    if (logoCarregada && imgLogo.complete && imgLogo.naturalWidth > 0) {
-        ctxRef.save();
-        let valZoom = elLogoZoom ? elLogoZoom.value : 35;
-        let percentualZoom = valZoom / 100;
-        logoAtualWidth = imgBase.naturalWidth * percentualZoom;
-        let proporcao = (imgLogo.naturalHeight / imgLogo.naturalWidth);
-        logoAtualHeight = proporcao * logoAtualWidth;
-        
-        ctxRef.translate(logoX, logoY);
-        let valGiro = elLogoGiro ? elLogoGiro.value : 0;
-        let giroManualRad = (parseFloat(valGiro) * Math.PI) / 180;
-        ctxRef.rotate(giroManualRad);
+    if (!incluirRodape && zonaImpressao) {
+        desenharGridPerspectiva(ctxRef);
+    }
 
-        if (elModelo && elModelo.value === 'horizontal') {
-            ctxRef.transform(1, 0, -0.40, 1, 0, 0); 
-        } else {
-            ctxRef.transform(1, 0, -0.060, 1, 0, 0); 
+    if (logoCarregada && imgLogo.complete && imgLogo.naturalWidth > 0 && zonaImpressao) {
+        const cantos = computarCantosLogo();
+        if (cantos) {
+            const [tl, tr, bl, br] = cantos;
+            ctxRef.save();
+            ctxRef.beginPath();
+            ctxRef.moveTo(zonaImpressao.tl.x, zonaImpressao.tl.y);
+            ctxRef.lineTo(zonaImpressao.tr.x, zonaImpressao.tr.y);
+            ctxRef.lineTo(zonaImpressao.br.x, zonaImpressao.br.y);
+            ctxRef.lineTo(zonaImpressao.bl.x, zonaImpressao.bl.y);
+            ctxRef.closePath();
+            ctxRef.clip();
+            desenharLogoComPerspectiva(ctxRef, imgLogo, tl, tr, bl, br);
+            ctxRef.restore();
         }
-        ctxRef.drawImage(imgLogo, -logoAtualWidth / 2, -logoAtualHeight / 2, logoAtualWidth, logoAtualHeight);
-        ctxRef.restore();
     }
 
     if (imgCordao.complete && imgCordao.naturalWidth > 0) {
@@ -1370,15 +1779,24 @@ function processarETingirMockup(incluirRodape = false) {
 }
 
 function resetarPosicaoLogoPadrao() {
-    if (!imgBase.naturalWidth) return;
-    const elModelo = document.getElementById('modelo');
-    if (elModelo && elModelo.value === 'horizontal') {
-        logoX = imgBase.naturalWidth * 0.48;
-        logoY = imgBase.naturalHeight * 0.54;
-    } else {
-        logoX = imgBase.naturalWidth * 0.50;
-        logoY = imgBase.naturalHeight * 0.53;
-    }
+    logoUV = { u: 0.5, v: 0.5 };
+}
+
+function resetarCanvas() {
+    // Limpa o logo e reseta todos os controles para o estado inicial
+    logoCarregada = false;
+    imgLogo.src = '';
+    logoUV = { u: 0.5, v: 0.5 };
+    const elZoom = document.getElementById('logo-zoom');
+    const elGiro = document.getElementById('logo-giro');
+    const elInput = document.getElementById('logoFile');
+    if (elZoom)  { elZoom.value  = 40; document.getElementById('logo-zoom-val') && (document.getElementById('logo-zoom-val').textContent = '40%'); }
+    if (elGiro)  { elGiro.value  = 0;  document.getElementById('logo-giro-val') && (document.getElementById('logo-giro-val').textContent = '0°'); }
+    if (elInput) elInput.value = '';
+    mockupGeradoComRodape = false;
+    const btnDownload = document.getElementById('btnDownloadLayout');
+    if (btnDownload) btnDownload.disabled = true;
+    processarETingirMockup(false);
 }
 
 function carregarArquivosDoServidor() {
@@ -1389,6 +1807,7 @@ function carregarArquivosDoServidor() {
     function verificarPronto() {
         carregadas++;
         if (carregadas === 4) {
+            zonaImpressao = detectarZonaDeImpressao() || zonaFallbackPorModelo();
             resetarPosicaoLogoPadrao();
             mockupGeradoComRodape = false;
             const btnDownload = document.getElementById('btnDownloadLayout');
@@ -1396,8 +1815,6 @@ function carregarArquivosDoServidor() {
             processarETingirMockup(false);
         }
     }
-    imgBase.crossOrigin = "anonymous"; imgFrente.crossOrigin = "anonymous";
-    imgLateral.crossOrigin = "anonymous"; imgCordao.crossOrigin = "anonymous";
     imgBase.onload = verificarPronto; imgFrente.onload = verificarPronto;
     imgLateral.onload = verificarPronto; imgCordao.onload = verificarPronto;
     imgBase.src = `sacola_${sentido}_base.png?v=${Date.now()}`;
@@ -1440,37 +1857,63 @@ function obterCoordenadasPointer(e) {
     };
 }
 
+function pontoNoPoly(px, py, pts) {
+    let inside = false;
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        const xi = pts[i].x, yi = pts[i].y, xj = pts[j].x, yj = pts[j].y;
+        if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi))
+            inside = !inside;
+    }
+    return inside;
+}
+
 if (canvasRef) {
     canvasRef.addEventListener('pointerdown', function(e) {
-        if (!logoCarregada) return;
-        canvasRef.setPointerCapture(e.pointerId); 
+        if (!logoCarregada || !zonaImpressao) return;
         const mouse = obterCoordenadasPointer(e);
-        if (mouse.x >= logoX - logoAtualWidth/2 && mouse.x <= logoX + logoAtualWidth/2 &&
-            mouse.y >= logoY - logoAtualHeight/2 && mouse.y <= logoY + logoAtualHeight/2) {
+        const cantos = computarCantosLogo();
+        if (!cantos) return;
+        // Ordem de polígono: TL, TR, BR, BL
+        const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
+        if (pontoNoPoly(mouse.x, mouse.y, poly)) {
+            canvasRef.setPointerCapture(e.pointerId);
             arrastandoLogo = true;
-            offsetMouseX = mouse.x - logoX; offsetMouseY = mouse.y - logoY;
-            canvasRef.style.cursor = "grabbing"; mockupGeradoComRodape = false;
+            const uv = canvasParaUV(mouse.x, mouse.y);
+            offsetUV = { u: uv.u - logoUV.u, v: uv.v - logoUV.v };
+            canvasRef.style.cursor = 'grabbing';
+            mockupGeradoComRodape = false;
             const btnDownload = document.getElementById('btnDownloadLayout');
             if (btnDownload) btnDownload.disabled = true;
         }
     });
 
     canvasRef.addEventListener('pointermove', function(e) {
-        if (!logoCarregada) return;
+        if (!zonaImpressao) return;
         const mouse = obterCoordenadasPointer(e);
         if (arrastandoLogo) {
-            logoX = mouse.x - offsetMouseX; logoY = mouse.y - offsetMouseY;
-            processarETingirMockup(false); 
+            const uv = canvasParaUV(mouse.x, mouse.y);
+            logoUV = {
+                u: Math.max(0, Math.min(1, uv.u - offsetUV.u)),
+                v: Math.max(0, Math.min(1, uv.v - offsetUV.v))
+            };
+            processarETingirMockup(false);
         } else {
-            if (mouse.x >= logoX - logoAtualWidth/2 && mouse.x <= logoX + logoAtualWidth/2 &&
-                mouse.y >= logoY - logoAtualHeight/2 && mouse.y <= logoY + logoAtualHeight/2) {
-                canvasRef.style.cursor = "pointer";
-            } else { canvasRef.style.cursor = "default"; }
+            if (logoCarregada) {
+                const cantos = computarCantosLogo();
+                const poly = cantos ? [cantos[0], cantos[1], cantos[3], cantos[2]] : null;
+                canvasRef.style.cursor = (poly && pontoNoPoly(mouse.x, mouse.y, poly)) ? 'grab' : 'default';
+            } else {
+                canvasRef.style.cursor = 'default';
+            }
         }
     });
 
     canvasRef.addEventListener('pointerup', function(e) {
-        if (arrastandoLogo) { canvasRef.releasePointerCapture(e.pointerId); arrastandoLogo = false; canvasRef.style.cursor = "default"; }
+        if (arrastandoLogo) {
+            canvasRef.releasePointerCapture(e.pointerId);
+            arrastandoLogo = false;
+            canvasRef.style.cursor = 'default';
+        }
     });
 }
 const btnGenerateJPEG = document.getElementById('btnGenerateJPEG');
@@ -1479,7 +1922,6 @@ const elBtnKraft = document.getElementById('btnKraft');
 const elCorFrente = document.getElementById('cor-frente');
 const elCorLateral = document.getElementById('cor-lateral');
 const elLogoZoom = document.getElementById('logo-zoom');
-const elLogoGiro = document.getElementById('logo-giro');
 const elModelo = document.getElementById('modelo');
 
 if (btnGenerateJPEG) {
@@ -1514,6 +1956,7 @@ if (elBtnKraft) {
 if (elCorFrente) elCorFrente.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elCorLateral) elCorLateral.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elLogoZoom) elLogoZoom.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
+const elLogoGiro = document.getElementById('logo-giro');
 if (elLogoGiro) elLogoGiro.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elModelo) elModelo.addEventListener('change', carregarArquivosDoServidor);
 
