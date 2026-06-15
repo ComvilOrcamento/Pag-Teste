@@ -21,7 +21,7 @@
     {
       "id": 8,
       "nomeCompleto": "3 Sacolas 17x18x8 - Offset 180g - sem revestimento",
-      "precoBase": 0.55
+      "precoBase": 0.56
     },
     {
       "id": 9,
@@ -32,6 +32,336 @@
       "id": 10,
       "nomeCompleto": "5 Sacolas 17x18x8 - Offset 180g - sem revestimento",
       "precoBase": 0.54
+    },
+    {
+      "id": 11,
+      "nomeCompleto": "05 Sacolas 17x18x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.36
+    },
+    {
+      "id": 12,
+      "nomeCompleto": "1 Sacolas 17x18x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.17
+    },
+    {
+      "id": 13,
+      "nomeCompleto": "2 Sacolas 17x18x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.04
+    },
+    {
+      "id": 14,
+      "nomeCompleto": "3 Sacolas 17x18x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.01
+    },
+    {
+      "id": 15,
+      "nomeCompleto": "4 Sacolas 17x18x8 - Offset 180g - Hotstamp",
+      "precoBase": 1
+    },
+    {
+      "id": 16,
+      "nomeCompleto": "5 Sacolas 17x18x8 - Offset 180g - Hotstamp",
+      "precoBase": 0.98
+    },
+    {
+      "id": 17,
+      "nomeCompleto": "05 Sacolas 17x18x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.68
+    },
+    {
+      "id": 18,
+      "nomeCompleto": "1 Sacolas 17x18x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.64
+    },
+    {
+      "id": 19,
+      "nomeCompleto": "2 Sacolas 17x18x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.57
+    },
+    {
+      "id": 20,
+      "nomeCompleto": "3 Sacolas 17x18x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.56
+    },
+    {
+      "id": 21,
+      "nomeCompleto": "4 Sacolas 17x18x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.55
+    },
+    {
+      "id": 22,
+      "nomeCompleto": "5 Sacolas 17x18x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.54
+    },
+    {
+      "id": 23,
+      "nomeCompleto": "05 Sacolas 17x18x8 - Duplex 190g - Plastificado",
+      "precoBase": 1.1
+    },
+    {
+      "id": 24,
+      "nomeCompleto": "1 Sacolas 17x18x8 - Duplex 190g - Plastificado",
+      "precoBase": 0.85
+    },
+    {
+      "id": 25,
+      "nomeCompleto": "2 Sacolas 17x18x8 - Duplex 190g - Plastificado",
+      "precoBase": 0.78
+    },
+    {
+      "id": 26,
+      "nomeCompleto": "3 Sacolas 17x18x8 - Duplex 190g - Plastificado",
+      "precoBase": 0.77
+    },
+    {
+      "id": 27,
+      "nomeCompleto": "4 Sacolas 17x18x8 - Duplex 190g - Plastificado",
+      "precoBase": 0.76
+    },
+    {
+      "id": 28,
+      "nomeCompleto": "5 Sacolas 17x18x8 - Duplex 190g - Plastificado",
+      "precoBase": 0.75
+    },
+    {
+      "id": 29,
+      "nomeCompleto": "05 Sacolas 17x18x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.96
+    },
+    {
+      "id": 30,
+      "nomeCompleto": "1 Sacolas 17x18x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.28
+    },
+    {
+      "id": 31,
+      "nomeCompleto": "2 Sacolas 17x18x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.12
+    },
+    {
+      "id": 32,
+      "nomeCompleto": "3 Sacolas 17x18x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.11
+    },
+    {
+      "id": 33,
+      "nomeCompleto": "4 Sacolas 17x18x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.1
+    },
+    {
+      "id": 34,
+      "nomeCompleto": "5 Sacolas 17x18x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.09
+    },
+    {
+      "id": 35,
+      "nomeCompleto": "05 Sacolas 17x18x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.98
+    },
+    {
+      "id": 36,
+      "nomeCompleto": "1 Sacolas 17x18x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.43
+    },
+    {
+      "id": 37,
+      "nomeCompleto": "2 Sacolas 17x18x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.3
+    },
+    {
+      "id": 38,
+      "nomeCompleto": "3 Sacolas 17x18x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.29
+    },
+    {
+      "id": 39,
+      "nomeCompleto": "4 Sacolas 17x18x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.28
+    },
+    {
+      "id": 40,
+      "nomeCompleto": "5 Sacolas 17x18x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.27
+    },
+    {
+      "id": 41,
+      "nomeCompleto": "05 Sacolas 18x24x8 - Offset 180g - sem revestimento",
+      "precoBase": 0.7
+    },
+    {
+      "id": 42,
+      "nomeCompleto": "1 Sacolas 18x24x8 - Offset 180g - sem revestimento",
+      "precoBase": 0.65
+    },
+    {
+      "id": 43,
+      "nomeCompleto": "2 Sacolas 18x24x8 - Offset 180g - sem revestimento",
+      "precoBase": 0.64
+    },
+    {
+      "id": 44,
+      "nomeCompleto": "3 Sacolas 18x24x8 - Offset 180g - sem revestimento",
+      "precoBase": 0.63
+    },
+    {
+      "id": 45,
+      "nomeCompleto": "4 Sacolas 18x24x8 - Offset 180g - sem revestimento",
+      "precoBase": 0.62
+    },
+    {
+      "id": 46,
+      "nomeCompleto": "5 Sacolas 18x24x8 - Offset 180g - sem revestimento",
+      "precoBase": 0.61
+    },
+    {
+      "id": 47,
+      "nomeCompleto": "05 Sacolas 18x24x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.48
+    },
+    {
+      "id": 48,
+      "nomeCompleto": "1 Sacolas 18x24x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.18
+    },
+    {
+      "id": 49,
+      "nomeCompleto": "2 Sacolas 18x24x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.11
+    },
+    {
+      "id": 50,
+      "nomeCompleto": "3 Sacolas 18x24x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.08
+    },
+    {
+      "id": 51,
+      "nomeCompleto": "4 Sacolas 18x24x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.07
+    },
+    {
+      "id": 52,
+      "nomeCompleto": "5 Sacolas 18x24x8 - Offset 180g - Hotstamp",
+      "precoBase": 1.05
+    },
+    {
+      "id": 53,
+      "nomeCompleto": "05 Sacolas 18x24x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.7
+    },
+    {
+      "id": 54,
+      "nomeCompleto": "1 Sacolas 18x24x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.65
+    },
+    {
+      "id": 55,
+      "nomeCompleto": "2 Sacolas 18x24x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.64
+    },
+    {
+      "id": 56,
+      "nomeCompleto": "3 Sacolas 18x24x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.63
+    },
+    {
+      "id": 57,
+      "nomeCompleto": "4 Sacolas 18x24x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.62
+    },
+    {
+      "id": 58,
+      "nomeCompleto": "5 Sacolas 18x24x8 - Duplex 190g - sem revestimento",
+      "precoBase": 0.61
+    },
+    {
+      "id": 59,
+      "nomeCompleto": "05 Sacolas 18x24x8 - Duplex 190g - Plastificada",
+      "precoBase": 1.12
+    },
+    {
+      "id": 60,
+      "nomeCompleto": "1 Sacolas 18x24x8 - Duplex 190g - Plastificada",
+      "precoBase": 0.86
+    },
+    {
+      "id": 61,
+      "nomeCompleto": "2 Sacolas 18x24x8 - Duplex 190g - Plastificada",
+      "precoBase": 87
+    },
+    {
+      "id": 62,
+      "nomeCompleto": "3 Sacolas 18x24x8 - Duplex 190g - Plastificada",
+      "precoBase": 0.86
+    },
+    {
+      "id": 63,
+      "nomeCompleto": "4 Sacolas 18x24x8 - Duplex 190g - Plastificada",
+      "precoBase": 0.85
+    },
+    {
+      "id": 64,
+      "nomeCompleto": "5 Sacolas 18x24x8 - Duplex 190g - Plastificada",
+      "precoBase": 0.84
+    },
+    {
+      "id": 65,
+      "nomeCompleto": "05 Sacolas 18x24x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.98
+    },
+    {
+      "id": 66,
+      "nomeCompleto": "1 Sacolas 18x24x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.29
+    },
+    {
+      "id": 67,
+      "nomeCompleto": "2 Sacolas 18x24x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.19
+    },
+    {
+      "id": 68,
+      "nomeCompleto": "3 Sacolas 18x24x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.15
+    },
+    {
+      "id": 69,
+      "nomeCompleto": "4 Sacolas 18x24x8 - Duplex 190g - BOPP + Verniz",
+      "precoBase": 1.13
+    },
+    {
+      "id": 70,
+      "nomeCompleto": "5 Sacolas 18x24x8 - Duplex 190g - BOPP + Verniz Verniz",
+      "precoBase": 1.11
+    },
+    {
+      "id": 71,
+      "nomeCompleto": "05 Sacolas 18x24x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 2
+    },
+    {
+      "id": 72,
+      "nomeCompleto": "1 Sacolas 18x24x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.44
+    },
+    {
+      "id": 73,
+      "nomeCompleto": "2 Sacolas 18x24x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.37
+    },
+    {
+      "id": 74,
+      "nomeCompleto": "3 Sacolas 18x24x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.34
+    },
+    {
+      "id": 75,
+      "nomeCompleto": "4 Sacolas 18x24x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.33
+    },
+    {
+      "id": 76,
+      "nomeCompleto": "5 Sacolas 18x24x8 - Duplex 190g - BOPP + Hot",
+      "precoBase": 1.31
     }
   ],
   "cordoes": [
@@ -122,5 +452,43 @@
     "2000": 160,
     "5000": 400,
     "Variavel": 0
+  },
+  "zonasImpressao": {
+    "vertical": {
+      "tl": [
+        0.26476190476190475,
+        0.10142857142857144
+      ],
+      "tr": [
+        0.79,
+        0.13476190476190478
+      ],
+      "bl": [
+        0.32571428571428573,
+        0.8361904761904763
+      ],
+      "br": [
+        0.752857142857143,
+        0.6766666666666667
+      ]
+    },
+    "horizontal": {
+      "tl": [
+        0.10857142857142857,
+        0.14571428571428574
+      ],
+      "tr": [
+        0.9261904761904762,
+        0.16095238095238093
+      ],
+      "bl": [
+        0.16904761904761906,
+        0.770952380952381
+      ],
+      "br": [
+        0.9295238095238094,
+        0.5933333333333334
+      ]
+    }
   }
 }
