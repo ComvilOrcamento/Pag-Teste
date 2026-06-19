@@ -2008,13 +2008,19 @@ function pontoNoPoly(px, py, pts) {
     return inside;
 }
 
+// ==========================================================================
+// CAPTURA INTERATIVA DO MOUSE / TOQUE PARA ARRASTAR O LOGOTIPO
+// ==========================================================================
 if (canvasRef) {
     canvasRef.addEventListener('pointerdown', function(e) {
         if (!logoCarregada || !zonaImpressao) return;
         const mouse = obterCoordenadasPointer(e);
         const cantos = computarCantosLogo();
-        if (!cantos) return;
-        const poly = [cantos, cantos, cantos, cantos];
+        if (!cantos || cantos.length < 4) return;
+        
+        // CORREÇÃO: Mapeia os 4 cantos reais individualmente na ordem horária correta do polígono
+        const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
+        
         if (pontoNoPoly(mouse.x, mouse.y, poly)) {
             canvasRef.setPointerCapture(e.pointerId);
             arrastandoLogo = true;
@@ -2040,8 +2046,12 @@ if (canvasRef) {
         } else {
             if (logoCarregada) {
                 const cantos = computarCantosLogo();
-                const poly = cantos ? [cantos, cantos, cantos, cantos] : null;
-                canvasRef.style.cursor = (poly && pontoNoPoly(mouse.x, mouse.y, poly)) ? 'grab' : 'default';
+                if (cantos && cantos.length >= 4) {
+                    const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
+                    canvasRef.style.cursor = pontoNoPoly(mouse.x, mouse.y, poly) ? 'grab' : 'default';
+                } else {
+                    canvasRef.style.cursor = 'default';
+                }
             } else {
                 canvasRef.style.cursor = 'default';
             }
@@ -2056,6 +2066,7 @@ if (canvasRef) {
         }
     });
 }
+
 
 const btnGenerateJPEG = document.getElementById('btnGenerateJPEG');
 const btnDownloadLayout = document.getElementById('btnDownloadLayout');
