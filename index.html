@@ -1642,6 +1642,7 @@ function canvasParaUV(cx, cy) {
     return { u: Math.max(0, Math.min(1, u)), v: Math.max(0, Math.min(1, v)) };
 }
 
+
 function calcularHV(hw) {
     if (!zonaImpressao || !imgLogo.naturalWidth) return hw;
     const { tl, tr, bl, br } = zonaImpressao;
