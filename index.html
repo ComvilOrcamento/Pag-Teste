@@ -381,7 +381,6 @@
         <div class="box-conteudo">
             <div style="font-size: 16px; margin-bottom: 15px; color: #003366; font-weight: bold;">Painel Administrativo de Parâmetros</div>
             
-            <!-- SUB-ABAS INTERNAS DO PAINEL ADMIN -->
             <div class="sub-tabs">
                 <button class="sub-tab-btn active" onclick="switchSubTab(event, 'admin-sacola')">Configurações Sacola</button>
                 <button class="sub-tab-btn" onclick="switchSubTab(event, 'admin-mao')">Configurações Mão</button>
@@ -390,14 +389,19 @@
             <!-- SUB-ABA ADMIN: CONFIGURAÇÕES SACOLA -->
             <div id="admin-sacola" class="sub-tab-content active">
                 <div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
+                <!-- REESTRUTURADO PARA ATENDER AO REQUISITO DE M² POR MODELO -->
                 <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-                    <div class="field" style="width: 60%;">
+                    <div class="field" style="width: 50%;">
                         <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
                         <input type="text" id="prodNome" placeholder="Ex: Sacola Offset 180g - 18x24x8">
                     </div>
-                    <div class="field" style="width: 20%;">
+                    <div class="field" style="width: 15%;">
                         <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Base (R$)</label>
                         <input type="number" id="prodPreco" min="0" step="0.01" placeholder="0.78">
+                    </div>
+                    <div class="field" style="width: 15%;">
+                        <label style="font-size: 12px; font-weight: bold; color: #475569;">M² Aberto</label>
+                        <input type="number" id="prodMetroQuadrado" min="0" step="0.0001" placeholder="0.1450">
                     </div>
                     <div class="field" style="width: 20%;">
                         <button class="btn-principal" onclick="adicionarProdutoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
@@ -405,7 +409,14 @@
                 </div>
                 <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
                     <table id="tableProdutosAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                        <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Nome</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="padding: 8px; text-align: left; width: 50%;">Nome</th>
+                                <th style="padding: 8px; text-align: left; width: 15%;">Preço</th>
+                                <th style="padding: 8px; text-align: left; width: 15%;">M² Aberto</th>
+                                <th style="padding: 8px; text-align: left; width: 20%;">Ação</th>
+                            </tr>
+                        </thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -431,7 +442,6 @@
                 </div>
 
                 <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos de Acabamentos e Cores (Sacola)</div>
-                <!-- CONFIGURAÇÃO DIRETA DE VALORES SEM OPÇÕES SIM/NÃO -->
                 <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap; width: 100%;">
                     <div class="field" style="flex: 1; min-width: 0;"><label>Valor Adicional de Ilhós (R$)</label><input type="number" id="fixoIlhosAdmin" step="0.01" placeholder="0.20"></div>
                     <div class="field" style="flex: 1; min-width: 0;"><label>Valor Adicional de Furo (R$)</label><input type="number" id="fixoFuroAdmin" step="0.01" placeholder="0.15"></div>
@@ -444,27 +454,28 @@
                 </div>
 
                 <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração das Taxas de Enobrecimento (Sacola)</div>
+                <!-- REESTRUTURAÇÃO DOS INPUTS: ELIMINADO EXTRA MILHEIRO, ADICIONADO VALOR M² E VALOR FIXO LOTE -->
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; font-weight: bold; font-size: 11px; color: #475569; text-transform: uppercase;">
-                        <div>Tipo de Enobrecimento</div><div>Valor Unitário Base</div><div>Extra por 1mil un</div>
+                        <div>Tipo de Enobrecimento</div><div>Valor por M² (R$)</div><div>Valor Fixo Lote (R$)</div>
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
-                        <label style="font-size:12px;">Plastificação Brilho</label><input type="number" id="enoPlastBrilhoBase" step="0.01" placeholder="0.00"><input type="number" id="enoPlastBrilhoExtra" step="0.01" placeholder="0.00">
+                        <label style="font-size:12px;">Plastificação Brilho</label><input type="number" id="enoPlastBrilhoM2" step="0.0001" placeholder="0.00"><input type="number" id="enoPlastBrilhoFixo" step="0.01" placeholder="0.00">
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
-                        <label style="font-size:12px;">Plastificação Fosca</label><input type="number" id="enoPlastFoscaBase" step="0.01" placeholder="0.00"><input type="number" id="enoPlastFoscaExtra" step="0.01" placeholder="0.00">
+                        <label style="font-size:12px;">Plastificação Fosca</label><input type="number" id="enoPlastFoscaM2" step="0.0001" placeholder="0.00"><input type="number" id="enoPlastFoscaFixo" step="0.01" placeholder="0.00">
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
-                        <label style="font-size:12px;">Hotstamp</label><input type="number" id="enoHotstampBase" step="0.01" placeholder="0.00"><input type="number" id="enoHotstampExtra" step="0.01" placeholder="0.00">
+                        <label style="font-size:12px;">Hotstamp</label><input type="number" id="enoHotstampM2" step="0.0001" placeholder="0.00"><input type="number" id="enoHotstampFixo" step="0.01" placeholder="0.00">
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
-                        <label style="font-size:12px;">BOPP Brilho</label><input type="number" id="enoBoppBrilhoBase" step="0.01" placeholder="0.00"><input type="number" id="enoBoppBrilhoExtra" step="0.01" placeholder="0.00">
+                        <label style="font-size:12px;">BOPP Brilho</label><input type="number" id="enoBoppBrilhoM2" step="0.0001" placeholder="0.00"><input type="number" id="enoBoppBrilhoFixo" step="0.01" placeholder="0.00">
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
-                        <label style="font-size:12px;">BOPP Fosca</label><input type="number" id="enoBoppFoscaBase" step="0.01" placeholder="0.00"><input type="number" id="enoBoppFoscaExtra" step="0.01" placeholder="0.00">
+                        <label style="font-size:12px;">BOPP Fosca</label><input type="number" id="enoBoppFoscaM2" step="0.0001" placeholder="0.00"><input type="number" id="enoBoppFoscaFixo" step="0.01" placeholder="0.00">
                     </div>
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
-                        <label style="font-size:12px;">Verniz</label><input type="number" id="enoVernizBase" step="0.01" placeholder="0.00"><input type="number" id="enoVernizExtra" step="0.01" placeholder="0.00">
+                        <label style="font-size:12px;">Verniz</label><input type="number" id="enoVernizM2" step="0.0001" placeholder="0.00"><input type="number" id="enoVernizFixo" step="0.01" placeholder="0.00">
                     </div>
                 </div>
 
@@ -621,25 +632,25 @@ function renderAllAdminParteDois() {
         }
     }
 
-    // SINCRONIZA ESTADO DOS NOVOS VALORES DE ENOBRECIMENTO NO ADMIN
+    // SINCRONIZA ESTADO DOS NOVOS VALORES DE ENOBRECIMENTO M² + FIXO LOTE
     if (databaseSacola.valoresEnobrecimento) {
-        document.getElementById('enoPlastBrilhoBase').value = databaseSacola.valoresEnobrecimento.plastBrilhoBase || 0;
-        document.getElementById('enoPlastBrilhoExtra').value = databaseSacola.valoresEnobrecimento.plastBrilhoExtra || 0;
-        document.getElementById('enoPlastFoscaBase').value = databaseSacola.valoresEnobrecimento.plastFoscaBase || 0;
-        document.getElementById('enoPlastFoscaExtra').value = databaseSacola.valoresEnobrecimento.plastFoscaExtra || 0;
-        document.getElementById('enoHotstampBase').value = databaseSacola.valoresEnobrecimento.hotstampBase || 0;
-        document.getElementById('enoHotstampExtra').value = databaseSacola.valoresEnobrecimento.hotstampExtra || 0;
-        document.getElementById('enoBoppBrilhoBase').value = databaseSacola.valoresEnobrecimento.boppBrilhoBase || 0;
-        document.getElementById('enoBoppBrilhoExtra').value = databaseSacola.valoresEnobrecimento.boppBrilhoExtra || 0;
-        document.getElementById('enoBoppFoscaBase').value = databaseSacola.valoresEnobrecimento.boppFoscaBase || 0;
-        document.getElementById('enoBoppFoscaExtra').value = databaseSacola.valoresEnobrecimento.boppFoscaExtra || 0;
-        document.getElementById('enoVernizBase').value = databaseSacola.valoresEnobrecimento.vernizBase || 0;
-        document.getElementById('enoVernizExtra').value = databaseSacola.valoresEnobrecimento.vernizExtra || 0;
+        document.getElementById('enoPlastBrilhoM2').value = databaseSacola.valoresEnobrecimento.plastBrilhoM2 || 0;
+        document.getElementById('enoPlastBrilhoFixo').value = databaseSacola.valoresEnobrecimento.plastBrilhoFixo || 0;
+        document.getElementById('enoPlastFoscaM2').value = databaseSacola.valoresEnobrecimento.plastFoscaM2 || 0;
+        document.getElementById('enoPlastFoscaFixo').value = databaseSacola.valoresEnobrecimento.plastFoscaFixo || 0;
+        document.getElementById('enoHotstampM2').value = databaseSacola.valoresEnobrecimento.hotstampM2 || 0;
+        document.getElementById('enoHotstampFixo').value = databaseSacola.valoresEnobrecimento.hotstampFixo || 0;
+        document.getElementById('enoBoppBrilhoM2').value = databaseSacola.valoresEnobrecimento.boppBrilhoM2 || 0;
+        document.getElementById('enoBoppBrilhoFixo').value = databaseSacola.valoresEnobrecimento.boppBrilhoFixo || 0;
+        document.getElementById('enoBoppFoscaM2').value = databaseSacola.valoresEnobrecimento.boppFoscaM2 || 0;
+        document.getElementById('enoBoppFoscaFixo').value = databaseSacola.valoresEnobrecimento.boppFoscaFixo || 0;
+        document.getElementById('enoVernizM2').value = databaseSacola.valoresEnobrecimento.vernizM2 || 0;
+        document.getElementById('enoVernizFixo').value = databaseSacola.valoresEnobrecimento.vernizFixo || 0;
     }
 }
 
 function renderAllAdmin() {
-    // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA
+    // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA (ADICIONADA COLUNA M² ABERTO)
     const tbodyProd = document.querySelector('#tableProdutosAdmin tbody');
     if (tbodyProd) {
         tbodyProd.innerHTML = '';
@@ -647,6 +658,7 @@ function renderAllAdmin() {
             tbodyProd.innerHTML += `<tr>
                 <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${p.nomeCompleto}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'nomeCompleto', this.value)"></td>
                 <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${p.precoBase}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'precoBase', this.value)"></td>
+                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.0001" style="width:100%; border:none; background:transparent;" value="${p.metroQuadrado || 0}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'metroQuadrado', this.value)"></td>
                 <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('produtosConfigurados', ${idx})">Excluir</button></td>
             </tr>`;
         });
@@ -700,7 +712,7 @@ function resetarTaxaMaoAdmin(chave) {
 
 function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
     let db = (tipo === 'produtosConfigurados' || tipo === 'cordoes') ? databaseSacola : databaseMao;
-    if (propriedade === 'precoBase' || propriedade === 'preco') {
+    if (propriedade === 'precoBase' || propriedade === 'preco' || propriedade === 'metroQuadrado') {
         db[tipo][index][propriedade] = Math.max(0, parseFloat(novoValor) || 0); 
     } else {
         db[tipo][index][propriedade] = novoValor.trim();
@@ -710,11 +722,12 @@ function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
 function adicionarProdutoAdmin() {
     const nome = document.getElementById('prodNome').value.trim();
     const preco = Math.max(0, parseFloat(document.getElementById('prodPreco').value) || 0);
+    const m2 = Math.max(0, parseFloat(document.getElementById('prodMetroQuadrado').value) || 0);
     if(!nome) return;
     if (!databaseSacola.produtosConfigurados) databaseSacola.produtosConfigurados = [];
     const novoId = databaseSacola.produtosConfigurados.length > 0 ? Math.max(...databaseSacola.produtosConfigurados.map(p => p.id)) + 1 : 1;
-    databaseSacola.produtosConfigurados.push({ "id": novoId, "nomeCompleto": nome, "precoBase": preco });
-    document.getElementById('prodNome').value = ''; document.getElementById('prodPreco').value = '';
+    databaseSacola.produtosConfigurados.push({ "id": novoId, "nomeCompleto": nome, "precoBase": preco, "metroQuadrado": m2 });
+    document.getElementById('prodNome').value = ''; document.getElementById('prodPreco').value = ''; document.getElementById('prodMetroQuadrado').value = '';
     renderAllAdmin();
 }
 
@@ -802,7 +815,7 @@ function adminZonaInicializarCantos(canvas) {
     const W = canvas.width, H = canvas.height;
     const salvo = databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
     const src = salvo
-        ? [salvo.tl, salvo.tr, salvo.bl, salvo.br].map(p => [p[0], p[1]])
+        ? [salvo.tl, salvo.tr, salvo.bl, salvo.br].map(p => [p, p])
         : ADMIN_ZONA_DEFAULTS[adminZonaModelo];
     adminZonaCorners = src.map(([u, v]) => ({ x: u * W, y: v * H }));
 }
@@ -829,7 +842,7 @@ function adminZonaDesenhar(canvas) {
     ctx.beginPath();
     ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
     ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
+    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash();
     ctx.beginPath();
     ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
     ctx.closePath(); ctx.stroke();
@@ -914,20 +927,20 @@ function sincronizarFormularioObjetoAdmin() {
     databaseSacola.valoresAcabamento.cores['4x0'] = Math.max(0, parseFloat(document.getElementById('cor4x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['4x1'] = Math.max(0, parseFloat(document.getElementById('cor4x1Admin').value) || 0);
 
-    // SINCRONIZAÇÃO DA NOVA TABELA DE ENOBRECIMENTOS (BASE + EXTRA POR MILHEIRO)
+    // PERSISTÊNCIA DA REESTRUTURAÇÃO: VALOR M² + FIXO LOTE POR TIPO
     if (!databaseSacola.valoresEnobrecimento) databaseSacola.valoresEnobrecimento = {};
-    databaseSacola.valoresEnobrecimento.plastBrilhoBase = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoBase').value) || 0);
-    databaseSacola.valoresEnobrecimento.plastBrilhoExtra = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoExtra').value) || 0);
-    databaseSacola.valoresEnobrecimento.plastFoscaBase = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaBase').value) || 0);
-    databaseSacola.valoresEnobrecimento.plastFoscaExtra = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaExtra').value) || 0);
-    databaseSacola.valoresEnobrecimento.hotstampBase = Math.max(0, parseFloat(document.getElementById('enoHotstampBase').value) || 0);
-    databaseSacola.valoresEnobrecimento.hotstampExtra = Math.max(0, parseFloat(document.getElementById('enoHotstampExtra').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppBrilhoBase = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoBase').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppBrilhoExtra = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoExtra').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppFoscaBase = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaBase').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppFoscaExtra = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaExtra').value) || 0);
-    databaseSacola.valoresEnobrecimento.vernizBase = Math.max(0, parseFloat(document.getElementById('enoVernizBase').value) || 0);
-    databaseSacola.valoresEnobrecimento.vernizExtra = Math.max(0, parseFloat(document.getElementById('enoVernizExtra').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastBrilhoM2 = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoM2').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastBrilhoFixo = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoFixo').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastFoscaM2 = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaM2').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastFoscaFixo = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaFixo').value) || 0);
+    databaseSacola.valoresEnobrecimento.hotstampM2 = Math.max(0, parseFloat(document.getElementById('enoHotstampM2').value) || 0);
+    databaseSacola.valoresEnobrecimento.hotstampFixo = Math.max(0, parseFloat(document.getElementById('enoHotstampFixo').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppBrilhoM2 = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoM2').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppBrilhoFixo = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoFixo').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppFoscaM2 = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaM2').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppFoscaFixo = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaFixo').value) || 0);
+    databaseSacola.valoresEnobrecimento.vernizM2 = Math.max(0, parseFloat(document.getElementById('enoVernizM2').value) || 0);
+    databaseSacola.valoresEnobrecimento.vernizFixo = Math.max(0, parseFloat(document.getElementById('enoVernizFixo').value) || 0);
 }
 
 function salvarAlteracoesAdminLocais() {
@@ -968,8 +981,8 @@ objImgMinha.onerror = function() { objImgMinha.src = "https://placehold.co"; };
 
 const bancoReservaSacola = {
   "produtosConfigurados": [
-    { "id": 1, "nomeCompleto": "Sacola Offset 180g - 18x24x8", "precoBase": 0.78 },
-    { "id": 2, "nomeCompleto": "Sacola Offset 180g - 24x35x10", "precoBase": 0.95 }
+    { "id": 1, "nomeCompleto": "Sacola Offset 180g - 18x24x8", "precoBase": 0.78, "metroQuadrado": 0.1450 },
+    { "id": 2, "nomeCompleto": "Sacola Offset 180g - 24x35x10", "precoBase": 0.95, "metroQuadrado": 0.2380 }
   ],
   "cordoes": [
     { "nome": "Nylon", "preco": 0.20 }, 
@@ -981,14 +994,14 @@ const bancoReservaSacola = {
     "furoLaco": 0.15, 
     "cores": { "1x0": 450.00, "2x0": 480.00, "4x0": 560.00, "4x1": 590.00 } 
   },
-  // INICIALIZAÇÃO DOS PREÇOS DOS NOVOS CAMPOS DE ENOBRECIMENTO NO BANCO RESERVA
+  // ATUALIZAÇÃO DO BANCO RESERVA PARA M2 E VALOR FIXO INDUSTRIAL POR LOTE
   "valoresEnobrecimento": {
-    "plastBrilhoBase": 0.10, "plastBrilhoExtra": 15.00,
-    "plastFoscaBase": 0.15,  "plastFoscaExtra": 20.00,
-    "hotstampBase": 0.25,    "hotstampExtra": 35.00,
-    "boppBrilhoBase": 0.12,  "boppBrilhoExtra": 18.00,
-    "boppFoscaBase": 0.18,   "boppFoscaExtra": 22.00,
-    "vernizBase": 0.08,      "vernizExtra": 12.00
+    "plastBrilhoM2": 1.20,  "plastBrilhoFixo": 80.00,
+    "plastFoscaM2": 1.80,   "plastFoscaFixo": 100.00,
+    "hotstampM2": 3.50,     "hotstampFixo": 250.00,
+    "boppBrilhoM2": 1.50,   "boppBrilhoFixo": 90.00,
+    "boppFoscaM2": 2.10,    "boppFoscaFixo": 110.00,
+    "vernizM2": 0.90,       "vernizFixo": 70.00
   }
 };
 
@@ -1108,7 +1121,6 @@ function calcularValoresAtuaisSacola() {
     const nomeCordaoSelected = document.getElementById("selectCordao_sacola").value;
     const corSelecionada = document.getElementById("selectCores_sacola").value;
     
-    // CAPTURA DO SELETOR DO CLIENTE (INICIA EM NÃO POR PADRÃO)
     const temIlhos = document.getElementById("selectIlhos_sacola").value === "Sim";
     const temFuroLaco = document.getElementById("selectFuroLaco_sacola").value === "Sim";
     const qtd = parseInt(document.getElementById("qtd_sacola").value) || 500;
@@ -1123,31 +1135,43 @@ function calcularValoresAtuaisSacola() {
 
     let produtoEncontrado = databaseSacola.produtosConfigurados.find(p => p.id === idProdutoSelected);
     let precoProdutoBase = produtoEncontrado ? parseFloat(produtoEncontrado.precoBase || 0) : 0;
+    let metroQuadradoBase = produtoEncontrado ? parseFloat(produtoEncontrado.metroQuadrado || 0) : 0;
     let detalhesBase = produtoEncontrado ? produtoEncontrado.nomeCompleto : 'Nenhum produto';
     
     let cordaoEncontrado = databaseSacola.cordoes.find(c => c.nome === nomeCordaoSelected);
     let precoCordaoAlca = cordaoEncontrado ? parseFloat(cordaoEncontrado.preco || 0) : 0;
     
-    // SE MARCAR SIM, SOMA O VALOR DO ADMIN. SE NÃO, FICA ZERO.
-    let precoIlhos = (temIlhos && databaseSacola.valoresAcabamento) ? parseFloat(databaseSacola.valoresAcabamento.ilhos || 0) : 0;
-    let precoFuroLaco = (temFuroLaco && databaseSacola.valoresAcabamento) ? parseFloat(databaseSacola.valoresAcabamento.furoLaco || 0) : 0;
-    let precoCoresFixo = (databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.cores) ? parseFloat(databaseSacola.valoresAcabamento.cores[corSelecionada] || 0) : 0;
+    let precoIlhos = temIlhos ? parseFloat(databaseSacola.valoresAcabamento?.ilhos || 0) : 0;
+    let precoFuroLaco = temFuroLaco ? parseFloat(databaseSacola.valoresAcabamento?.furoLaco || 0) : 0;
+    let precoCoresFixo = parseFloat(databaseSacola.valoresAcabamento?.cores[corSelecionada] || 0);
 
-    // MATEMÁTICA AVANÇADA: VALOR BASE UNITÁRIO + TAXA EXTRA POR BLOCO DE 1.000 (A PARTIR DE 1.000 UN)
-    let blocosDeMil = (qtd >= 1000) ? Math.ceil(qtd / 1000) : 0;
     let dbEno = databaseSacola.valoresEnobrecimento || {};
 
-    let custoEnoTotal = 0;
-    if (enoPlastBrilho) custoEnoTotal += (parseFloat(dbEno.plastBrilhoBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.plastBrilhoExtra || 0));
-    if (enoPlastFosca)  custoEnoTotal += (parseFloat(dbEno.plastFoscaBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.plastFoscaExtra || 0));
-    if (enoHotstamp)    custoEnoTotal += (parseFloat(dbEno.hotstampBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.hotstampExtra || 0));
-    if (enoBoppBrilho)  custoEnoTotal += (parseFloat(dbEno.boppBrilhoBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.boppBrilhoExtra || 0));
-    if (enoBoppFosca)   custoEnoTotal += (parseFloat(dbEno.boppFoscaBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.boppFoscaExtra || 0));
-    if (enoVerniz)      custoEnoTotal += (parseFloat(dbEno.vernizBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.vernizExtra || 0));
+    // CÁLCULO DA PARTE UNITÁRIA DO METRO QUADRADO POR TIPO ATIVO
+    let custoEnoUnitarioM2 = 0;
+    if (enoPlastBrilho) custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.plastBrilhoM2 || 0));
+    if (enoPlastFosca)  custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.plastFoscaM2 || 0));
+    if (enoHotstamp)    custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.hotstampM2 || 0));
+    if (enoBoppBrilho)  custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.boppBrilhoM2 || 0));
+    if (enoBoppFosca)   custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.boppFoscaM2 || 0));
+    if (enoVerniz)      custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.vernizM2 || 0));
 
-    let somaInsumosFisicosUnitarios = precoProdutoBase + precoIlhos + precoCordaoAlca + precoFuroLaco;
-    let subtotalTiragemFisica = (somaInsumosFisicosUnitarios * qtd) + custoEnoTotal;
-    let custoTotalFinalDoLote = subtotalTiragemFisica + precoCoresFixo;
+    // CÁLCULO DO VALOR FIXO POR LOGÍSTICA DE LOTE INDUSTRIAL
+    let custoEnoFixoLote = 0;
+    if (enoPlastBrilho) custoEnoFixoLote += parseFloat(dbEno.plastBrilhoFixo || 0);
+    if (enoPlastFosca)  custoEnoFixoLote += parseFloat(dbEno.plastFoscaFixo || 0);
+    if (enoHotstamp)    custoEnoFixoLote += parseFloat(dbEno.hotstampFixo || 0);
+    if (enoBoppBrilho)  custoEnoFixoLote += parseFloat(dbEno.boppBrilhoFixo || 0);
+    if (enoBoppFosca)   custoEnoFixoLote += parseFloat(dbEno.boppFoscaFixo || 0);
+    if (enoVerniz)      custoEnoFixoLote += parseFloat(dbEno.vernizFixo || 0);
+
+    // MONTAGEM FORMAL DA PARTE "A" CONFORME REQUISITADO:
+    // A = valor base + cordão/alça + Furo + Ilhós + enobrecimento metro quadrado clickbox
+    let parteA = precoProdutoBase + precoCordaoAlca + precoFuroLaco + precoIlhos + custoEnoUnitarioM2;
+    
+    // ENGENHARIA DO CUSTO DO LOTE CONSOLIDADO:
+    // Custo = (A * quantidade) + impressão + enobrecimento fixo
+    let custoTotalFinalDoLote = (parteA * qtd) + precoCoresFixo + custoEnoFixoLote;
     
     if (qtd > 2000) {
         let unidadesExcedentes = qtd - 2000;
@@ -1155,10 +1179,10 @@ function calcularValoresAtuaisSacola() {
         custoTotalFinalDoLote += (blocksDeMil * 50.00);
     }
     
+    // VALOR DE VENDA COM MARGEM DE LUCRO DE 70% (MULTIPLICADOR 1.70)
     let totalLoteComMargemLucro = custoTotalFinalDoLote * 1.70;
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
     
-    // COMPILA LISTA TEXTUAL DE ENOBRECIMENTOS ATIVOS
     let listEno = [];
     if(enoPlastBrilho) listEno.push("Plast. Brilho");
     if(enoPlastFosca) listEno.push("Plast. Fosca");
@@ -1413,7 +1437,7 @@ function exportarOrcamentoGenerico(config) {
     const condicoes = config.condicoesComerciais || [
         "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em " + dataValidade.toLocaleDateString('pt-BR') + ").",
         "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.",
-        "• Prazo de Produção: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.",
+        "• Prazo de Production: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.",
         "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB)."
     ];
     condicoes.forEach((linha, i) => {
@@ -1990,7 +2014,7 @@ if (canvasRef) {
         const mouse = obterCoordenadasPointer(e);
         const cantos = computarCantosLogo();
         if (!cantos) return;
-        const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
+        const poly = [cantos, cantos, cantos, cantos];
         if (pontoNoPoly(mouse.x, mouse.y, poly)) {
             canvasRef.setPointerCapture(e.pointerId);
             arrastandoLogo = true;
@@ -2016,7 +2040,7 @@ if (canvasRef) {
         } else {
             if (logoCarregada) {
                 const cantos = computarCantosLogo();
-                const poly = cantos ? [cantos[0], cantos[1], cantos[3], cantos[2]] : null;
+                const poly = cantos ? [cantos, cantos, cantos, cantos] : null;
                 canvasRef.style.cursor = (poly && pontoNoPoly(mouse.x, mouse.y, poly)) ? 'grab' : 'default';
             } else {
                 canvasRef.style.cursor = 'default';
