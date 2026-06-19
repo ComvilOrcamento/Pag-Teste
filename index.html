@@ -369,7 +369,7 @@
     <!-- ABA PAINEL ADMIN -->
     <div id="tab-admin" class="tab-content">
         <div class="box-conteudo">
-            <div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
+            <div style="font-size: 18px; margin: 0 0 18px 0; color: #003366; font-weight: bold; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">📦 Administração Sacola</div><div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
             <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
                 <div class="field" style="width: 60%;">
                     <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
@@ -415,7 +415,14 @@
                 <div class="field" style="flex: 1; min-width: 110px;"><label>Valor Ilhós</label><input type="number" id="fixoIlhosAdmin" step="0.01"></div>
                 <div class="field" style="flex: 1; min-width: 110px;"><label>Furo?</label><select id="statusFuroAdmin" onchange="toggleCustoCampoAdmin('statusFuroAdmin', 'fixoFuroAdmin')"><option value="sim">Sim</option><option value="nao">Não</option></select></div>
                 <div class="field" style="flex: 1; min-width: 110px;"><label>Valor Furo</label><input type="number" id="fixoFuroAdmin" step="0.01"></div>
-                <div class="field" style="flex: 1; min-width: 150px;"><label>Vlr. Base Enobrecimento</label><input type="number" id="baseEnobrecimentoAdmin" step="0.01"></div>
+                
+<div class="field" style="flex: 1; min-width: 150px;"><label>Plastificação Brilho</label><input type="number" id="enobPlastBrilhoAdmin" step="0.01"></div>
+<div class="field" style="flex: 1; min-width: 150px;"><label>Plastificação Fosca</label><input type="number" id="enobPlastFoscaAdmin" step="0.01"></div>
+<div class="field" style="flex: 1; min-width: 150px;"><label>Hotstamp</label><input type="number" id="enobHotstampAdmin" step="0.01"></div>
+<div class="field" style="flex: 1; min-width: 150px;"><label>BOPP Brilho</label><input type="number" id="enobBoppBrilhoAdmin" step="0.01"></div>
+<div class="field" style="flex: 1; min-width: 150px;"><label>BOPP Fosca</label><input type="number" id="enobBoppFoscaAdmin" step="0.01"></div>
+<div class="field" style="flex: 1; min-width: 150px;"><label>Verniz</label><input type="number" id="enobVernizAdmin" step="0.01"></div>
+
             </div>
             <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
                 <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 1x0</label><input type="number" id="cor1x0Admin" step="0.01"></div>
@@ -432,7 +439,7 @@
                 </table>
             </div>
 
-            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração Mão de Torcida (E.V.A.)</div>
+            <div style="font-size: 18px; margin: 25px 0 18px 0; color: #003366; font-weight: bold; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">✋ Administração Mão</div><div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração Mão de Torcida (E.V.A.)</div>
             <div class="field" style="margin-bottom: 12px;">
                 <label>Valor Start Lote Mão (R$)</label>
                 <input type="number" id="valorStartMaoAdmin" step="0.01">
@@ -593,7 +600,14 @@ function renderAllAdminParteDois() {
     document.getElementById('valorStartMaoAdmin').value = databaseMao.valorStartMao || 0;
 
     if (databaseSacola.valoresAcabamento) {
-        document.getElementById('baseEnobrecimentoAdmin').value = databaseSacola.valoresAcabamento.enobrecimentoPrecoUnitario || 0;
+        
+        const enob = databaseSacola.valoresAcabamento.enobrecimentos || {};
+        document.getElementById('enobPlastBrilhoAdmin').value = enob['Plastificação Brilho'] || 0;
+        document.getElementById('enobPlastFoscaAdmin').value = enob['Plastificação Fosca'] || 0;
+        document.getElementById('enobHotstampAdmin').value = enob['Hotstamp'] || 0;
+        document.getElementById('enobBoppBrilhoAdmin').value = enob['BOPP Brilho'] || 0;
+        document.getElementById('enobBoppFoscaAdmin').value = enob['BOPP Fosca'] || 0;
+        document.getElementById('enobVernizAdmin').value = enob['Verniz'] || 0;
         
         const temIlhos = databaseSacola.valoresAcabamento.ilhos > 0;
         document.getElementById('statusIlhosAdmin').value = temIlhos ? 'sim' : 'nao';
@@ -884,8 +898,15 @@ function sincronizarFormularioObjetoAdmin() {
     databaseMao.valorStartMao = Math.max(0, parseFloat(document.getElementById('valorStartMaoAdmin').value) || 0);
     if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {}, taxasExcedentesEnobrecimento: {} };
     
-    // Sincroniza o novo preço unitário base de enobrecimento do admin
-    databaseSacola.valoresAcabamento.enobrecimentoPrecoUnitario = Math.max(0, parseFloat(document.getElementById('baseEnobrecimentoAdmin').value) || 0);
+    // Sincroniza valores individuais de enobrecimento
+    databaseSacola.valoresAcabamento.enobrecimentos = {
+        'Plastificação Brilho': Math.max(0, parseFloat(document.getElementById('enobPlastBrilhoAdmin').value) || 0),
+        'Plastificação Fosca': Math.max(0, parseFloat(document.getElementById('enobPlastFoscaAdmin').value) || 0),
+        'Hotstamp': Math.max(0, parseFloat(document.getElementById('enobHotstampAdmin').value) || 0),
+        'BOPP Brilho': Math.max(0, parseFloat(document.getElementById('enobBoppBrilhoAdmin').value) || 0),
+        'BOPP Fosca': Math.max(0, parseFloat(document.getElementById('enobBoppFoscaAdmin').value) || 0),
+        'Verniz': Math.max(0, parseFloat(document.getElementById('enobVernizAdmin').value) || 0)
+    };
 
     const ilhosStatus = document.getElementById('statusIlhosAdmin').value;
     databaseSacola.valoresAcabamento.ilhos = ilhosStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0) : 0.00;
@@ -1094,10 +1115,12 @@ function calcularValoresAtuaisSacola() {
     let precoIlhos = (temIlhos && databaseSacola.valoresAcabamento) ? parseFloat(databaseSacola.valoresAcabamento.ilhos || 0) : 0;
     let precoFuroLaco = (temFuroLaco && databaseSacola.valoresAcabamento) ? parseFloat(databaseSacola.valoresAcabamento.furoLaco || 0) : 0;
     
-    // Multiplica o valor unitário base de enobrecimento pela quantidade de opções marcadas
+    // Soma apenas os enobrecimentos marcados utilizando valor individual
     let precoEnobrecimentoAcumulado = 0;
-    if (listaEnobrecimentos.length > 0 && databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.enobrecimentoPrecoUnitario) {
-        precoEnobrecimentoAcumulado = parseFloat(databaseSacola.valoresAcabamento.enobrecimentoPrecoUnitario || 0) * listaEnobrecimentos.length;
+    if (listaEnobrecimentos.length > 0 && databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.enobrecimentos) {
+        listaEnobrecimentos.forEach(tipo => {
+            precoEnobrecimentoAcumulado += parseFloat(databaseSacola.valoresAcabamento.enobrecimentos[tipo] || 0);
+        });
     }
     
     let precoCoresFixo = (databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.cores) ? parseFloat(databaseSacola.valoresAcabamento.cores[corSelecionada] || 0) : 0;
