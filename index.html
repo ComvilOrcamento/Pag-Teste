@@ -814,11 +814,15 @@ function adminZonaCarregarModelo() {
 function adminZonaInicializarCantos(canvas) {
     const W = canvas.width, H = canvas.height;
     const salvo = databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
+    
+    // Formatação rígida da matriz para impedir quebra de escala bilinear
     const src = salvo
-        ? [salvo.tl, salvo.tr, salvo.bl, salvo.br].map(p => [p, p])
+        ? [[salvo.tl[0], salvo.tl[1]], [salvo.tr[0], salvo.tr[1]], [salvo.bl[0], salvo.bl[1]], [salvo.br[0], salvo.br[1]]]
         : ADMIN_ZONA_DEFAULTS[adminZonaModelo];
+        
     adminZonaCorners = src.map(([u, v]) => ({ x: u * W, y: v * H }));
 }
+
 
 function adminZonaDesenhar(canvas) {
     if (!canvas) canvas = document.getElementById('adminZonaCanvas');
@@ -988,13 +992,12 @@ const bancoReservaSacola = {
     { "nome": "Nylon", "preco": 0.20 }, 
     { "nome": "Gorgurão", "preco": 0.28 }
   ],
-  "quantidades":[],
+  "quantidades":,
   "valoresAcabamento": { 
     "ilhos": 0.20, 
     "furoLaco": 0.15, 
     "cores": { "1x0": 450.00, "2x0": 480.00, "4x0": 560.00, "4x1": 590.00 } 
   },
-  // ATUALIZAÇÃO DO BANCO RESERVA PARA M2 E VALOR FIXO INDUSTRIAL POR LOTE
   "valoresEnobrecimento": {
     "plastBrilhoM2": 1.20,  "plastBrilhoFixo": 80.00,
     "plastFoscaM2": 1.80,   "plastFoscaFixo": 100.00,
@@ -1004,6 +1007,7 @@ const bancoReservaSacola = {
     "vernizM2": 0.90,       "vernizFixo": 70.00
   }
 };
+
 
 const bancoReservaMao = {
   "modelosMao": [
