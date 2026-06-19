@@ -2130,6 +2130,51 @@ function switchTab(e, idConteudo) {
         verificarAberturaTabAdmin(idConteudo);
     }
 }
+    // ==========================================================================
+// ROTINAS DE EXPORTAÇÃO E DOWNLOAD COMPATÍVEIS COM O PAINEL ADMIN
+// ==========================================================================
+function adminGerarMockupJpeg() {
+    // Força a renderização do mockup completo incluindo o rodapé institucional Comvil
+    if (typeof processarETingirMockup === "function") {
+        processarETingirMockup(true);
+        mockupGeradoComRodape = true;
+        alert("✓ Mockup gerado com sucesso! Clique em 'Descarregar Layout' para salvar.");
+    }
+}
+
+function adminBaixarLayout() {
+    const canvasAdmin = document.getElementById('mockupCanvas');
+    if (!canvasAdmin) {
+        alert("Erro: Canvas do mockup não foi localizado na página.");
+        return;
+    }
+
+    // Garante a geração com o rodapé institucional antes do disparo do download
+    if (typeof processarETingirMockup === "function") {
+        processarETingirMockup(true);
+    }
+
+    try {
+        const link = document.createElement('a');
+        const elModelo = document.getElementById('modelo');
+        const sentido = elModelo ? elModelo.value : 'vertical';
+        
+        link.download = `proposta-comvil-admin-${sentido}.jpg`;
+        link.href = canvasAdmin.toDataURL("image/jpeg", 1.0);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Restaura o canvas para o modo de edição interativo (remove o rodapé)
+        setTimeout(() => { 
+            if (typeof processarETingirMockup === "function") processarETingirMockup(false); 
+        }, 150);
+    } catch(e) {
+        // Fallback de segurança para quando o arquivo é aberto diretamente via file:// sem servidor local
+        alert("Aviso de Segurança (CORS): Para realizar o download automático, execute o arquivo usando um servidor local (Live Server no VS Code).\n\nComo alternativa rápida: Clique com o botão direito sobre a imagem da sacola e escolha 'Salvar imagem como'.");
+    }
+}
+
 </script>
 </body>
 </html>
