@@ -1999,7 +1999,7 @@ function pontoNoPoly(px, py, pts) {
 }
 
 // ==========================================================================
-// CAPTURA INTERATIVA DO MOUSE / TOQUE PARA ARRASTAR O LOGOTIPO
+// CAPTURA INTERATIVA DO MOUSE COM MATRIZ CORRIGIDA
 // ==========================================================================
 if (canvasRef) {
     canvasRef.addEventListener('pointerdown', function(e) {
@@ -2008,7 +2008,7 @@ if (canvasRef) {
         const cantos = computarCantosLogo();
         if (!cantos || cantos.length < 4) return;
         
-        // CORREÇÃO: Mapeia os 4 cantos reais individualmente na ordem horária correta do polígono
+        // CORREÇÃO ABSOLUTA DA MATRIZ INDEXADA DOS 4 VÉRTICES (TL, TR, BR, BL)
         const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
         
         if (pontoNoPoly(mouse.x, mouse.y, poly)) {
@@ -2018,8 +2018,6 @@ if (canvasRef) {
             offsetUV = { u: uv.u - logoUV.u, v: uv.v - logoUV.v };
             canvasRef.style.cursor = 'grabbing';
             mockupGeradoComRodape = false;
-            const btnDownload = document.getElementById('btnDownloadLayout');
-            if (btnDownload) btnDownload.disabled = true;
         }
     });
 
@@ -2039,12 +2037,8 @@ if (canvasRef) {
                 if (cantos && cantos.length >= 4) {
                     const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
                     canvasRef.style.cursor = pontoNoPoly(mouse.x, mouse.y, poly) ? 'grab' : 'default';
-                } else {
-                    canvasRef.style.cursor = 'default';
-                }
-            } else {
-                canvasRef.style.cursor = 'default';
-            }
+                } else { canvasRef.style.cursor = 'default'; }
+            } else { canvasRef.style.cursor = 'default'; }
         }
     });
 
@@ -2108,29 +2102,70 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // FUNÇÃO GLOBAL DE TROCA DE ABAS PRINCIPAIS COM TRAVA DE SEGURANÇA POR SENHA
-function switchTab(e, idConteudo) {
+// ==========================================================================
+// CONTROLE FORÇADO DE NAVEGAÇÃO COESA NO ESCOPO GLOBAL DO ATENDIMENTO
+// ==========================================================================
+window.switchTab = function(e, idConteudo) {
     if (idConteudo === 'tab-admin') {
         const senhaDigitada = prompt("Acesso Restrito! Digite a senha administrativa:");
-        const senhaCorreta = "Comvil@0123";
-        
-        if (senhaDigitada !== senhaCorreta) {
+        if (senhaDigitada !== "Comvil@0123") {
             alert("❌ Senha incorreta ou operação cancelada. Permissão negada!");
             return; 
         }
     }
-
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
     e.target.classList.add('active');
-    
     const targetPanel = document.getElementById(idConteudo);
     if (targetPanel) targetPanel.classList.add('active');
-    
-    if (typeof verificarAberturaTabAdmin === "function") {
-        verificarAberturaTabAdmin(idConteudo);
+    if (typeof verificarAberturaTabAdmin === "function") verificarAberturaTabAdmin(idConteudo);
+};
+
+window.switchSubTab = function(e, idSubConteudo) {
+    const parentContainer = document.getElementById('tab-admin');
+    if (!parentContainer) return;
+    parentContainer.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+    parentContainer.querySelectorAll('.sub-tab-content').forEach(panel => panel.classList.remove('active'));
+    e.target.classList.add('active');
+    const targetPanel = document.getElementById(idSubConteudo);
+    if (targetPanel) targetPanel.classList.add('active');
+    if (idSubConteudo === 'admin-sacola' && typeof adminZonaInit === "function") adminZonaInit();
+};
+
+function adminGerarMockupJpeg() {
+    if (typeof processarETingirMockup === "function") {
+        processarETingirMockup(true);
+        mockupGeradoComRodape = true;
+        alert("✓ Mockup gerado! Clique em 'Descarregar Layout' para salvar.");
     }
 }
 
+function adminBaixarLayout() {
+    const canvasAdmin = document.getElementById('mockupCanvas');
+    if (!canvasAdmin) return;
+    try {
+        const link = document.createElement('a');
+        const elModelo = document.getElementById('modelo');
+        link.download = `proposta-comvil-admin-${elModelo ? elModelo.value : 'vertical'}.jpg`;
+        link.href = canvasAdmin.toDataURL("image/jpeg", 1.0);
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        setTimeout(() => { if (typeof processarETingirMockup === "function") processarETingirMockup(false); }, 150);
+    } catch(e) {
+        alert("Aviso de Segurança (CORS): Para baixar automaticamente, execute o arquivo usando um servidor local (Live Server).\n\nAlternativa rápida: Clique com o botão direito sobre a sacola e escolha 'Salvar imagem como'.");
+    }
+}
+
+// OUVINTES OPERACIONAIS DE INPUT DO SIMULADOR
+if (elCorFrente) elCorFrente.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; processarETingirMockup(false); });
+if (elCorLateral) elCorLateral.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; processarETingirMockup(false); });
+if (elLogoZoom) elLogoZoom.addEventListener('input', () => { mockupGeradoComRodape = false; processarETingirMockup(false); });
+if (elLogoGiro) elLogoGiro.addEventListener('input', () => { mockupGeradoComRodape = false; processarETingirMockup(false); });
+if (elModelo) elModelo.addEventListener('change', carregarArquivosDoServidor);
+
+window.addEventListener('DOMContentLoaded', () => { 
+    if (typeof renderizarGradeCordoes === "function") renderizarGradeCordoes(); 
+    if (typeof carregarArquivosDoServidor === "function") carregarArquivosDoServidor(); 
+});
 </script>
 </body>
 </html>
