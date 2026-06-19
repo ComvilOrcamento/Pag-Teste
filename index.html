@@ -811,18 +811,15 @@ function adminZonaCarregarModelo() {
     };
     adminZonaImgRef.src = `sacola_${adminZonaModelo}_base.png`;
 }
+
 function adminZonaInicializarCantos(canvas) {
     const W = canvas.width, H = canvas.height;
     const salvo = databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
-    
-    // Formatação rígida da matriz para impedir quebra de escala bilinear
     const src = salvo
-        ? [[salvo.tl[0], salvo.tl[1]], [salvo.tr[0], salvo.tr[1]], [salvo.bl[0], salvo.bl[1]], [salvo.br[0], salvo.br[1]]]
+        ? [salvo.tl, salvo.tr, salvo.bl, salvo.br].map(p => [p[0], p[1]])
         : ADMIN_ZONA_DEFAULTS[adminZonaModelo];
-        
     adminZonaCorners = src.map(([u, v]) => ({ x: u * W, y: v * H }));
 }
-
 
 function adminZonaDesenhar(canvas) {
     if (!canvas) canvas = document.getElementById('adminZonaCanvas');
@@ -846,7 +843,7 @@ function adminZonaDesenhar(canvas) {
     ctx.beginPath();
     ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
     ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash();
+    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
     ctx.beginPath();
     ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
     ctx.closePath(); ctx.stroke();
@@ -922,29 +919,17 @@ function sincronizarFormularioObjetoAdmin() {
     databaseMao.valorStartMao = Math.max(0, parseFloat(document.getElementById('valorStartMaoAdmin').value) || 0);
     if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {} };
     
-    databaseSacola.valoresAcabamento.ilhos = Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0);
-    databaseSacola.valoresAcabamento.furoLaco = Math.max(0, parseFloat(document.getElementById('fixoFuroAdmin').value) || 0);
+    const ilhosStatus = document.getElementById('statusIlhosAdmin').value;
+    databaseSacola.valoresAcabamento.ilhos = ilhosStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0) : 0.00;
+    
+    const furoStatus = document.getElementById('statusFuroAdmin').value;
+    databaseSacola.valoresAcabamento.furoLaco = furoStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoFuroAdmin').value) || 0) : 0.00;
     
     if (!databaseSacola.valoresAcabamento.cores) databaseSacola.valoresAcabamento.cores = {};
     databaseSacola.valoresAcabamento.cores['1x0'] = Math.max(0, parseFloat(document.getElementById('cor1x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['2x0'] = Math.max(0, parseFloat(document.getElementById('cor2x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['4x0'] = Math.max(0, parseFloat(document.getElementById('cor4x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['4x1'] = Math.max(0, parseFloat(document.getElementById('cor4x1Admin').value) || 0);
-
-    // PERSISTÊNCIA DA REESTRUTURAÇÃO: VALOR M² + FIXO LOTE POR TIPO
-    if (!databaseSacola.valoresEnobrecimento) databaseSacola.valoresEnobrecimento = {};
-    databaseSacola.valoresEnobrecimento.plastBrilhoM2 = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoM2').value) || 0);
-    databaseSacola.valoresEnobrecimento.plastBrilhoFixo = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoFixo').value) || 0);
-    databaseSacola.valoresEnobrecimento.plastFoscaM2 = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaM2').value) || 0);
-    databaseSacola.valoresEnobrecimento.plastFoscaFixo = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaFixo').value) || 0);
-    databaseSacola.valoresEnobrecimento.hotstampM2 = Math.max(0, parseFloat(document.getElementById('enoHotstampM2').value) || 0);
-    databaseSacola.valoresEnobrecimento.hotstampFixo = Math.max(0, parseFloat(document.getElementById('enoHotstampFixo').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppBrilhoM2 = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoM2').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppBrilhoFixo = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoFixo').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppFoscaM2 = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaM2').value) || 0);
-    databaseSacola.valoresEnobrecimento.boppFoscaFixo = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaFixo').value) || 0);
-    databaseSacola.valoresEnobrecimento.vernizM2 = Math.max(0, parseFloat(document.getElementById('enoVernizM2').value) || 0);
-    databaseSacola.valoresEnobrecimento.vernizFixo = Math.max(0, parseFloat(document.getElementById('enoVernizFixo').value) || 0);
 }
 
 function salvarAlteracoesAdminLocais() {
