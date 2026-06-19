@@ -368,7 +368,20 @@
 
     <!-- ABA PAINEL ADMIN -->
     <div id="tab-admin" class="tab-content">
-        <div class="box-conteudo">
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+    <button class="btn-principal"
+            onclick="abrirAdminAba('sacola')"
+            style="margin:0;">
+        📦 Sacola
+    </button>
+
+    <button class="btn-principal"
+            onclick="abrirAdminAba('mao')"
+            style="margin:0;">
+        ✋ Mão
+    </button>
+</div>
+        <div class="box-conteudo"> <div id="admin-sacola">
             <div style="font-size: 18px; margin: 0 0 18px 0; color: #003366; font-weight: bold; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">📦 Administração Sacola</div><div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
             <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
                 <div class="field" style="width: 60%;">
@@ -459,14 +472,70 @@
                 <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x1</label><input type="number" id="cor4x1Admin" step="0.01"></div>
             </div>
 
-            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Taxas adicionais a cada (Sacola > 1000un)</div>
-            <div style="max-height: 180px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
-                <table id="tableExcedentesEnobrecimentoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Tipo de Enobrecimento</th><th style="padding: 8px; text-align: left; width: 40%;">Taxa por Bloco 1000 un (R$)</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+            <div style="font-size: 15px;
+margin: 15px 0 10px 0;
+color: #0f172a;
+font-weight: bold;
+border-bottom: 1px dashed #cbd5e1;
+padding-bottom: 5px;">
 
+Taxas de Excedentes de Enobrecimento por Bloco
+</div>
+
+<div style="display:flex;
+gap:15px;
+margin-bottom:12px;
+align-items:flex-end;
+width:100%;">
+
+    <div class="field" style="width:60%;">
+        <label>Nome do Enobrecimento</label>
+        <input type="text"
+               id="nomeExcedenteEnobAdmin">
+    </div>
+
+    <div class="field" style="width:20%;">
+        <label>Valor</label>
+        <input type="number"
+               id="valorExcedenteEnobAdmin"
+               step="0.01">
+    </div>
+
+    <div class="field" style="width:20%;">
+        <button class="btn-principal"
+                onclick="adicionarExcedenteEnobAdmin()"
+                style="margin:0;height:38px;padding:0;">
+            Add
+        </button>
+    </div>
+
+</div>
+
+<div style="max-height:140px;
+overflow-y:auto;
+border:1px solid #e2e8f0;
+border-radius:6px;
+margin-bottom:20px;">
+
+<table id="tableExcedentesEnobrecimentoAdmin"
+       style="width:100%;
+       border-collapse:collapse;
+       font-size:13px;">
+
+<thead>
+<tr style="background:#f8fafc;">
+<th style="padding:8px;width:60%;">Nome</th>
+<th style="padding:8px;width:20%;">Valor</th>
+<th style="padding:8px;width:20%;">Ação</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+</div>
+        </div>
+            <div id="admin-mao" style="display:none;">
             <div style="font-size: 18px; margin: 25px 0 18px 0; color: #003366; font-weight: bold; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">✋ Administração Mão</div><div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração Mão de Torcida (E.V.A.)</div>
             <div class="field" style="margin-bottom: 12px;">
                 <label>Valor Start Lote Mão (R$)</label>
@@ -528,7 +597,8 @@
                 <canvas id="adminZonaCanvas" style="width:100%; display:block; cursor:crosshair; touch-action:none;"></canvas>
             </div>
             <button class="btn-principal" onclick="adminZonaSalvar()" style="margin:0 0 20px 0; background:#7c3aed;">Aplicar Zona ao Mockup</button>
-
+         </div>
+            
             <div style="display: flex; gap: 15px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
                 <button class="btn-principal" onclick="salvarAlteracoesAdminLocais()" style="margin:0; background: #003366; flex:1;">Salvar no Sistema</button>
                 <button class="btn-principal" onclick="exportarJsonAdminAtualizado()" style="margin:0; background: #10b981; flex:1;">Baixar dados.json</button>
@@ -2110,6 +2180,18 @@ function switchTab(e, idConteudo) {
     if (typeof verificarAberturaTabAdmin === "function") {
         verificarAberturaTabAdmin(idConteudo);
     }
+}
+    function abrirAdminAba(tipo){
+
+    document.getElementById('admin-sacola').style.display='none';
+    document.getElementById('admin-mao').style.display='none';
+
+    if(tipo==='sacola'){
+        document.getElementById('admin-sacola').style.display='block';
+    }else{
+        document.getElementById('admin-mao').style.display='block';
+    }
+
 }
 </script>
 </body>
