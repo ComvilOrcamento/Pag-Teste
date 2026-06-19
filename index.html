@@ -24,9 +24,14 @@
         .tab-btn { flex: 1; min-width: 110px; max-width: 150px; text-align: center; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px 6px 0 0; background: #f8fafc; cursor: pointer; font-weight: bold; color: var(--text-muted); margin-bottom: -2px; font-size: 14px; transition: all 0.2s; }
         .tab-btn.active { background: white; color: var(--primary); border-bottom-color: transparent; position: relative; z-index: 2; }
 
+        /* SUB-ABAS DO PAINEL ADMIN */
+        .sub-tabs { display: flex; gap: 8px; margin: 15px 0 25px 0; border-bottom: 2px solid #e2e8f0; width: 100%; justify-content: flex-start; }
+        .sub-tab-btn { padding: 10px 18px; border: 1px solid #cbd5e1; border-bottom: none; border-radius: 6px 6px 0 0; background: #f8fafc; cursor: pointer; font-weight: bold; color: var(--text-muted); font-size: 13px; transition: all 0.2s; }
+        .sub-tab-btn.active { background: white; color: var(--secondary); border-color: #cbd5e1 #cbd5e1 transparent #cbd5e1; position: relative; margin-bottom: -2px; z-index: 2; }
+
         /* CONTEÚDOS */
-        .tab-content { display: none; width: 100%; }
-        .tab-content.active { display: block; }
+        .tab-content, .sub-tab-content { display: none; width: 100%; }
+        .tab-content.active, .sub-tab-content.active { display: block; }
         
         .box-conteudo { border: 1px solid #cbd5e1; border-radius: 8px; padding: 25px; background: white; width: 100%; }
         
@@ -40,17 +45,13 @@
         input:focus, select:focus { border-color: #0056b3; }
         input[readonly] { background-color: #f1f5f9; color: #64748b; border-color: #cbd5e1; cursor: not-allowed; }
         
-        /* Estilos para os checkboxes de Enobrecimento */
-        .checkbox-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 5px; }
-        .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #333; cursor: pointer; font-weight: normal; }
-        .checkbox-item input[type="checkbox"] { width: auto; height: auto; cursor: pointer; }
-
         .btn-principal { width: 100%; background: #003366; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; margin: 20px 0 10px 0; transition: background 0.2s; }
         .btn-principal:hover { background: #002244; }
         
         .botoes-container { display: flex; gap: 15px; margin-top: 15px; width: 100%; }
         .btn-exportar { flex: 1; background: #0056b3; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; height: 42px; transition: background 0.2s; }
         .btn-exportar:hover { background: #004085; }
+        
         /* ÁREA DE PREVIEW RESPONSIVA */
         .area-orcamento { background: #ffffff; border: 1px solid #ddd; padding: 20px; margin-top: 15px; color: #333; border-radius: 6px; display: none; width: 100%; word-wrap: break-word; }
         .logos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #0056b3; padding-bottom: 15px; gap: 15px; }
@@ -68,9 +69,7 @@
             .logos-header { flex-direction: column; text-align: center; gap: 12px; }
             .logo-box { justify-content: center; width: 100%; }
             #preview-numeracao-topo_sacola, #preview-numeracao-topo_mao { text-align: center; width: 100%; font-size: 14px; }
-            .checkbox-group { grid-template-columns: 1fr; }
         }
-
         /* CONFIGURAÇÕES DE INTERFACE DO MOCKUP INTERNO */
         .papel-triplo-wrapper { display: flex; gap: 10px; align-items: center; width: 100%; }
         .picker-container { display: flex; flex-direction: column; width: 33.33%; }
@@ -157,7 +156,7 @@
                 <div class="field">
                     <label>Acabamento com Ilhós *</label>
                     <select id="selectIlhos_sacola">
-                        <option value="Não">Não</option>
+                        <option value="Não" selected>Não</option>
                         <option value="Sim">Sim</option>
                     </select>
                 </div>
@@ -167,19 +166,31 @@
                 <div class="field">
                     <label>Furo para Laço *</label>
                     <select id="selectFuroLaco_sacola">
-                        <option value="Não">Não</option>
+                        <option value="Não" selected>Não</option>
                         <option value="Sim">Sim</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Enobrecimento</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-item"><input type="checkbox" name="enobrecimento_sacola" value="Plastificação Brilho"> Plastificação Brilho</label>
-                        <label class="checkbox-item"><input type="checkbox" name="enobrecimento_sacola" value="Plastificação Fosca"> Plastificação Fosca</label>
-                        <label class="checkbox-item"><input type="checkbox" name="enobrecimento_sacola" value="Hotstamp"> Hotstamp</label>
-                        <label class="checkbox-item"><input type="checkbox" name="enobrecimento_sacola" value="BOPP Brilho"> BOPP Brilho</label>
-                        <label class="checkbox-item"><input type="checkbox" name="enobrecimento_sacola" value="BOPP Fosca"> BOPP Fosca</label>
-                        <label class="checkbox-item"><input type="checkbox" name="enobrecimento_sacola" value="Verniz"> Verniz</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding-top: 2px;">
+                        <label style="font-weight: normal; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="eno_plastBrilho" style="width:14px; height:14px;"> Plastificação Brilho
+                        </label>
+                        <label style="font-weight: normal; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="eno_plastFosca" style="width:14px; height:14px;"> Plastificação Fosca
+                        </label>
+                        <label style="font-weight: normal; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="eno_hotstamp" style="width:14px; height:14px;"> Hotstamp
+                        </label>
+                        <label style="font-weight: normal; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="eno_boppBrilho" style="width:14px; height:14px;"> BOPP Brilho
+                        </label>
+                        <label style="font-weight: normal; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="eno_boppFosca" style="width:14px; height:14px;"> BOPP Fosca
+                        </label>
+                        <label style="font-weight: normal; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="eno_verniz" style="width:14px; height:14px;"> Verniz
+                        </label>
                     </div>
                 </div>
             </div>
@@ -209,7 +220,6 @@
                     <div class="secao-preview"><div class="preview-titulo">Financeiro</div><div id="text-dados-financeiro_sacola"></div></div>
                     <div class="rodape-contato-preview" id="preview-contato-rodape_sacola"></div>
                 </div>
-                <canvas id="canvasEspelho_sacola" style="display:none;"></canvas>
                 <div class="botoes-container">
                     <button class="btn-exportar" onclick="abrirImagemNovaAbaSacola()">Exportar Orçamento</button>
                 </div>
@@ -282,7 +292,6 @@
                     <input type="text" id="telVendedor_mao" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" maxlength="15">
                 </div>
             </div>
-
             <button class="btn-principal" onclick="gerarVisualizacaoTelaMao()">Gerar Orçamento</button>
 
             <div id="bloco-resultado_mao" style="display: none;">
@@ -303,7 +312,8 @@
             </div>
         </div>
     </div>
-    <!-- ABA MOCKUP SACOLA -->
+
+    <!-- ABA MOCKUP SACOLA (RESTAURADA E INDEPENDENTE) -->
     <div id="tab-mockup" class="tab-content">
         <div class="box-conteudo">
             <div style="display: flex; width: 100%; gap: 20px; flex-wrap: wrap;">
@@ -368,237 +378,163 @@
 
     <!-- ABA PAINEL ADMIN -->
     <div id="tab-admin" class="tab-content">
-        <div style="display:flex; gap:10px; margin-bottom:20px;">
-    <button class="btn-principal"
-            onclick="abrirAdminAba('sacola')"
-            style="margin:0;">
-        📦 Sacola
-    </button>
+        <div class="box-conteudo">
+            <div style="font-size: 16px; margin-bottom: 15px; color: #003366; font-weight: bold;">Painel Administrativo de Parâmetros</div>
+            
+            <!-- SUB-ABAS INTERNAS DO PAINEL ADMIN -->
+            <div class="sub-tabs">
+                <button class="sub-tab-btn active" onclick="switchSubTab(event, 'admin-sacola')">Configurações Sacola</button>
+                <button class="sub-tab-btn" onclick="switchSubTab(event, 'admin-mao')">Configurações Mão</button>
+            </div>
 
-    <button class="btn-principal"
-            onclick="abrirAdminAba('mao')"
-            style="margin:0;">
-        ✋ Mão
-    </button>
-</div>
-        <div class="box-conteudo"> <div id="admin-sacola">
-            <div style="font-size: 18px; margin: 0 0 18px 0; color: #003366; font-weight: bold; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">📦 Administração Sacola</div><div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
-            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-                <div class="field" style="width: 60%;">
-                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
-                    <input type="text" id="prodNome" placeholder="Ex: Sacola Offset 180g - 18x24x8">
+            <!-- SUB-ABA ADMIN: CONFIGURAÇÕES SACOLA -->
+            <div id="admin-sacola" class="sub-tab-content active">
+                <div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
+                <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                    <div class="field" style="width: 60%;">
+                        <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
+                        <input type="text" id="prodNome" placeholder="Ex: Sacola Offset 180g - 18x24x8">
+                    </div>
+                    <div class="field" style="width: 20%;">
+                        <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Base (R$)</label>
+                        <input type="number" id="prodPreco" min="0" step="0.01" placeholder="0.78">
+                    </div>
+                    <div class="field" style="width: 20%;">
+                        <button class="btn-principal" onclick="adicionarProdutoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
+                    </div>
                 </div>
-                <div class="field" style="width: 20%;">
-                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço Base (R$)</label>
-                    <input type="number" id="prodPreco" min="0" step="0.01" placeholder="0.78">
+                <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                    <table id="tableProdutosAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Nome</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <div class="field" style="width: 20%;">
-                    <button class="btn-principal" onclick="adicionarProdutoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
+                <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Cordões / Alças</div>
+                <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                    <div class="field" style="width: 60%;">
+                        <label style="font-size: 12px; font-weight: bold; color: #475569;">Tipo de Alça / Cordão</label>
+                        <input type="text" id="cordaoNomeAdmin" placeholder="Ex: Nylon, Gorgurão">
+                    </div>
+                    <div class="field" style="width: 20%;">
+                        <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço (R$)</label>
+                        <input type="number" id="cordaoPrecoAdmin" min="0" step="0.01" placeholder="0.20">
+                    </div>
+                    <div class="field" style="width: 20%;">
+                        <button class="btn-principal" onclick="adicionarCordaoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
+                    </div>
                 </div>
-            </div>
-            <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
-                <table id="tableProdutosAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Nome</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Cordões / Alças</div>
-            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-                <div class="field" style="width: 60%;">
-                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Tipo de Alça / Cordão</label>
-                    <input type="text" id="cordaoNomeAdmin" placeholder="Ex: Nylon, Gorgurão">
+                <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                    <table id="tableCordoesAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Alça</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <div class="field" style="width: 20%;">
-                    <label style="font-size: 12px; font-weight: bold; color: #475569;">Preço (R$)</label>
-                    <input type="number" id="cordaoPrecoAdmin" min="0" step="0.01" placeholder="0.20">
+
+                <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos de Acabamentos e Cores (Sacola)</div>
+                <!-- CONFIGURAÇÃO DIRETA DE VALORES SEM OPÇÕES SIM/NÃO -->
+                <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap; width: 100%;">
+                    <div class="field" style="flex: 1; min-width: 0;"><label>Valor Adicional de Ilhós (R$)</label><input type="number" id="fixoIlhosAdmin" step="0.01" placeholder="0.20"></div>
+                    <div class="field" style="flex: 1; min-width: 0;"><label>Valor Adicional de Furo (R$)</label><input type="number" id="fixoFuroAdmin" step="0.01" placeholder="0.15"></div>
                 </div>
-                <div class="field" style="width: 20%;">
-                    <button class="btn-principal" onclick="adicionarCordaoAdmin()" style="margin:0; height:38px; padding:0;">Add</button>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 1x0</label><input type="number" id="cor1x0Admin" step="0.01"></div>
+                    <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 2x0</label><input type="number" id="cor2x0Admin" step="0.01"></div>
+                    <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x0</label><input type="number" id="cor4x0Admin" step="0.01"></div>
+                    <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x1</label><input type="number" id="cor4x1Admin" step="0.01"></div>
                 </div>
-            </div>
-            <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
-                <table id="tableCordoesAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Alça</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos de Acabamentos, Cores e Enobrecimento (Sacola)</div>
-            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-              <div class="field" style="flex: 1; min-width: 110px;">
-    <label>Valor Ilhós</label>
-    <input type="number" id="fixoIlhosAdmin" step="0.01">
-</div>
 
-<div class="field" style="flex: 1; min-width: 110px;">
-    <label>Valor Furo</label>
-    <input type="number" id="fixoFuroAdmin" step="0.01">
-</div>
+                <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração das Taxas de Enobrecimento (Sacola)</div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; font-weight: bold; font-size: 11px; color: #475569; text-transform: uppercase;">
+                        <div>Tipo de Enobrecimento</div><div>Valor Unitário Base</div><div>Extra por 1mil un</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <label style="font-size:12px;">Plastificação Brilho</label><input type="number" id="enoPlastBrilhoBase" step="0.01" placeholder="0.00"><input type="number" id="enoPlastBrilhoExtra" step="0.01" placeholder="0.00">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <label style="font-size:12px;">Plastificação Fosca</label><input type="number" id="enoPlastFoscaBase" step="0.01" placeholder="0.00"><input type="number" id="enoPlastFoscaExtra" step="0.01" placeholder="0.00">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <label style="font-size:12px;">Hotstamp</label><input type="number" id="enoHotstampBase" step="0.01" placeholder="0.00"><input type="number" id="enoHotstampExtra" step="0.01" placeholder="0.00">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <label style="font-size:12px;">BOPP Brilho</label><input type="number" id="enoBoppBrilhoBase" step="0.01" placeholder="0.00"><input type="number" id="enoBoppBrilhoExtra" step="0.01" placeholder="0.00">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <label style="font-size:12px;">BOPP Fosca</label><input type="number" id="enoBoppFoscaBase" step="0.01" placeholder="0.00"><input type="number" id="enoBoppFoscaExtra" step="0.01" placeholder="0.00">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <label style="font-size:12px;">Verniz</label><input type="number" id="enoVernizBase" step="0.01" placeholder="0.00"><input type="number" id="enoVernizExtra" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
 
-<div class="field">
-    <label>Plastificação Brilho</label>
-    <input type="number" id="enobPlastBrilhoAdmin" step="0.01">
-</div>
-
-<div class="field">
-    <label>Plastificação Fosca</label>
-    <input type="number" id="enobPlastFoscaAdmin" step="0.01">
-</div>
-
-<div class="field">
-    <label>Hotstamp</label>
-    <input type="number" id="enobHotstampAdmin" step="0.01">
-</div>
-
-<div class="field">
-    <label>BOPP Brilho</label>
-    <input type="number" id="enobBoppBrilhoAdmin" step="0.01">
-</div>
-
-<div class="field">
-    <label>BOPP Fosca</label>
-    <input type="number" id="enobBoppFoscaAdmin" step="0.01">
-</div>
-
-<div class="field">
-    <label>Verniz</label>
-    <input type="number" id="enobVernizAdmin" step="0.01">
-</div>
-
-            </div>
-            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 1x0</label><input type="number" id="cor1x0Admin" step="0.01"></div>
-                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 2x0</label><input type="number" id="cor2x0Admin" step="0.01"></div>
-                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x0</label><input type="number" id="cor4x0Admin" step="0.01"></div>
-                <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x1</label><input type="number" id="cor4x1Admin" step="0.01"></div>
-            </div>
-
-            <div style="font-size: 15px;
-margin: 15px 0 10px 0;
-color: #0f172a;
-font-weight: bold;
-border-bottom: 1px dashed #cbd5e1;
-padding-bottom: 5px;">
-
-Taxas de Excedentes de Enobrecimento por Bloco
-</div>
-
-<div style="display:flex;
-gap:15px;
-margin-bottom:12px;
-align-items:flex-end;
-width:100%;">
-
-    <div class="field" style="width:60%;">
-        <label>Nome do Enobrecimento</label>
-        <input type="text"
-               id="nomeExcedenteEnobAdmin">
-    </div>
-
-    <div class="field" style="width:20%;">
-        <label>Valor</label>
-        <input type="number"
-               id="valorExcedenteEnobAdmin"
-               step="0.01">
-    </div>
-
-    <div class="field" style="width:20%;">
-        <button class="btn-principal"
-                onclick="adicionarExcedenteEnobAdmin()"
-                style="margin:0;height:38px;padding:0;">
-            Add
-        </button>
-    </div>
-
-</div>
-
-<div style="max-height:140px;
-overflow-y:auto;
-border:1px solid #e2e8f0;
-border-radius:6px;
-margin-bottom:20px;">
-
-<table id="tableExcedentesEnobrecimentoAdmin"
-       style="width:100%;
-       border-collapse:collapse;
-       font-size:13px;">
-
-<thead>
-<tr style="background:#f8fafc;">
-<th style="padding:8px;width:60%;">Nome</th>
-<th style="padding:8px;width:20%;">Valor</th>
-<th style="padding:8px;width:20%;">Ação</th>
-</tr>
-</thead>
-
-<tbody></tbody>
-
-</table>
-</div>
-        </div>
-            <div id="admin-mao" style="display:none;">
-            <div style="font-size: 18px; margin: 25px 0 18px 0; color: #003366; font-weight: bold; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">✋ Administração Mão</div><div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração Mão de Torcida (E.V.A.)</div>
-            <div class="field" style="margin-bottom: 12px;">
-                <label>Valor Start Lote Mão (R$)</label>
-                <input type="number" id="valorStartMaoAdmin" step="0.01">
-            </div>
-            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-                <div class="field" style="width: 60%;"><label>Modelo Mão</label><input type="text" id="maoNomeAdmin" placeholder="Ex: Modelo Rock"></div>
-                <div class="field" style="width: 20%;"><label>Preço</label><input type="number" id="maoPrecoAdmin" step="0.01"></div>
-                <div class="field" style="width: 20%;"><button class="btn-principal" onclick="adicionarModeloMaoAdmin()" style="margin:0; height:38px; padding:0;">Add</button></div>
-            </div>
-            <div style="max-height: 130px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
-                <table id="tableModelosMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Modelo</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-                <div class="field" style="width: 60%;"><label>Nome da Cor de Estampa</label><input type="text" id="evaCorNomeAdmin" placeholder="Ex: Vermelho"></div>
-                <div class="field" style="width: 20%;"><label>Preço Extra</label><input type="number" id="evaCorPrecoAdmin" step="0.01"></div>
-                <div class="field" style="width: 20%;"><button class="btn-principal" onclick="adicionarCorEvaAdmin()" style="margin:0; height:38px; padding:0;">Add</button></div>
-            </div>
-            <div style="max-height: 130px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
-                <table id="tableCoresEvaAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Cor</th><th style="padding: 8px; text-align: left; width: 20%;">Extra</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Taxas Adicionais por Lote (Mão)</div>
-            <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
-                <div class="field" style="width: 60%;">
-                    <label>Selecione o Lote</label>
-                    <select id="taxaMaoQtdAlvoAdmin">
-                        <option value="100">100 un</option><option value="200">200 un</option><option value="300">300 un</option>
-                        <option value="500">500 un</option><option value="1000">1000 un</option><option value="2000">2000 un</option>
-                        <option value="5000">5000 un</option><option value="Variavel">Variável</option>
+                <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Calibração da Zona de Impressão (Mockup)</div>
+                <div style="font-size: 11px; color: #64748b; margin-bottom: 12px;">Arraste os 4 vértices sobre a imagem da sacola para definir a área imprimível de cada modelo.</div>
+                <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+                    <label style="font-size:12px; font-weight:bold; color:#475569;">Modelo:</label>
+                    <select id="adminZonaModelo" onchange="adminZonaCarregarModelo()" style="height:34px; font-size:13px; border:1px solid #ccc; border-radius:6px; padding:0 8px;">
+                        <option value="vertical">Vertical</option>
+                        <option value="horizontal">Horizontal</option>
                     </select>
                 </div>
-                <div class="field" style="width: 20%;"><label>Taxa (R$)</label><input type="number" id="taxaMaoValorAdmin" step="0.01"></div>
-                <div class="field" style="width: 20%;"><button class="btn-principal" onclick="atualizarObjetoTaxaMaoAdmin()" style="margin:0; height:38px; padding:0;">Definir</button></div>
+                <div style="width:100%; max-width:420px; margin:0 auto 12px auto; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                    <canvas id="adminZonaCanvas" style="width:100%; display:block; cursor:crosshair; touch-action:none;"></canvas>
+                </div>
+                <button class="btn-principal" onclick="adminZonaSalvar()" style="margin:0 0 20px 0; background:#7c3aed;">Aplicar Zona ao Mockup</button>
             </div>
-            <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 25px;">
-                <table id="tableTaxasQuantidadeMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                    <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Lote do Sistema</th><th style="padding: 8px; text-align: left; width: 20%;">Taxa</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
-                    <tbody></tbody>
-                </table>
+            <!-- SUB-ABA ADMIN: CONFIGURAÇÕES MÃO -->
+            <div id="admin-mao" class="sub-tab-content">
+                <div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração Mão de Torcida (E.V.A.)</div>
+                <div class="field" style="margin-bottom: 12px;">
+                    <label>Valor Start Lote Mão (R$)</label>
+                    <input type="number" id="valorStartMaoAdmin" step="0.01">
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                    <div class="field" style="width: 60%;"><label>Modelo Mão</label><input type="text" id="maoNomeAdmin" placeholder="Ex: Modelo Rock"></div>
+                    <div class="field" style="width: 20%;"><label>Preço</label><input type="number" id="maoPrecoAdmin" step="0.01"></div>
+                    <div class="field" style="width: 20%;"><button class="btn-principal" onclick="adicionarModeloMaoAdmin()" style="margin:0; height:38px; padding:0;">Add</button></div>
+                </div>
+                <div style="max-height: 130px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                    <table id="tableModelosMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Modelo</th><th style="padding: 8px; text-align: left; width: 20%;">Preço</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                    <div class="field" style="width: 60%;"><label>Nome da Cor de Estampa</label><input type="text" id="evaCorNomeAdmin" placeholder="Ex: Vermelho"></div>
+                    <div class="field" style="width: 20%;"><label>Preço Extra</label><input type="number" id="evaCorPrecoAdmin" step="0.01"></div>
+                    <div class="field" style="width: 20%;"><button class="btn-principal" onclick="adicionarCorEvaAdmin()" style="margin:0; height:38px; padding:0;">Add</button></div>
+                </div>
+                <div style="max-height: 130px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 20px;">
+                    <table id="tableCoresEvaAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Cor</th><th style="padding: 8px; text-align: left; width: 20%;">Extra</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Taxas Adicionais por Lote (Mão)</div>
+                <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
+                    <div class="field" style="width: 60%;">
+                        <label>Selecione o Lote</label>
+                        <select id="taxaMaoQtdAlvoAdmin">
+                            <option value="100">100 un</option><option value="200">200 un</option><option value="300">300 un</option>
+                            <option value="500">500 un</option><option value="1000">1000 un</option><option value="2000">2000 un</option>
+                            <option value="5000">5000 un</option><option value="Variavel">Variável</option>
+                        </select>
+                    </div>
+                    <div class="field" style="width: 20%;"><label>Taxa (R$)</label><input type="number" id="taxaMaoValorAdmin" step="0.01"></div>
+                    <div class="field" style="width: 20%;"><button class="btn-principal" onclick="atualizarObjetoTaxaMaoAdmin()" style="margin:0; height:38px; padding:0;">Definir</button></div>
+                </div>
+                <div style="max-height: 140px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 25px;">
+                    <table id="tableTaxasQuantidadeMaoAdmin" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead><tr style="background: #f8fafc;"><th style="padding: 8px; text-align: left; width: 60%;">Lote do Sistema</th><th style="padding: 8px; text-align: left; width: 20%;">Taxa</th><th style="padding: 8px; text-align: left; width: 20%;">Ação</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
 
-            <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Calibração da Zona de Impressão (Mockup)</div>
-            <div style="font-size: 11px; color: #64748b; margin-bottom: 12px;">Arraste os 4 vértices sobre a imagem da sacola para definir a área imprimível de cada modelo.</div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
-                <label style="font-size:12px; font-weight:bold; color:#475569;">Modelo:</label>
-                <select id="adminZonaModelo" onchange="adminZonaCarregarModelo()" style="height:34px; font-size:13px; border:1px solid #ccc; border-radius:6px; padding:0 8px;">
-                    <option value="vertical">Vertical</option>
-                    <option value="horizontal">Horizontal</option>
-                </select>
-            </div>
-            <div style="width:100%; max-width:420px; margin:0 auto 12px auto; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-                <canvas id="adminZonaCanvas" style="width:100%; display:block; cursor:crosshair; touch-action:none;"></canvas>
-            </div>
-            <button class="btn-principal" onclick="adminZonaSalvar()" style="margin:0 0 20px 0; background:#7c3aed;">Aplicar Zona ao Mockup</button>
-         </div>
-            
+            <!-- BOTÕES GERAIS DO ADMINISTRADOR -->
             <div style="display: flex; gap: 15px; border-top: 2px solid #e2e8f0; padding-top: 15px;">
                 <button class="btn-principal" onclick="salvarAlteracoesAdminLocais()" style="margin:0; background: #003366; flex:1;">Salvar no Sistema</button>
                 <button class="btn-principal" onclick="exportarJsonAdminAtualizado()" style="margin:0; background: #10b981; flex:1;">Baixar dados.json</button>
@@ -610,9 +546,6 @@ margin-bottom:20px;">
 
 <script>
 // INÍCIO DA ENGENHARIA LÓGICA E PERSISTÊNCIA DO ADMINISTRADOR INTEGRADO
-let ultimoCustoIlhosValidoAdmin = 0.20;
-let ultimoCustoFuroValidoAdmin = 0.15;
-
 function verificarAberturaTabAdmin(idConteudo) {
     if (idConteudo === 'tab-admin') {
         renderAllAdmin();
@@ -626,25 +559,23 @@ function verificarAberturaTabAdmin(idConteudo) {
     }
 }
 
-function toggleCustoCampoAdmin(selectId, inputId) {
-    const status = document.getElementById(selectId).value;
-    const inputCampo = document.getElementById(inputId);
-    if (status === 'nao') {
-        if (inputId === 'fixoIlhosAdmin' && parseFloat(inputCampo.value) > 0) {
-            ultimoCustoIlhosValidoAdmin = parseFloat(inputCampo.value);
-        }
-        if (inputId === 'fixoFuroAdmin' && parseFloat(inputCampo.value) > 0) {
-            ultimoCustoFuroValidoAdmin = parseFloat(inputCampo.value);
-        }
-        inputCampo.value = '0.00';
-        inputCampo.disabled = true;
-    } else {
-        inputCampo.disabled = false;
-        if (parseFloat(inputCampo.value) === 0) {
-            inputCampo.value = inputId === 'fixoIlhosAdmin' ? ultimoCustoIlhosValidoAdmin : ultimoCustoFuroValidoAdmin;
-        }
+// NAVEGAÇÃO ENTRE SUB-ABAS DO PAINEL ADMIN
+function switchSubTab(e, idSubConteudo) {
+    const parentContainer = document.getElementById('tab-admin');
+    if (!parentContainer) return;
+
+    parentContainer.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+    parentContainer.querySelectorAll('.sub-tab-content').forEach(panel => panel.classList.remove('active'));
+
+    e.target.classList.add('active');
+    const targetPanel = document.getElementById(idSubConteudo);
+    if (targetPanel) targetPanel.classList.add('active');
+
+    if (idSubConteudo === 'admin-sacola') {
+        adminZonaInit();
     }
 }
+
 function renderAllAdminParteDois() {
     // 4. PREENCHE TABELA DE CORES DE IMPRESSÃO DA MÃO (E.V.A)
     const tbodyCoresEva = document.querySelector('#tableCoresEvaAdmin tbody');
@@ -658,7 +589,6 @@ function renderAllAdminParteDois() {
             </tr>`;
         });
     }
-
     // 5. PREENCHE TABELA OPERACIONAL DE TAXAS ADICIONAIS POR LOTE
     const tbodyTaxasQtd = document.querySelector('#tableTaxasQuantidadeMaoAdmin tbody');
     if (tbodyTaxasQtd) {
@@ -676,46 +606,12 @@ function renderAllAdminParteDois() {
         });
     }
 
-    // 6. PREENCHE NOVA TABELA DE EXCEDENTES DE ENOBRECIMENTO DA SACOLA
-    const tbodyExcedentes = document.querySelector('#tableExcedentesEnobrecimentoAdmin tbody');
-    if (tbodyExcedentes) {
-        tbodyExcedentes.innerHTML = '';
-        if (!databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento) {
-            databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento = {
-                "Plastificação Brilho": 30.00, "Plastificação Fosca": 35.00, "Hotstamp": 60.00,
-                "BOPP Brilho": 40.00, "BOPP Fosca": 45.00, "Verniz": 50.00
-            };
-        }
-        Object.keys(databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento).forEach((tipo) => {
-            tbodyExcedentes.innerHTML += `<tr>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0; font-weight:bold; color:#334155;">${tipo}</td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent; font-weight:500;" value="${databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento[tipo]}" onchange="atualizarTaxaExcedenteEnobrecimentoAdmin('${tipo}', this.value)"></td>
-            </tr>`;
-        });
-    }
-
     // SINCRONIZA ESTADO DOS INPUTS FIXOS DO PAINEL
     document.getElementById('valorStartMaoAdmin').value = databaseMao.valorStartMao || 0;
 
     if (databaseSacola.valoresAcabamento) {
-        
-        const enob = databaseSacola.valoresAcabamento.enobrecimentos || {};
-        document.getElementById('enobPlastBrilhoAdmin').value = enob['Plastificação Brilho'] || 0;
-        document.getElementById('enobPlastFoscaAdmin').value = enob['Plastificação Fosca'] || 0;
-        document.getElementById('enobHotstampAdmin').value = enob['Hotstamp'] || 0;
-        document.getElementById('enobBoppBrilhoAdmin').value = enob['BOPP Brilho'] || 0;
-        document.getElementById('enobBoppFoscaAdmin').value = enob['BOPP Fosca'] || 0;
-        document.getElementById('enobVernizAdmin').value = enob['Verniz'] || 0;
-        
-        const temIlhos = databaseSacola.valoresAcabamento.ilhos =
-              parseFloat(
-              document.getElementById('fixoIlhosAdmin').value || 0
-);
-
-        const temFuro = databaseSacola.valoresAcabamento.furoLaco =
-              parseFloat(
-              document.getElementById('fixoFuroAdmin').value || 0
-);
+        document.getElementById('fixoIlhosAdmin').value = databaseSacola.valoresAcabamento.ilhos || 0;
+        document.getElementById('fixoFuroAdmin').value = databaseSacola.valoresAcabamento.furoLaco || 0;
         
         if (databaseSacola.valoresAcabamento.cores) {
             document.getElementById('cor1x0Admin').value = databaseSacola.valoresAcabamento.cores['1x0'] || 0;
@@ -724,7 +620,24 @@ function renderAllAdminParteDois() {
             document.getElementById('cor4x1Admin').value = databaseSacola.valoresAcabamento.cores['4x1'] || 0;
         }
     }
+
+    // SINCRONIZA ESTADO DOS NOVOS VALORES DE ENOBRECIMENTO NO ADMIN
+    if (databaseSacola.valoresEnobrecimento) {
+        document.getElementById('enoPlastBrilhoBase').value = databaseSacola.valoresEnobrecimento.plastBrilhoBase || 0;
+        document.getElementById('enoPlastBrilhoExtra').value = databaseSacola.valoresEnobrecimento.plastBrilhoExtra || 0;
+        document.getElementById('enoPlastFoscaBase').value = databaseSacola.valoresEnobrecimento.plastFoscaBase || 0;
+        document.getElementById('enoPlastFoscaExtra').value = databaseSacola.valoresEnobrecimento.plastFoscaExtra || 0;
+        document.getElementById('enoHotstampBase').value = databaseSacola.valoresEnobrecimento.hotstampBase || 0;
+        document.getElementById('enoHotstampExtra').value = databaseSacola.valoresEnobrecimento.hotstampExtra || 0;
+        document.getElementById('enoBoppBrilhoBase').value = databaseSacola.valoresEnobrecimento.boppBrilhoBase || 0;
+        document.getElementById('enoBoppBrilhoExtra').value = databaseSacola.valoresEnobrecimento.boppBrilhoExtra || 0;
+        document.getElementById('enoBoppFoscaBase').value = databaseSacola.valoresEnobrecimento.boppFoscaBase || 0;
+        document.getElementById('enoBoppFoscaExtra').value = databaseSacola.valoresEnobrecimento.boppFoscaExtra || 0;
+        document.getElementById('enoVernizBase').value = databaseSacola.valoresEnobrecimento.vernizBase || 0;
+        document.getElementById('enoVernizExtra').value = databaseSacola.valoresEnobrecimento.vernizExtra || 0;
+    }
 }
+
 function renderAllAdmin() {
     // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA
     const tbodyProd = document.querySelector('#tableProdutosAdmin tbody');
@@ -765,16 +678,10 @@ function renderAllAdmin() {
         });
     }
     
-    renderAllAdminParteDois();
+    renderAllAdmin();
 }
-
 function atualizarTaxaInlineMaoAdmin(chave, valor) {
     databaseMao.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
-}
-
-function atualizarTaxaExcedenteEnobrecimentoAdmin(tipo, valor) {
-    if (!databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento) databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento = {};
-    databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento[tipo] = Math.max(0, parseFloat(valor) || 0);
 }
 
 function atualizarObjetoTaxaMaoAdmin() {
@@ -785,6 +692,7 @@ function atualizarObjetoTaxaMaoAdmin() {
     document.getElementById('taxaMaoValorAdmin').value = '';
     renderAllAdmin();
 }
+
 function resetarTaxaMaoAdmin(chave) {
     if (databaseMao.taxasQuantidade) databaseMao.taxasQuantidade[chave] = 0.00;
     renderAllAdmin();
@@ -860,6 +768,7 @@ const ADMIN_ZONA_DEFAULTS = {
     vertical:   [[0.21,0.13],[0.79,0.13],[0.19,0.81],[0.81,0.81]],
     horizontal: [[0.08,0.16],[0.70,0.13],[0.10,0.84],[0.72,0.81]]
 };
+
 function adminZonaInit() {
     const canvas = document.getElementById('adminZonaCanvas');
     if (!canvas) return;
@@ -889,7 +798,6 @@ function adminZonaCarregarModelo() {
     };
     adminZonaImgRef.src = `sacola_${adminZonaModelo}_base.png`;
 }
-
 function adminZonaInicializarCantos(canvas) {
     const W = canvas.width, H = canvas.height;
     const salvo = databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
@@ -914,20 +822,21 @@ function adminZonaDesenhar(canvas) {
         ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center'; ctx.font = '13px Arial';
         ctx.fillText('Acesse a aba Mockup primeiro para carregar a imagem', W / 2, H / 2);
     }
+
     const [tl, tr, bl, br] = adminZonaCorners;
     ctx.save();
     ctx.fillStyle = 'rgba(0,83,166,0.10)';
     ctx.beginPath();
-    ctx.moveTo(tl.x, tl.y); ctx.lineTo(tr.x, tr.y); ctx.lineTo(br.x, br.y); ctx.lineTo(bl.x, bl.y);
+    ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
     ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = 'rgba(0,83,166,0.85)'; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
     ctx.beginPath();
-    ctx.moveTo(tl.x, tl.y); ctx.lineTo(tr.x, tr.y); ctx.lineTo(br.x, br.y); ctx.lineTo(bl.x, bl.y);
+    ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y);
     ctx.closePath(); ctx.stroke();
     ctx.setLineDash([]);
     ctx.restore();
 
-    const LABELS = ['TL', 'TR', 'BL', 'BR'];
+    const LABELS = ['TL','TR','BL','BR'];
     const HR = Math.max(12, W * 0.028);
     adminZonaCorners.forEach((c, i) => {
         ctx.beginPath(); ctx.arc(c.x, c.y, HR, 0, Math.PI * 2);
@@ -994,29 +903,31 @@ function adminZonaSalvar() {
 
 function sincronizarFormularioObjetoAdmin() {
     databaseMao.valorStartMao = Math.max(0, parseFloat(document.getElementById('valorStartMaoAdmin').value) || 0);
-    if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {}, taxasExcedentesEnobrecimento: {} };
+    if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {} };
     
-    // Sincroniza valores individuais de enobrecimento
-    databaseSacola.valoresAcabamento.enobrecimentos = {
-        'Plastificação Brilho': Math.max(0, parseFloat(document.getElementById('enobPlastBrilhoAdmin').value) || 0),
-        'Plastificação Fosca': Math.max(0, parseFloat(document.getElementById('enobPlastFoscaAdmin').value) || 0),
-        'Hotstamp': Math.max(0, parseFloat(document.getElementById('enobHotstampAdmin').value) || 0),
-        'BOPP Brilho': Math.max(0, parseFloat(document.getElementById('enobBoppBrilhoAdmin').value) || 0),
-        'BOPP Fosca': Math.max(0, parseFloat(document.getElementById('enobBoppFoscaAdmin').value) || 0),
-        'Verniz': Math.max(0, parseFloat(document.getElementById('enobVernizAdmin').value) || 0)
-    };
-
-    databaseSacola.valoresAcabamento.ilhos =
-    parseFloat(document.getElementById('fixoIlhosAdmin').value || 0);
-    
-    databaseSacola.valoresAcabamento.furoLaco =
-    parseFloat(document.getElementById('fixoFuroAdmin').value || 0);
+    databaseSacola.valoresAcabamento.ilhos = Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0);
+    databaseSacola.valoresAcabamento.furoLaco = Math.max(0, parseFloat(document.getElementById('fixoFuroAdmin').value) || 0);
     
     if (!databaseSacola.valoresAcabamento.cores) databaseSacola.valoresAcabamento.cores = {};
     databaseSacola.valoresAcabamento.cores['1x0'] = Math.max(0, parseFloat(document.getElementById('cor1x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['2x0'] = Math.max(0, parseFloat(document.getElementById('cor2x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['4x0'] = Math.max(0, parseFloat(document.getElementById('cor4x0Admin').value) || 0);
     databaseSacola.valoresAcabamento.cores['4x1'] = Math.max(0, parseFloat(document.getElementById('cor4x1Admin').value) || 0);
+
+    // SINCRONIZAÇÃO DA NOVA TABELA DE ENOBRECIMENTOS (BASE + EXTRA POR MILHEIRO)
+    if (!databaseSacola.valoresEnobrecimento) databaseSacola.valoresEnobrecimento = {};
+    databaseSacola.valoresEnobrecimento.plastBrilhoBase = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoBase').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastBrilhoExtra = Math.max(0, parseFloat(document.getElementById('enoPlastBrilhoExtra').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastFoscaBase = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaBase').value) || 0);
+    databaseSacola.valoresEnobrecimento.plastFoscaExtra = Math.max(0, parseFloat(document.getElementById('enoPlastFoscaExtra').value) || 0);
+    databaseSacola.valoresEnobrecimento.hotstampBase = Math.max(0, parseFloat(document.getElementById('enoHotstampBase').value) || 0);
+    databaseSacola.valoresEnobrecimento.hotstampExtra = Math.max(0, parseFloat(document.getElementById('enoHotstampExtra').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppBrilhoBase = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoBase').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppBrilhoExtra = Math.max(0, parseFloat(document.getElementById('enoBoppBrilhoExtra').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppFoscaBase = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaBase').value) || 0);
+    databaseSacola.valoresEnobrecimento.boppFoscaExtra = Math.max(0, parseFloat(document.getElementById('enoBoppFoscaExtra').value) || 0);
+    databaseSacola.valoresEnobrecimento.vernizBase = Math.max(0, parseFloat(document.getElementById('enoVernizBase').value) || 0);
+    databaseSacola.valoresEnobrecimento.vernizExtra = Math.max(0, parseFloat(document.getElementById('enoVernizExtra').value) || 0);
 }
 
 function salvarAlteracoesAdminLocais() {
@@ -1032,6 +943,7 @@ function salvarAlteracoesAdminLocais() {
     alert("✓ Configurações aplicadas com sucesso no sistema!");
     renderAllAdmin();
 }
+
 function exportarJsonAdminAtualizado() {
     sincronizarFormularioObjetoAdmin();
     let objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
@@ -1041,11 +953,10 @@ function exportarJsonAdminAtualizado() {
     link.download = "dados.json"; 
     link.click();
 }
-
 /* ==========================================================================
    BANCOS DE DADOS E CARREGAMENTO UNIFICADO (DADOS.JSON)
    ========================================================================== */
-let databaseSacola = { produtosConfigurados: [], cordoes: [], quantidades: [], valoresAcabamento: null };
+let databaseSacola = { produtosConfigurados: [], cordoes: [], quantidades: [], valoresAcabamento: null, valoresEnobrecimento: null };
 let databaseMao = { logoEmpresa: "", modelosMao: [], coresEva: [], valorStartMao: 0, taxasQuantidade: {} };
 
 let numeroOrcamentoSacola = "";
@@ -1061,25 +972,26 @@ const bancoReservaSacola = {
     { "id": 2, "nomeCompleto": "Sacola Offset 180g - 24x35x10", "precoBase": 0.95 }
   ],
   "cordoes": [
-    { "nome": "Nylon", "preco": 0.20 },
+    { "nome": "Nylon", "preco": 0.20 }, 
     { "nome": "Gorgurão", "preco": 0.28 }
   ],
-  "quantidades": [],
-  "valoresAcabamento": {
-    "ilhos": 0.20,
-    "furoLaco": 0.15,
-    "enobrecimentoPrecoUnitario": 0.35,
-    "cores": { "1x0": 450.00, "2x0": 480.00, "4x0": 560.00, "4x1": 590.00 },
-    "taxasExcedentesEnobrecimento": {
-        "Plastificação Brilho": 30.00,
-        "Plastificação Fosca": 35.00,
-        "Hotstamp": 60.00,
-        "BOPP Brilho": 40.00,
-        "BOPP Fosca": 45.00,
-        "Verniz": 50.00
-    }
+  "quantidades":[],
+  "valoresAcabamento": { 
+    "ilhos": 0.20, 
+    "furoLaco": 0.15, 
+    "cores": { "1x0": 450.00, "2x0": 480.00, "4x0": 560.00, "4x1": 590.00 } 
+  },
+  // INICIALIZAÇÃO DOS PREÇOS DOS NOVOS CAMPOS DE ENOBRECIMENTO NO BANCO RESERVA
+  "valoresEnobrecimento": {
+    "plastBrilhoBase": 0.10, "plastBrilhoExtra": 15.00,
+    "plastFoscaBase": 0.15,  "plastFoscaExtra": 20.00,
+    "hotstampBase": 0.25,    "hotstampExtra": 35.00,
+    "boppBrilhoBase": 0.12,  "boppBrilhoExtra": 18.00,
+    "boppFoscaBase": 0.18,   "boppFoscaExtra": 22.00,
+    "vernizBase": 0.08,      "vernizExtra": 12.00
   }
 };
+
 const bancoReservaMao = {
   "modelosMao": [
     { "id": 1, "nome": "Mão tipo Tradicional 40cm", "precoBase": 3.50 },
@@ -1116,10 +1028,9 @@ window.onload = function() {
             processarDadosCarregados(null);
         });
 };
-
 function processarDadosCarregados(data) {
     if (data) {
-        if (data.produtosConfigurados || data.valoresAcabamento) { databaseSacola = data; } 
+        if (data.produtosConfigurados || data.valoresAcabamento || data.valoresEnobrecimento) { databaseSacola = data; } 
         else { databaseSacola = JSON.parse(JSON.stringify(bancoReservaSacola)); }
 
         if (data.modelosMao || data.coresEva) { databaseMao = data; } 
@@ -1139,6 +1050,7 @@ function processarDadosCarregados(data) {
     carregarMenusMao(); 
     atualizarTaxaQuantidadeMao();
 }
+
 function mascaraTelefone(input) {
     let v = input.value.replace(/\D/g, "");
     if (v.length > 11) v = v.substring(0, 11);
@@ -1190,18 +1102,24 @@ function carregarMenusSacola() {
         }
     }
 }
+
 function calcularValoresAtuaisSacola() {
     const idProdutoSelected = parseInt(document.getElementById("selectProdutoConfigurado_sacola").value);
     const nomeCordaoSelected = document.getElementById("selectCordao_sacola").value;
     const corSelecionada = document.getElementById("selectCores_sacola").value;
+    
+    // CAPTURA DO SELETOR DO CLIENTE (INICIA EM NÃO POR PADRÃO)
     const temIlhos = document.getElementById("selectIlhos_sacola").value === "Sim";
     const temFuroLaco = document.getElementById("selectFuroLaco_sacola").value === "Sim";
     const qtd = parseInt(document.getElementById("qtd_sacola").value) || 500;
     
-    // Captura os checkboxes ativos de enobrecimento da sacola
-    const checkboxes = document.querySelectorAll('input[name="enobrecimento_sacola"]:checked');
-    let listaEnobrecimentos = [];
-    checkboxes.forEach(cb => listaEnobrecimentos.push(cb.value));
+    // CAPTURA DOS CLICKBOXES DE ENOBRECIMENTO
+    const enoPlastBrilho = document.getElementById("eno_plastBrilho").checked;
+    const enoPlastFosca = document.getElementById("eno_plastFosca").checked;
+    const enoHotstamp = document.getElementById("eno_hotstamp").checked;
+    const enoBoppBrilho = document.getElementById("eno_boppBrilho").checked;
+    const enoBoppFosca = document.getElementById("eno_boppFosca").checked;
+    const enoVerniz = document.getElementById("eno_verniz").checked;
 
     let produtoEncontrado = databaseSacola.produtosConfigurados.find(p => p.id === idProdutoSelected);
     let precoProdutoBase = produtoEncontrado ? parseFloat(produtoEncontrado.precoBase || 0) : 0;
@@ -1210,58 +1128,59 @@ function calcularValoresAtuaisSacola() {
     let cordaoEncontrado = databaseSacola.cordoes.find(c => c.nome === nomeCordaoSelected);
     let precoCordaoAlca = cordaoEncontrado ? parseFloat(cordaoEncontrado.preco || 0) : 0;
     
+    // SE MARCAR SIM, SOMA O VALOR DO ADMIN. SE NÃO, FICA ZERO.
     let precoIlhos = (temIlhos && databaseSacola.valoresAcabamento) ? parseFloat(databaseSacola.valoresAcabamento.ilhos || 0) : 0;
     let precoFuroLaco = (temFuroLaco && databaseSacola.valoresAcabamento) ? parseFloat(databaseSacola.valoresAcabamento.furoLaco || 0) : 0;
-    
-    // Soma apenas os enobrecimentos marcados utilizando valor individual
-    let precoEnobrecimentoAcumulado = 0;
-    if (listaEnobrecimentos.length > 0 && databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.enobrecimentos) {
-        listaEnobrecimentos.forEach(tipo => {
-            precoEnobrecimentoAcumulado += parseFloat(databaseSacola.valoresAcabamento.enobrecimentos[tipo] || 0);
-        });
-    }
-    
     let precoCoresFixo = (databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.cores) ? parseFloat(databaseSacola.valoresAcabamento.cores[corSelecionada] || 0) : 0;
 
-    let somaInsumosFisicosUnitarios = precoProdutoBase + precoIlhos + precoCordaoAlca + precoFuroLaco + precoEnobrecimentoAcumulado;
-    let subtotalTiragemFisica = somaInsumosFisicosUnitarios * qtd;
+    // MATEMÁTICA AVANÇADA: VALOR BASE UNITÁRIO + TAXA EXTRA POR BLOCO DE 1.000 (A PARTIR DE 1.000 UN)
+    let blocosDeMil = (qtd >= 1000) ? Math.ceil(qtd / 1000) : 0;
+    let dbEno = databaseSacola.valoresEnobrecimento || {};
+
+    let custoEnoTotal = 0;
+    if (enoPlastBrilho) custoEnoTotal += (parseFloat(dbEno.plastBrilhoBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.plastBrilhoExtra || 0));
+    if (enoPlastFosca)  custoEnoTotal += (parseFloat(dbEno.plastFoscaBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.plastFoscaExtra || 0));
+    if (enoHotstamp)    custoEnoTotal += (parseFloat(dbEno.hotstampBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.hotstampExtra || 0));
+    if (enoBoppBrilho)  custoEnoTotal += (parseFloat(dbEno.boppBrilhoBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.boppBrilhoExtra || 0));
+    if (enoBoppFosca)   custoEnoTotal += (parseFloat(dbEno.boppFoscaBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.boppFoscaExtra || 0));
+    if (enoVerniz)      custoEnoTotal += (parseFloat(dbEno.vernizBase || 0) * qtd) + (blocosDeMil * parseFloat(dbEno.vernizExtra || 0));
+
+    let somaInsumosFisicosUnitarios = precoProdutoBase + precoIlhos + precoCordaoAlca + precoFuroLaco;
+    let subtotalTiragemFisica = (somaInsumosFisicosUnitarios * qtd) + custoEnoTotal;
     let custoTotalFinalDoLote = subtotalTiragemFisica + precoCoresFixo;
     
-    // REGRA 1: Penalidade Tradicional de Grandes Volumes do Lote Geral (Acima de 2000 unidades)
     if (qtd > 2000) {
         let unidadesExcedentes = qtd - 2000;
         let blocksDeMil = Math.ceil(unidadesExcedentes / 1000); 
         custoTotalFinalDoLote += (blocksDeMil * 50.00);
     }
     
-    // REGRA 2: Penalidade de Grandes Volumes por Tipo de Enobrecimento (Acima de 1000 unidades)
-    if (qtd > 1000 && listaEnobrecimentos.length > 0 && databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento) {
-        let excedenteUnidades = qtd - 1000;
-        let blocosDeMilEnobrecimento = Math.ceil(excedenteUnidades / 1000);
-        
-        listaEnobrecimentos.forEach(tipo => {
-            let taxaDoTipo = parseFloat(databaseSacola.valoresAcabamento.taxasExcedentesEnobrecimento[tipo] || 0);
-            custoTotalFinalDoLote += (blocosDeMilEnobrecimento * taxaDoTipo);
-        });
-    }
-    
     let totalLoteComMargemLucro = custoTotalFinalDoLote * 1.70;
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
+    
+    // COMPILA LISTA TEXTUAL DE ENOBRECIMENTOS ATIVOS
+    let listEno = [];
+    if(enoPlastBrilho) listEno.push("Plast. Brilho");
+    if(enoPlastFosca) listEno.push("Plast. Fosca");
+    if(enoHotstamp) listEno.push("Hotstamp");
+    if(enoBoppBrilho) listEno.push("BOPP Brilho");
+    if(enoBoppFosca) listEno.push("BOPP Fosca");
+    if(enoVerniz) listEno.push("Verniz");
+    let enoTextoFinal = listEno.length > 0 ? listEno.join(", ") : "Nenhum";
     
     return { 
         custoUnitario: precoUnitarioDeVenda, qtd: qtd, total: totalLoteComMargemLucro, 
         detalhesBase: detalhesBase, nomeCordao: nomeCordaoSelected, corSelecionada: corSelecionada, 
-        temFuroLaco: temFuroLaco, temIlhos: temIlhos,
-        enobrecimentos: listaEnobrecimentos.length > 0 ? listaEnobrecimentos.join(", ") : "Nenhum"
+        temFuroLaco: temFuroLaco, temIlhos: temIlhos, enoTexto: enoTextoFinal
     };
 }
-
 function obterNumeroIdentificadorSacola() {
     if(numeroOrcamentoSacola) return numeroOrcamentoSacola;
     const d = new Date();
     numeroOrcamentoSacola = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
     return numeroOrcamentoSacola;
 }
+
 function gerarVisualizacaoTelaSacola() {
     const nome = document.getElementById("nomeCliente_sacola").value.trim();
     const tel = document.getElementById("telCliente_sacola").value.trim();
@@ -1273,7 +1192,7 @@ function gerarVisualizacaoTelaSacola() {
     
     document.getElementById("preview-numeracao-topo_sacola").innerText = "Nº " + numeroFinal;
     document.getElementById("text-dados-cliente_sacola").innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
-    document.getElementById("text-dados-produto_sacola").innerHTML = `<strong>Base:</strong> ${dCom.detalhesBase}<br><strong>Cores:</strong> ${dCom.corSelecionada} | <strong>Ilhós:</strong> ${dCom.temIlhos ? 'Sim' : 'Não'}<br><strong>Alça:</strong> ${dCom.nomeCordao} | <strong>Furo Laço:</strong> ${dCom.temFuroLaco ? 'Sim' : 'Não'}<br><strong>Enobrecimento:</strong> ${dCom.enobrecimentos}`;
+    document.getElementById("text-dados-produto_sacola").innerHTML = `<strong>Base:</strong> ${dCom.detalhesBase}<br><strong>Cores:</strong> ${dCom.corSelecionada} | <strong>Ilhós:</strong> ${dCom.temIlhos ? 'Sim' : 'Não'}<br><strong>Alça:</strong> ${dCom.nomeCordao} | <strong>Furo Laço:</strong> ${dCom.temFuroLaco ? 'Sim' : 'Não'}<br><strong>Enobrecimento:</strong> ${dCom.enoTexto}`;
     document.getElementById("text-dados-financeiro_sacola").innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
     
     let textoVendedor = telVendedor ? ` | 📞 Vendedor: ${telVendedor}` : '';
@@ -1310,6 +1229,7 @@ function carregarMenusMao() {
         }
     }
 }
+
 function verificarQuantidadeVariavel(select) {
     const campoManual = document.getElementById("campoQtdVariavel");
     if(campoManual) {
@@ -1372,12 +1292,13 @@ function calcularValoresAtuaisMao() {
     let custoTotalFinalDoLote = subtotalComEncaixe + taxaQuantidadeAdicional + startLoteFixo;
     let totalLoteComMargemLucro = custoTotalFinalDoLote * 1.70; 
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
-
+    
     return { 
         custoUnitario: precoUnitarioDeVenda, qtd: qtd, total: totalLoteComMargemLucro, 
         detalhesBase: detalhesBase, tipoEncaixe: tipoEncaixe, corEva: nomeCorEvaSelected
     };
 }
+
 function obterNumeroIdentificadorMao() {
     if(numeroOrcamentoMao) return numeroOrcamentoMao;
     const d = new Date();
@@ -1405,7 +1326,6 @@ function gerarVisualizacaoTelaMao() {
     document.getElementById("area-orcamento_mao").style.display = "block";
     document.getElementById("bloco-resultado_mao").style.display = "block";
 }
-
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     let words = text.split(' '); let line = ''; let currentY = y;
     for (let n = 0; n < words.length; n++) {
@@ -1436,12 +1356,12 @@ function exportarOrcamentoGenerico(config) {
     const dataValidade = new Date();
     dataValidade.setDate(dataHoje.getDate() + 10);
     
-    const canvas = document.getElementById(config.canvasId) || document.createElement("canvas");
+    const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     
     canvas.width = 600; canvas.height = 860;
     ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Só desenha se for data URL — imagens file:// contaminam o canvas e bloqueiam toDataURL
+    
     if (objImgMinha.naturalWidth > 0 && objImgMinha.src && objImgMinha.src.startsWith('data:')) {
         try {
             let maxAlturaLogo = 50;
@@ -1466,7 +1386,8 @@ function exportarOrcamentoGenerico(config) {
     ctx.fillStyle = "#333333"; ctx.font = "12px Arial";
     ctx.fillText("Nome / Razão Social: " + nome, 50, 185); 
     ctx.fillText("Telefone: " + telFormulario, 50, 203);
-    desenharCaixaPdf(ctx, 35, 235, 530, 115, "Especificações Técnicas do Pedido");
+    
+    desenharCaixaPdf(ctx, 35, 235, 530, 105, "Especificações Técnicas do Pedido");
     ctx.fillStyle = "#333333"; ctx.font = "bold 11px Arial"; ctx.fillText(config.labelModelo, 50, 270); ctx.font = "11px Arial";
     
     let detalhesTexto = dadosComerciais.detalhesBase;
@@ -1475,26 +1396,24 @@ function exportarOrcamentoGenerico(config) {
     if(partes.length > 4) ctx.fillText("• " + partes.slice(4).join(" | "), 50, 306);
     ctx.font = "bold 11px Arial"; ctx.fillText(config.labelMontagem, 50, 324); ctx.font = "11px Arial";
     ctx.fillText(config.textoLinhaInsumos(dadosComerciais), 50, 338);
-    if(config.sufixo === "sacola") {
-        ctx.fillText("• Enobrecimento: " + dadosComerciais.enobrecimentos, 50, 350);
-    }
     
-    desenharCaixaPdf(ctx, 35, 365, 530, 70, "Resumo Financeiro");
+    desenharCaixaPdf(ctx, 35, 360, 530, 70, "Resumo Financeiro");
     ctx.fillStyle = "#333333"; ctx.font = "12px Arial";
-    ctx.fillText("Quantidade Solicitada: " + dadosComerciais.qtd + " unidades", 50, 400); 
-    ctx.fillText("Preço Unitário Médio de Venda: " + formatarMoeda(dadosComerciais.custoUnitario), 50, 420);
+    ctx.fillText("Quantidade Solicitada: " + dadosComerciais.qtd + " unidades", 50, 395); 
+    ctx.fillText("Preço Unitário Médio de Venda: " + formatarMoeda(dadosComerciais.custoUnitario), 50, 415);
     
     ctx.fillStyle = "#0056b3"; ctx.font = "bold 14px Arial"; ctx.textAlign = "right"; 
-    ctx.fillText("TOTAL DA PROPOSTA: " + formatarMoeda(dadosComerciais.total), 550, 415);
-    ctx.fillStyle = "#f0f7ff"; ctx.fillRect(35, 455, 530, 135); ctx.strokeStyle = "#0056b3"; ctx.lineWidth = 1; ctx.strokeRect(35, 455, 530, 135);
-    ctx.fillStyle = "#0056b3"; ctx.font = "bold 11px Arial"; ctx.textAlign = "left"; ctx.fillText("⚠️ CONDIÇÕES COMERCIAIS DE CONTRATAÇÃO", 45, 477);
+    ctx.fillText("TOTAL DA PROPOSTA: " + formatarMoeda(dadosComerciais.total), 550, 410);
+    
+    ctx.fillStyle = "#f0f7ff"; ctx.fillRect(35, 450, 530, 135); ctx.strokeStyle = "#0056b3"; ctx.lineWidth = 1; ctx.strokeRect(35, 450, 530, 135);
+    ctx.fillStyle = "#0056b3"; ctx.font = "bold 11px Arial"; ctx.textAlign = "left"; ctx.fillText("⚠️ CONDIÇÕES COMERCIAIS DE CONTRATAÇÃO", 45, 472);
     ctx.fillStyle = "#444444"; ctx.font = "11px Arial";
     
-    let startY = 500; const maxTextWidth = 510; const lineSpacing = 16;
+    let startY = 495; const maxTextWidth = 510; const lineSpacing = 16;
     const condicoes = config.condicoesComerciais || [
         "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em " + dataValidade.toLocaleDateString('pt-BR') + ").",
         "• Forma de Pagamento: 50% de entrada na aprovação do pedido e 50% restante para 21 dias após a entrega.",
-        "• Prazo de Production: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.",
+        "• Prazo de Produção: 20 dias úteis a partir da validação digital do layout e pagamento do sinal de entrada.",
         "• Condições de Frete: São Paulo Capital (CIF - Por nossa conta) | Grande SP e Outros Estados (FOB)."
     ];
     condicoes.forEach((linha, i) => {
@@ -1503,18 +1422,18 @@ function exportarOrcamentoGenerico(config) {
         else wrapText(ctx, texto, 45, startY, maxTextWidth, lineSpacing);
     });
 
-    ctx.strokeStyle = "#dddddd"; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(35, 640); ctx.lineTo(565, 640); ctx.stroke();
+    ctx.strokeStyle = "#dddddd"; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(35, 635); ctx.lineTo(565, 635); ctx.stroke();
     ctx.textAlign = "center";
     let nomeAssinaturaVendedor = vendedor || 'Equipe Comercial Comvil';
     ctx.fillStyle = "#777777"; ctx.font = "10px Arial"; 
-    ctx.fillText("Documento emitido por: " + nomeAssinaturaVendedor + " em " + dataHoje.toLocaleDateString('pt-BR'), 300, 620);
+    ctx.fillText("Documento emitido por: " + nomeAssinaturaVendedor + " em " + dataHoje.toLocaleDateString('pt-BR'), 300, 615);
     
-    ctx.fillStyle = "#0056b3"; ctx.font = "bold 11px Arial"; ctx.fillText("COMVIL BRINDES", 300, 670);
-    ctx.fillStyle = "#555555"; ctx.font = "10px Arial"; ctx.fillText("CNPJ: 36.206.286/0001-03  |  ✉️ comvil@comvil.com.br", 300, 690);
+    ctx.fillStyle = "#0056b3"; ctx.font = "bold 11px Arial"; ctx.fillText("COMVIL BRINDES", 300, 665);
+    ctx.fillStyle = "#555555"; ctx.font = "10px Arial"; ctx.fillText("CNPJ: 36.206.286/0001-03  |  ✉ comvil@comvil.com.br", 300, 685);
     
     let stringTelefones = "☎️ Fixo: 11 3461-0813  |  📱 WhatsApp: 11 97024-3064";
     if (telVendedor) stringTelefones += `  |  📞 Vendedor: ${telVendedor}`;
-    ctx.fillText(stringTelefones, 300, 708);
+    ctx.fillText(stringTelefones, 300, 703);
     
     ctx.textAlign = "left"; 
     const novaAba = window.open("", "_blank");
@@ -1561,11 +1480,11 @@ function exportarOrcamentoGenerico(config) {
 }
 function abrirImagemNovaAbaSacola() {
     exportarOrcamentoGenerico({
-        sufixo: "sacola", canvasId: "canvasEspelho_sacola", tituloProposta: "PROPOSTA COMERCIAL DE EMBALAGENS", prefixoArquivo: "Sacola",
+        sufixo: "sacola", tituloProposta: "PROPOSTA COMERCIAL DE EMBALAGENS", prefixoArquivo: "Sacola",
         labelModelo: "Modelo base de fábrica:", labelMontagem: "Especificações de montagem e impressão:",
         funcaoCalculo: calcularValoresAtuaisSacola, funcaoNumero: obterNumeroIdentificadorSacola,
         textoLinhaInsumos: function(d) {
-            return "• Cores: " + d.corSelecionada + "  |  • Ilhós: " + (d.temIlhos ? "Sim" : "Não") + "  |  • Alça: " + d.nomeCordao + "  |  • Furo Laço: " + (d.temFuroLaco ? "Sim" : "Não");
+            return "• Cores: " + d.corSelecionada + "  |  • Ilhós: " + (d.temIlhos ? "Sim" : "Não") + "  |  • Alça: " + d.nomeCordao + "  |  • Furo Laço: " + (d.temFuroLaco ? "Sim" : "Não") + "  |  • Enobrecimento: " + d.enoTexto;
         },
         condicoesComerciais: [
             "• Validade da Proposta: Ativa por 10 dias (vencimento obrigatório em {dataValidade}).",
@@ -1578,7 +1497,7 @@ function abrirImagemNovaAbaSacola() {
 
 function abrirImagemNovaAbaMao() {
     exportarOrcamentoGenerico({
-        sufixo: "mao", canvasId: null, tituloProposta: "PROPOSTA COMERCIAL DE EMBALAGENS E BRINDES", prefixoArquivo: "Mao",
+        sufixo: "mao", tituloProposta: "PROPOSTA COMERCIAL DE EMBALAGENS E BRINDES", prefixoArquivo: "Mao",
         labelModelo: "Modelo base de fábrica:", labelMontagem: "Especificações de montagem e estampa:",
         funcaoCalculo: calcularValoresAtuaisMao, funcaoNumero: obterNumeroIdentificadorMao,
         textoLinhaInsumos: function(d) {
@@ -1612,12 +1531,13 @@ let logoCarregada = false; let logoEmpresaPronta = false;
 let mockupGeradoComRodape = false;
 let modoKraftAtivo = false;
 
-let zonaImpressao = null;       
-let logoUV = { u: 0.5, v: 0.5 }; 
+let zonaImpressao = null;       // {tl, tr, bl, br} em px — face frontal da sacola
+let logoUV = { u: 0.5, v: 0.5 }; // centro do logo no espaço UV da zona (0–1)
 let arrastandoLogo = false;
 let offsetUV = { u: 0, v: 0 };
 let corCordaoSelecionada = "#ffffff";
-// MATRIZ CORRIGIDA E COMPLETA DE CORES DO MOSTRUÁRIO DE CORDÕES
+
+// MATRIZ DE CORES DO MOSTRUÁRIO DE CORDÕES
 const mostruarioCordao = [
     { nome: "Branco", hex: "#ffffff" }, { nome: "Preto", hex: "#000000" },
     { nome: "Cinza Claro", hex: "#8c8c8c" }, { nome: "Azul Caneta", hex: "#0b2bc6" },
@@ -1655,7 +1575,6 @@ function renderizarGradeCordoes() {
         elGrid.appendChild(box);
     });
 }
-
 function criarCamadaColorida(imgMascara, corHex) {
     const buffer = document.createElement('canvas');
     const canvasRef = document.getElementById('mockupCanvas');
@@ -1670,6 +1589,7 @@ function criarCamadaColorida(imgMascara, corHex) {
     }
     return buffer;
 }
+
 /* ---------- SISTEMA DE ZONA UV ---------- */
 function pontoDaZona(u, v) {
     if (!zonaImpressao) return { x: 0, y: 0 };
@@ -1705,6 +1625,7 @@ function calcularHV(hw) {
     const zonaH = (Math.hypot(bl.x-tl.x, bl.y-tl.y) + Math.hypot(br.x-tr.x, br.y-tr.y)) / 2;
     return hw * (zonaW / zonaH) * (imgLogo.naturalHeight / imgLogo.naturalWidth);
 }
+
 function computarCantosLogo() {
     if (!zonaImpressao || !imgLogo.naturalWidth) return null;
     const elLogoZoom = document.getElementById('logo-zoom');
@@ -1730,6 +1651,7 @@ function computarCantosLogo() {
         return offsets.map(({ du, dv }) => pontoDaZona(u + du, v + dv));
     }
 
+    // Rotação em espaço de superfície: logo gira como adesivo na sacola
     const cos = Math.cos(giroRad), sin = Math.sin(giroRad);
     return offsets.map(({ du, dv }) => {
         const sx = du * Wpx, sy = dv * Hpx;
@@ -1738,7 +1660,6 @@ function computarCantosLogo() {
         return pontoDaZona(u + rx / Wpx, v + ry / Hpx);
     });
 }
-
 function detectarZonaDeImpressao() {
     if (!imgFrente.complete || imgFrente.naturalWidth === 0) return null;
     const W = imgFrente.naturalWidth, H = imgFrente.naturalHeight;
@@ -1746,7 +1667,7 @@ function detectarZonaDeImpressao() {
         const off = document.createElement('canvas');
         off.width = W; off.height = H;
         off.getContext('2d').drawImage(imgFrente, 0, 0);
-        const dados = off.getContext('2d').getImageData(0, 0, W, H).data; 
+        const dados = off.getContext('2d').getImageData(0, 0, W, H).data;
         const alpha = (x, y) => dados[(y * W + x) * 4 + 3];
         const LIMIAR = 40;
 
@@ -1843,6 +1764,7 @@ function desenharGridPerspectiva(ctx) {
     ctx.closePath(); ctx.stroke();
     ctx.restore();
 }
+
 function desenharTrianguloPerspectiva(ctx, img, x0,y0, x1,y1, x2,y2, u0,v0, u1,v1, u2,v2) {
     const denom = (u0*(v1-v2) + u1*(v2-v0) + u2*(v0-v1));
     if (Math.abs(denom) < 1e-10) return;
@@ -1876,7 +1798,6 @@ function desenharLogoComPerspectiva(ctx, img, tl, tr, bl, br) {
         }
     }
 }
-
 function processarETingirMockup(incluirRodape = false) {
     const canvasRef = document.getElementById('mockupCanvas');
     if(!canvasRef) return;
@@ -1911,6 +1832,7 @@ function processarETingirMockup(incluirRodape = false) {
         const camadaLateral = criarCamadaColorida(imgLateral, corFinalLateral);
         ctxRef.drawImage(camadaLateral, 0, 0);
     }
+
     if (!incluirRodape && zonaImpressao) {
         desenharGridPerspectiva(ctxRef);
     }
@@ -1941,7 +1863,7 @@ function processarETingirMockup(incluirRodape = false) {
     ctxRef.globalCompositeOperation = 'multiply';
     ctxRef.drawImage(imgBase, 0, 0);
     ctxRef.restore();
-
+    
     if (incluirRodape) {
         ctxRef.save();
         ctxRef.fillStyle = "#e8e8e8";
@@ -1986,14 +1908,15 @@ function resetarCanvas() {
     const elZoom = document.getElementById('logo-zoom');
     const elGiro = document.getElementById('logo-giro');
     const elInput = document.getElementById('logo');
-    if (elZoom) elZoom.value = 40;
-    if (elGiro) elGiro.value = 0;
+    if (elZoom)  { elZoom.value  = 40; }
+    if (elGiro)  { elGiro.value  = 0;  }
     if (elInput) elInput.value = '';
     mockupGeradoComRodape = false;
     const btnDownload = document.getElementById('btnDownloadLayout');
     if (btnDownload) btnDownload.disabled = true;
     processarETingirMockup(false);
 }
+
 function carregarArquivosDoServidor() {
     const elModelo = document.getElementById('modelo');
     if (!elModelo) return;
@@ -2042,7 +1965,6 @@ if (elInputLogo) {
         }
     });
 }
-
 function obterCoordenadasPointer(e) {
     if (!canvasRef) return { x: 0, y: 0 };
     const rect = canvasRef.getBoundingClientRect();
@@ -2061,6 +1983,7 @@ function pontoNoPoly(px, py, pts) {
     }
     return inside;
 }
+
 if (canvasRef) {
     canvasRef.addEventListener('pointerdown', function(e) {
         if (!logoCarregada || !zonaImpressao) return;
@@ -2146,10 +2069,10 @@ if (elBtnKraft) {
         processarETingirMockup(false);
     });
 }
-
 if (elCorFrente) elCorFrente.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elCorLateral) elCorLateral.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elLogoZoom) elLogoZoom.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
+
 const elLogoGiro = document.getElementById('logo-giro');
 if (elLogoGiro) elLogoGiro.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elModelo) elModelo.addEventListener('change', carregarArquivosDoServidor);
@@ -2159,6 +2082,7 @@ window.addEventListener('DOMContentLoaded', () => {
     carregarArquivosDoServidor(); 
 });
 
+// FUNÇÃO GLOBAL DE TROCA DE ABAS PRINCIPAIS COM TRAVA DE SEGURANÇA POR SENHA
 function switchTab(e, idConteudo) {
     if (idConteudo === 'tab-admin') {
         const senhaDigitada = prompt("Acesso Restrito! Digite a senha administrativa:");
@@ -2180,18 +2104,6 @@ function switchTab(e, idConteudo) {
     if (typeof verificarAberturaTabAdmin === "function") {
         verificarAberturaTabAdmin(idConteudo);
     }
-}
-    function abrirAdminAba(tipo){
-
-    document.getElementById('admin-sacola').style.display='none';
-    document.getElementById('admin-mao').style.display='none';
-
-    if(tipo==='sacola'){
-        document.getElementById('admin-sacola').style.display='block';
-    }else{
-        document.getElementById('admin-mao').style.display='block';
-    }
-
 }
 </script>
 </body>
