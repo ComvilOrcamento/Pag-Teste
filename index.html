@@ -962,16 +962,27 @@ function sincronizarFormularioObjetoAdmin() {
 }
 
 function salvarAlteracoesAdminLocais() {
+
+    console.log("Iniciando salvamento");
+
     sincronizarFormularioObjetoAdmin();
+
+    console.log("Após sincronização");
     
     if (typeof carregarMenusSacola === "function") carregarMenusSacola();
     if (typeof carregarMenusMao === "function") carregarMenusMao();
     if (typeof atualizarTaxaQuantidadeMao === "function") atualizarTaxaQuantidadeMao();
     
     let objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
-    localStorage.setItem('comvil_catalogo_cache', JSON.stringify(objetoUnificado));
-    
-    alert("✓ Configurações aplicadas com sucesso no sistema!");
+
+    localStorage.setItem(
+        'comvil_catalogo_cache',
+        JSON.stringify(objetoUnificado)
+    );
+
+    console.log("Salvou no localStorage");
+
+    alert("✓ Configurações aplicadas com sucesso!");
     renderAllAdmin();
 }
 
