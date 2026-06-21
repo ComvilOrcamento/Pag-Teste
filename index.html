@@ -916,22 +916,49 @@ function adminZonaSalvar() {
 }
 
 function sincronizarFormularioObjetoAdmin() {
-    databaseMao.valorStartMao = Math.max(0, parseFloat(document.getElementById('valorStartMaoAdmin').value) || 0);
-    if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {} };
-    
-    const ilhosStatus = document.getElementById('statusIlhosAdmin').value;
+
+    const valorStartMao = document.getElementById('valorStartMaoAdmin');
+    if (valorStartMao) {
+        databaseMao.valorStartMao =
+            Math.max(0, parseFloat(valorStartMao.value) || 0);
+    }
+
+    if (!databaseSacola.valoresAcabamento) {
+        databaseSacola.valoresAcabamento = { cores: {} };
+    }
+
+    const fixoIlhos = document.getElementById('fixoIlhosAdmin');
     databaseSacola.valoresAcabamento.ilhos =
-    Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0);
-    
-    const furoStatus = document.getElementById('statusFuroAdmin').value;
+        fixoIlhos
+            ? Math.max(0, parseFloat(fixoIlhos.value) || 0)
+            : 0;
+
+    const fixoFuro = document.getElementById('fixoFuroAdmin');
     databaseSacola.valoresAcabamento.furoLaco =
-    Math.max(0, parseFloat(document.getElementById('fixoFuroAdmin').value) || 0);
-    
-    if (!databaseSacola.valoresAcabamento.cores) databaseSacola.valoresAcabamento.cores = {};
-    databaseSacola.valoresAcabamento.cores['1x0'] = Math.max(0, parseFloat(document.getElementById('cor1x0Admin').value) || 0);
-    databaseSacola.valoresAcabamento.cores['2x0'] = Math.max(0, parseFloat(document.getElementById('cor2x0Admin').value) || 0);
-    databaseSacola.valoresAcabamento.cores['4x0'] = Math.max(0, parseFloat(document.getElementById('cor4x0Admin').value) || 0);
-    databaseSacola.valoresAcabamento.cores['4x1'] = Math.max(0, parseFloat(document.getElementById('cor4x1Admin').value) || 0);
+        fixoFuro
+            ? Math.max(0, parseFloat(fixoFuro.value) || 0)
+            : 0;
+
+    if (!databaseSacola.valoresAcabamento.cores) {
+        databaseSacola.valoresAcabamento.cores = {};
+    }
+
+    const cor1x0 = document.getElementById('cor1x0Admin');
+    const cor2x0 = document.getElementById('cor2x0Admin');
+    const cor4x0 = document.getElementById('cor4x0Admin');
+    const cor4x1 = document.getElementById('cor4x1Admin');
+
+    databaseSacola.valoresAcabamento.cores['1x0'] =
+        cor1x0 ? Math.max(0, parseFloat(cor1x0.value) || 0) : 0;
+
+    databaseSacola.valoresAcabamento.cores['2x0'] =
+        cor2x0 ? Math.max(0, parseFloat(cor2x0.value) || 0) : 0;
+
+    databaseSacola.valoresAcabamento.cores['4x0'] =
+        cor4x0 ? Math.max(0, parseFloat(cor4x0.value) || 0) : 0;
+
+    databaseSacola.valoresAcabamento.cores['4x1'] =
+        cor4x1 ? Math.max(0, parseFloat(cor4x1.value) || 0) : 0;
 }
 
 function salvarAlteracoesAdminLocais() {
