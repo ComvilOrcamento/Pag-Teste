@@ -920,10 +920,12 @@ function sincronizarFormularioObjetoAdmin() {
     if (!databaseSacola.valoresAcabamento) databaseSacola.valoresAcabamento = { cores: {} };
     
     const ilhosStatus = document.getElementById('statusIlhosAdmin').value;
-    databaseSacola.valoresAcabamento.ilhos = ilhosStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0) : 0.00;
+    databaseSacola.valoresAcabamento.ilhos =
+    Math.max(0, parseFloat(document.getElementById('fixoIlhosAdmin').value) || 0);
     
     const furoStatus = document.getElementById('statusFuroAdmin').value;
-    databaseSacola.valoresAcabamento.furoLaco = furoStatus === 'sim' ? Math.max(0, parseFloat(document.getElementById('fixoFuroAdmin').value) || 0) : 0.00;
+    databaseSacola.valoresAcabamento.furoLaco =
+    Math.max(0, parseFloat(document.getElementById('fixoFuroAdmin').value) || 0);
     
     if (!databaseSacola.valoresAcabamento.cores) databaseSacola.valoresAcabamento.cores = {};
     databaseSacola.valoresAcabamento.cores['1x0'] = Math.max(0, parseFloat(document.getElementById('cor1x0Admin').value) || 0);
@@ -948,12 +950,30 @@ function salvarAlteracoesAdminLocais() {
 
 function exportarJsonAdminAtualizado() {
     sincronizarFormularioObjetoAdmin();
-    let objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
-    const blob = new Blob([JSON.stringify(objetoUnificado, null, 2)], { type: "application/json" });
-    const link = document.createElement("a"); 
-    link.href = URL.createObjectURL(blob); 
-    link.download = "dados.json"; 
-    link.click();
+
+    const objetoUnificado = {
+        ...databaseSacola,
+        ...databaseMao
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(objetoUnificado, null, 2)],
+        { type: "application/json;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "dados.json";
+
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
 }
 /* ==========================================================================
    BANCOS DE DADOS E CARREGAMENTO UNIFICADO (DADOS.JSON)
