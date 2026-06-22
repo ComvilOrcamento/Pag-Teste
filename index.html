@@ -44,7 +44,7 @@
         
         input:focus, select:focus { border-color: #0056b3; }
         input[readonly] { background-color: #f1f5f9; color: #64748b; border-color: #cbd5e1; cursor: not-allowed; }
-        
+
         .btn-principal { width: 100%; background: #003366; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; margin: 20px 0 10px 0; transition: background 0.2s; }
         .btn-principal:hover { background: #002244; }
         
@@ -105,14 +105,12 @@
 <body>
 <div class="orcamento-box">
     <h1>Comvil Orçamentos</h1>
-    
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'tab-sacola')">Sacola</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-mao')">Mão</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-mockup')">Mockup Sacola</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-admin')">Painel Admin</button>
     </div>
-
     <!-- ABA SACOLA -->
     <div id="tab-sacola" class="tab-content active">
         <div class="box-conteudo">
@@ -226,7 +224,6 @@
             </div>
         </div>
     </div>
-
     <!-- ABA MÃO -->
     <div id="tab-mao" class="tab-content">
         <div class="box-conteudo">
@@ -312,7 +309,6 @@
             </div>
         </div>
     </div>
-
     <!-- ABA MOCKUP SACOLA (RESTAURADA E INDEPENDENTE) -->
     <div id="tab-mockup" class="tab-content">
         <div class="box-conteudo">
@@ -375,7 +371,6 @@
             </div>
         </div>
     </div>
-
     <!-- ABA PAINEL ADMIN -->
     <div id="tab-admin" class="tab-content">
         <div class="box-conteudo">
@@ -389,7 +384,6 @@
             <!-- SUB-ABA ADMIN: CONFIGURAÇÕES SACOLA -->
             <div id="admin-sacola" class="sub-tab-content active">
                 <div style="font-size: 15px; margin: 10px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração de Sacola Personalizada (Produto Base)</div>
-                <!-- REESTRUTURADO PARA ATENDER AO REQUISITO DE M² POR MODELO -->
                 <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
                     <div class="field" style="width: 50%;">
                         <label style="font-size: 12px; font-weight: bold; color: #475569;">Nome Comercial Exibido no Menu</label>
@@ -452,9 +446,7 @@
                     <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x0</label><input type="number" id="cor4x0Admin" step="0.01"></div>
                     <div class="field" style="flex: 1; min-width: 110px;"><label>Custo 4x1</label><input type="number" id="cor4x1Admin" step="0.01"></div>
                 </div>
-
                 <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Configuração das Taxas de Enobrecimento (Sacola)</div>
-                <!-- REESTRUTURAÇÃO DOS INPUTS: ELIMINADO EXTRA MILHEIRO, ADICIONADO VALOR M² E VALOR FIXO LOTE -->
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; font-weight: bold; font-size: 11px; color: #475569; text-transform: uppercase;">
                         <div>Tipo de Enobrecimento</div><div>Valor por M² (R$)</div><div>Valor Fixo Lote (R$)</div>
@@ -523,7 +515,6 @@
                         <tbody></tbody>
                     </table>
                 </div>
-
                 <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Taxas Adicionais por Lote (Mão)</div>
                 <div style="display: flex; gap: 15px; margin-bottom: 12px; align-items: flex-end; width: 100%;">
                     <div class="field" style="width: 60%;">
@@ -586,132 +577,171 @@ function switchSubTab(e, idSubConteudo) {
         adminZonaInit();
     }
 }
-
 function renderAllAdminParteDois() {
     // 4. PREENCHE TABELA DE CORES DE IMPRESSÃO DA MÃO (E.V.A)
     const tbodyCoresEva = document.querySelector('#tableCoresEvaAdmin tbody');
     if (tbodyCoresEva) {
         tbodyCoresEva.innerHTML = '';
-        databaseMao.coresEva.forEach((cor, idx) => {
-            tbodyCoresEva.innerHTML += `<tr>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${cor.nome}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'nome', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${cor.preco}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'preco', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('coresEva', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
+        if (databaseMao && databaseMao.coresEva) {
+            databaseMao.coresEva.forEach((cor, idx) => {
+                tbodyCoresEva.innerHTML += `<tr>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${cor.nome}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'nome', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${cor.preco}" onchange="atualizarDadosInlineAdmin('coresEva', ${idx}, 'preco', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('coresEva', ${idx})">Excluir</button></td>
+                </tr>`;
+            });
+        }
     }
     // 5. PREENCHE TABELA OPERACIONAL DE TAXAS ADICIONAIS POR LOTE
     const tbodyTaxasQtd = document.querySelector('#tableTaxasQuantidadeMaoAdmin tbody');
     if (tbodyTaxasQtd) {
         tbodyTaxasQtd.innerHTML = '';
-        if (!databaseMao.taxasQuantidade) {
-            databaseMao.taxasQuantidade = { "100": 0, "200": 0, "300": 0, "500": 0, "1000": 0, "2000": 0, "5000": 0, "Variavel": 0 };
+        if (databaseMao) {
+            if (!databaseMao.taxasQuantidade) {
+                databaseMao.taxasQuantidade = { "100": 0, "200": 0, "300": 0, "500": 0, "1000": 0, "2000": 0, "5000": 0, "Variavel": 0 };
+            }
+            Object.keys(databaseMao.taxasQuantidade).forEach((key) => {
+                let labelExibido = key === "Variavel" ? "Outra Qtd (Variável)" : key + " un";
+                tbodyTaxasQtd.innerHTML += `<tr>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${labelExibido}" disabled></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${databaseMao.taxasQuantidade[key]}" onchange="atualizarTaxaInlineMaoAdmin('${key}', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#64748b; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="resetarTaxaMaoAdmin('${key}')">Zerar</button></td>
+                </tr>`;
+            });
         }
-        Object.keys(databaseMao.taxasQuantidade).forEach((key) => {
-            let labelExibido = key === "Variavel" ? "Outra Qtd (Variável)" : key + " un";
-            tbodyTaxasQtd.innerHTML += `<tr>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${labelExibido}" disabled></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${databaseMao.taxasQuantidade[key]}" onchange="atualizarTaxaInlineMaoAdmin('${key}', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#64748b; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="resetarTaxaMaoAdmin('${key}')">Zerar</button></td>
-            </tr>`;
-        });
     }
 
     // SINCRONIZA ESTADO DOS INPUTS FIXOS DO PAINEL
-    document.getElementById('valorStartMaoAdmin').value = databaseMao.valorStartMao || 0;
+    const elStartMao = document.getElementById('valorStartMaoAdmin');
+    if (elStartMao && databaseMao) elStartMao.value = databaseMao.valorStartMao || 0;
 
-    if (databaseSacola.valoresAcabamento) {
-        document.getElementById('fixoIlhosAdmin').value = databaseSacola.valoresAcabamento.ilhos || 0;
-        document.getElementById('fixoFuroAdmin').value = databaseSacola.valoresAcabamento.furoLaco || 0;
+    if (databaseSacola && databaseSacola.valoresAcabamento) {
+        const elIlhos = document.getElementById('fixoIlhosAdmin');
+        const elFuro = document.getElementById('fixoFuroAdmin');
+        if (elIlhos) elIlhos.value = databaseSacola.valoresAcabamento.ilhos || 0;
+        if (elFuro) elFuro.value = databaseSacola.valoresAcabamento.furoLaco || 0;
         
         if (databaseSacola.valoresAcabamento.cores) {
-            document.getElementById('cor1x0Admin').value = databaseSacola.valoresAcabamento.cores['1x0'] || 0;
-            document.getElementById('cor2x0Admin').value = databaseSacola.valoresAcabamento.cores['2x0'] || 0;
-            document.getElementById('cor4x0Admin').value = databaseSacola.valoresAcabamento.cores['4x0'] || 0;
-            document.getElementById('cor4x1Admin').value = databaseSacola.valoresAcabamento.cores['4x1'] || 0;
+            const el1x0 = document.getElementById('cor1x0Admin');
+            const el2x0 = document.getElementById('cor2x0Admin');
+            const el4x0 = document.getElementById('cor4x0Admin');
+            const el4x1 = document.getElementById('cor4x1Admin');
+            if (el1x0) el1x0.value = databaseSacola.valoresAcabamento.cores['1x0'] || 0;
+            if (el2x0) el2x0.value = databaseSacola.valoresAcabamento.cores['2x0'] || 0;
+            if (el4x0) el4x0.value = databaseSacola.valoresAcabamento.cores['4x0'] || 0;
+            if (el4x1) el4x1.value = databaseSacola.valoresAcabamento.cores['4x1'] || 0;
         }
     }
 
     // SINCRONIZA ESTADO DOS NOVOS VALORES DE ENOBRECIMENTO M² + FIXO LOTE
-    if (databaseSacola.valoresEnobrecimento) {
-        document.getElementById('enoPlastBrilhoM2').value = databaseSacola.valoresEnobrecimento.plastBrilhoM2 || 0;
-        document.getElementById('enoPlastBrilhoFixo').value = databaseSacola.valoresEnobrecimento.plastBrilhoFixo || 0;
-        document.getElementById('enoPlastFoscaM2').value = databaseSacola.valoresEnobrecimento.plastFoscaM2 || 0;
-        document.getElementById('enoPlastFoscaFixo').value = databaseSacola.valoresEnobrecimento.plastFoscaFixo || 0;
-        document.getElementById('enoHotstampM2').value = databaseSacola.valoresEnobrecimento.hotstampM2 || 0;
-        document.getElementById('enoHotstampFixo').value = databaseSacola.valoresEnobrecimento.hotstampFixo || 0;
-        document.getElementById('enoBoppBrilhoM2').value = databaseSacola.valoresEnobrecimento.boppBrilhoM2 || 0;
-        document.getElementById('enoBoppBrilhoFixo').value = databaseSacola.valoresEnobrecimento.boppBrilhoFixo || 0;
-        document.getElementById('enoBoppFoscaM2').value = databaseSacola.valoresEnobrecimento.boppFoscaM2 || 0;
-        document.getElementById('enoBoppFoscaFixo').value = databaseSacola.valoresEnobrecimento.boppFoscaFixo || 0;
-        document.getElementById('enoVernizM2').value = databaseSacola.valoresEnobrecimento.vernizM2 || 0;
-        document.getElementById('enoVernizFixo').value = databaseSacola.valoresEnobrecimento.vernizFixo || 0;
+    if (databaseSacola && databaseSacola.valoresEnobrecimento) {
+        const elEpbM2 = document.getElementById('enoPlastBrilhoM2');
+        const elEpbFixo = document.getElementById('enoPlastBrilhoFixo');
+        const elEpfM2 = document.getElementById('enoPlastFoscaM2');
+        const elEpfFixo = document.getElementById('enoPlastFoscaFixo');
+        const elEhsM2 = document.getElementById('enoHotstampM2');
+        const elEhsFixo = document.getElementById('enoHotstampFixo');
+        const elEbbM2 = document.getElementById('enoBoppBrilhoM2');
+        const elEbbFixo = document.getElementById('enoBoppBrilhoFixo');
+        const elEbfM2 = document.getElementById('enoBoppFoscaM2');
+        const elEbfFixo = document.getElementById('enoBoppFoscaFixo');
+        const elEvnM2 = document.getElementById('enoVernizM2');
+        const elEvnFixo = document.getElementById('enoVernizFixo');
+
+        if (elEpbM2) elEpbM2.value = databaseSacola.valoresEnobrecimento.plastBrilhoM2 || 0;
+        if (elEpbFixo) elEpbFixo.value = databaseSacola.valoresEnobrecimento.plastBrilhoFixo || 0;
+        if (elEpfM2) elEpfM2.value = databaseSacola.valoresEnobrecimento.plastFoscaM2 || 0;
+        if (elEpfFixo) elEpfFixo.value = databaseSacola.valoresEnobrecimento.plastFoscaFixo || 0;
+        if (elEhsM2) elEhsM2.value = databaseSacola.valoresEnobrecimento.hotstampM2 || 0;
+        if (elEhsFixo) elEhsFixo.value = databaseSacola.valoresEnobrecimento.hotstampFixo || 0;
+        if (elEbbM2) elEbbM2.value = databaseSacola.valoresEnobrecimento.boppBrilhoM2 || 0;
+        if (elEbbFixo) elEbbFixo.value = databaseSacola.valoresEnobrecimento.boppBrilhoFixo || 0;
+        if (elEbfM2) elEbfM2.value = databaseSacola.valoresEnobrecimento.boppFoscaM2 || 0;
+        if (elEbfFixo) elEbfFixo.value = databaseSacola.valoresEnobrecimento.boppFoscaFixo || 0;
+        if (elEvnM2) elEvnM2.value = databaseSacola.valoresEnobrecimento.vernizM2 || 0;
+        if (elEvnFixo) elEvnFixo.value = databaseSacola.valoresEnobrecimento.vernizFixo || 0;
     }
 }
 
 function renderAllAdmin() {
-    // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA (ADICIONADA COLUNA M² ABERTO)
+    // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA
     const tbodyProd = document.querySelector('#tableProdutosAdmin tbody');
     if (tbodyProd) {
         tbodyProd.innerHTML = '';
-        databaseSacola.produtosConfigurados.forEach((p, idx) => {
-            tbodyProd.innerHTML += `<tr>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${p.nomeCompleto}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'nomeCompleto', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${p.precoBase}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'precoBase', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.0001" style="width:100%; border:none; background:transparent;" value="${p.metroQuadrado || 0}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'metroQuadrado', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('produtosConfigurados', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
+        if (databaseSacola && databaseSacola.produtosConfigurados) {
+            databaseSacola.produtosConfigurados.forEach((p, idx) => {
+                tbodyProd.innerHTML += `<tr>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${p.nomeCompleto}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'nomeCompleto', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${p.precoBase}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'precoBase', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.0001" style="width:100%; border:none; background:transparent;" value="${p.metroQuadrado || 0}" onchange="atualizarDadosInlineAdmin('produtosConfigurados', ${idx}, 'metroQuadrado', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('produtosConfigurados', ${idx})">Excluir</button></td>
+                </tr>`;
+            });
+        }
     }
 
     // 2. PREENCHE TABELA DE CORDÕES / ALÇAS DA SACOLA
     const tbodyCord = document.querySelector('#tableCordoesAdmin tbody');
     if (tbodyCord) {
         tbodyCord.innerHTML = '';
-        databaseSacola.cordoes.forEach((c, idx) => {
-            tbodyCord.innerHTML += `<tr>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${c.nome}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'nome', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${c.preco}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'preco', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('cordoes', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
+        if (databaseSacola && databaseSacola.cordoes) {
+            databaseSacola.cordoes.forEach((c, idx) => {
+                tbodyCord.innerHTML += `<tr>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${c.nome}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'nome', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${c.preco}" onchange="atualizarDadosInlineAdmin('cordoes', ${idx}, 'preco', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('cordoes', ${idx})">Excluir</button></td>
+                </tr>`;
+            });
+        }
     }
-
     // 3. PREENCHE TABELA DE MODELOS COMERCIAIS DE MÃO (E.V.A)
     const tbodyMao = document.querySelector('#tableModelosMaoAdmin tbody');
     if (tbodyMao) {
         tbodyMao.innerHTML = '';
-        databaseMao.modelosMao.forEach((m, idx) => {
-            tbodyMao.innerHTML += `<tr>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${m.nome}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'nome', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${m.precoBase}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'precoBase', this.value)"></td>
-                <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('modelosMao', ${idx})">Excluir</button></td>
-            </tr>`;
-        });
+        if (databaseMao && databaseMao.modelosMao) {
+            databaseMao.modelosMao.forEach((m, idx) => {
+                tbodyMao.innerHTML += `<tr>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="text" style="width:100%; border:none; background:transparent;" value="${m.nome}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'nome', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><input type="number" min="0" step="0.01" style="width:100%; border:none; background:transparent;" value="${m.precoBase}" onchange="atualizarDadosInlineAdmin('modelosMao', ${idx}, 'precoBase', this.value)"></td>
+                    <td style="padding:8px; border-bottom:1px solid #e2e8f0;"><button style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="removerItemAdmin('modelosMao', ${idx})">Excluir</button></td>
+                </tr>`;
+            });
+        }
     }
     
     renderAllAdminParteDois();
 }
+
 function atualizarTaxaInlineMaoAdmin(chave, valor) {
-    databaseMao.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
+    if (databaseMao && databaseMao.taxasQuantidade) {
+        databaseMao.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
+    }
 }
 
 function atualizarObjetoTaxaMaoAdmin() {
-    const chave = document.getElementById('taxaMaoQtdAlvoAdmin').value;
-    const valor = Math.max(0, parseFloat(document.getElementById('taxaMaoValorAdmin').value) || 0);
+    const elChave = document.getElementById('taxaMaoQtdAlvoAdmin');
+    const elValor = document.getElementById('taxaMaoValorAdmin');
+    if (!elChave || !elValor || !databaseMao) return;
+    
+    const chave = elChave.value;
+    const valor = Math.max(0, parseFloat(elValor.value) || 0);
     if (!databaseMao.taxasQuantidade) databaseMao.taxasQuantidade = {};
     databaseMao.taxasQuantidade[chave] = valor;
-    document.getElementById('taxaMaoValorAdmin').value = '';
+    elValor.value = '';
     renderAllAdmin();
 }
 
 function resetarTaxaMaoAdmin(chave) {
-    if (databaseMao.taxasQuantidade) databaseMao.taxasQuantidade[chave] = 0.00;
+    if (databaseMao && databaseMao.taxasQuantidade) {
+        databaseMao.taxasQuantidade[chave] = 0.00;
+    }
     renderAllAdmin();
 }
 
 function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
     let db = (tipo === 'produtosConfigurados' || tipo === 'cordoes') ? databaseSacola : databaseMao;
+    if (!db || !db[tipo] || !db[tipo][index]) return;
+    
     if (propriedade === 'precoBase' || propriedade === 'preco' || propriedade === 'metroQuadrado') {
         db[tipo][index][propriedade] = Math.max(0, parseFloat(novoValor) || 0); 
     } else {
@@ -720,51 +750,71 @@ function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
 }
 
 function adicionarProdutoAdmin() {
-    const nome = document.getElementById('prodNome').value.trim();
-    const preco = Math.max(0, parseFloat(document.getElementById('prodPreco').value) || 0);
-    const m2 = Math.max(0, parseFloat(document.getElementById('prodMetroQuadrado').value) || 0);
+    const elNome = document.getElementById('prodNome');
+    const elPreco = document.getElementById('prodPreco');
+    const elM2 = document.getElementById('prodMetroQuadrado');
+    if (!elNome || !elPreco || !elM2 || !databaseSacola) return;
+
+    const nome = elNome.value.trim();
+    const preco = Math.max(0, parseFloat(elPreco.value) || 0);
+    const m2 = Math.max(0, parseFloat(elM2.value) || 0);
     if(!nome) return;
+    
     if (!databaseSacola.produtosConfigurados) databaseSacola.produtosConfigurados = [];
     const novoId = databaseSacola.produtosConfigurados.length > 0 ? Math.max(...databaseSacola.produtosConfigurados.map(p => p.id)) + 1 : 1;
     databaseSacola.produtosConfigurados.push({ "id": novoId, "nomeCompleto": nome, "precoBase": preco, "metroQuadrado": m2 });
-    document.getElementById('prodNome').value = ''; document.getElementById('prodPreco').value = ''; document.getElementById('prodMetroQuadrado').value = '';
+    
+    elNome.value = ''; elPreco.value = ''; elM2.value = '';
     renderAllAdmin();
 }
-
 function adicionarCordaoAdmin() {
-    const nome = document.getElementById('cordaoNomeAdmin').value.trim();
-    const preco = Math.max(0, parseFloat(document.getElementById('cordaoPrecoAdmin').value) || 0);
+    const elNome = document.getElementById('cordaoNomeAdmin');
+    const elPreco = document.getElementById('cordaoPrecoAdmin');
+    if (!elNome || !elPreco || !databaseSacola) return;
+
+    const nome = elNome.value.trim();
+    const preco = Math.max(0, parseFloat(elPreco.value) || 0);
     if(!nome) return;
     if (!databaseSacola.cordoes) databaseSacola.cordoes = [];
     databaseSacola.cordoes.push({ "nome": nome, "preco": preco });
-    document.getElementById('cordaoNomeAdmin').value = ''; document.getElementById('cordaoPrecoAdmin').value = '';
+    elNome.value = ''; elPreco.value = '';
     renderAllAdmin();
 }
 
 function adicionarModeloMaoAdmin() {
-    const nome = document.getElementById('maoNomeAdmin').value.trim();
-    const preco = Math.max(0, parseFloat(document.getElementById('maoPrecoAdmin').value) || 0);
+    const elNome = document.getElementById('maoNomeAdmin');
+    const elPreco = document.getElementById('maoPrecoAdmin');
+    if (!elNome || !elPreco || !databaseMao) return;
+
+    const nome = elNome.value.trim();
+    const preco = Math.max(0, parseFloat(elPreco.value) || 0);
     if(!nome) return;
     if (!databaseMao.modelosMao) databaseMao.modelosMao = [];
     const novoId = databaseMao.modelosMao.length > 0 ? Math.max(...databaseMao.modelosMao.map(m => m.id)) + 1 : 1;
     databaseMao.modelosMao.push({ "id": novoId, "nome": nome, "precoBase": preco });
-    document.getElementById('maoNomeAdmin').value = ''; document.getElementById('maoPrecoAdmin').value = '';
+    elNome.value = ''; elPreco.value = '';
     renderAllAdmin();
 }
 
 function adicionarCorEvaAdmin() {
-    const nome = document.getElementById('evaCorNomeAdmin').value.trim();
-    const preco = Math.max(0, parseFloat(document.getElementById('evaCorPrecoAdmin').value) || 0);
+    const elNome = document.getElementById('evaCorNomeAdmin');
+    const elPreco = document.getElementById('evaCorPrecoAdmin');
+    if (!elNome || !elPreco || !databaseMao) return;
+
+    const nome = elNome.value.trim();
+    const preco = Math.max(0, parseFloat(elPreco.value) || 0);
     if(!nome) return;
     if (!databaseMao.coresEva) databaseMao.coresEva = [];
     databaseMao.coresEva.push({ "nome": nome, "preco": preco });
-    document.getElementById('evaCorNomeAdmin').value = ''; document.getElementById('evaCorPrecoAdmin').value = '';
+    elNome.value = ''; elPreco.value = '';
     renderAllAdmin();
 }
 
 function removerItemAdmin(tipo, index) {
     let db = (tipo === 'produtosConfigurados' || tipo === 'cordoes') ? databaseSacola : databaseMao;
-    db[tipo].splice(index, 1); 
+    if (db && db[tipo]) {
+        db[tipo].splice(index, 1); 
+    }
     renderAllAdmin(); 
 }
 
@@ -794,7 +844,6 @@ function adminZonaCarregarModelo() {
     if (sel) adminZonaModelo = sel.value;
     const canvas = document.getElementById('adminZonaCanvas');
     if (!canvas) return;
-
     adminZonaImgRef = new Image();
     adminZonaImgRef.onload = function() {
         const MAX_W = canvas.parentElement ? canvas.parentElement.clientWidth : 420;
@@ -814,7 +863,7 @@ function adminZonaCarregarModelo() {
 
 function adminZonaInicializarCantos(canvas) {
     const W = canvas.width, H = canvas.height;
-    const salvo = databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
+    const salvo = databaseSacola && databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[adminZonaModelo];
     const src = salvo
         ? [salvo.tl, salvo.tr, salvo.bl, salvo.br].map(p => [p[0], p[1]])
         : ADMIN_ZONA_DEFAULTS[adminZonaModelo];
@@ -899,7 +948,7 @@ function adminZonaSetupEventos(canvas) {
 
 function adminZonaSalvar() {
     const canvas = document.getElementById('adminZonaCanvas');
-    if (!canvas || !adminZonaCorners) return;
+    if (!canvas || !adminZonaCorners || !databaseSacola) return;
     const W = canvas.width, H = canvas.height;
     if (!databaseSacola.zonasImpressao) databaseSacola.zonasImpressao = {};
     const [tl, tr, bl, br] = adminZonaCorners;
@@ -916,11 +965,11 @@ function adminZonaSalvar() {
 }
 
 function sincronizarFormularioObjetoAdmin() {
+    if (!databaseMao || !databaseSacola) return;
 
     const valorStartMao = document.getElementById('valorStartMaoAdmin');
     if (valorStartMao) {
-        databaseMao.valorStartMao =
-            Math.max(0, parseFloat(valorStartMao.value) || 0);
+        databaseMao.valorStartMao = Math.max(0, parseFloat(valorStartMao.value) || 0);
     }
 
     if (!databaseSacola.valoresAcabamento) {
@@ -928,45 +977,58 @@ function sincronizarFormularioObjetoAdmin() {
     }
 
     const fixoIlhos = document.getElementById('fixoIlhosAdmin');
-    databaseSacola.valoresAcabamento.ilhos =
-        fixoIlhos
-            ? Math.max(0, parseFloat(fixoIlhos.value) || 0)
-            : 0;
+    databaseSacola.valoresAcabamento.ilhos = fixoIlhos ? Math.max(0, parseFloat(fixoIlhos.value) || 0) : 0;
 
     const fixoFuro = document.getElementById('fixoFuroAdmin');
-    databaseSacola.valoresAcabamento.furoLaco =
-        fixoFuro
-            ? Math.max(0, parseFloat(fixoFuro.value) || 0)
-            : 0;
+    databaseSacola.valoresAcabamento.furoLaco = fixoFuro ? Math.max(0, parseFloat(fixoFuro.value) || 0) : 0;
 
     if (!databaseSacola.valoresAcabamento.cores) {
         databaseSacola.valoresAcabamento.cores = {};
     }
-
     const cor1x0 = document.getElementById('cor1x0Admin');
     const cor2x0 = document.getElementById('cor2x0Admin');
     const cor4x0 = document.getElementById('cor4x0Admin');
     const cor4x1 = document.getElementById('cor4x1Admin');
 
-    databaseSacola.valoresAcabamento.cores['1x0'] =
-        cor1x0 ? Math.max(0, parseFloat(cor1x0.value) || 0) : 0;
+    databaseSacola.valoresAcabamento.cores['1x0'] = cor1x0 ? Math.max(0, parseFloat(cor1x0.value) || 0) : 0;
+    databaseSacola.valoresAcabamento.cores['2x0'] = cor2x0 ? Math.max(0, parseFloat(cor2x0.value) || 0) : 0;
+    databaseSacola.valoresAcabamento.cores['4x0'] = cor4x0 ? Math.max(0, parseFloat(cor4x0.value) || 0) : 0;
+    databaseSacola.valoresAcabamento.cores['4x1'] = cor4x1 ? Math.max(0, parseFloat(cor4x1.value) || 0) : 0;
 
-    databaseSacola.valoresAcabamento.cores['2x0'] =
-        cor2x0 ? Math.max(0, parseFloat(cor2x0.value) || 0) : 0;
+    // PERSISTÊNCIA DOS NOVOS CAMPOS DE ENOBRECIMENTO M² + FIXO LOTE
+    if (!databaseSacola.valoresEnobrecimento) {
+        databaseSacola.valoresEnobrecimento = {};
+    }
+    const elEpbM2 = document.getElementById('enoPlastBrilhoM2');
+    const elEpbFixo = document.getElementById('enoPlastBrilhoFixo');
+    const elEpfM2 = document.getElementById('enoPlastFoscaM2');
+    const elEpfFixo = document.getElementById('enoPlastFoscaFixo');
+    const elEhsM2 = document.getElementById('enoHotstampM2');
+    const elEhsFixo = document.getElementById('enoHotstampFixo');
+    const elEbbM2 = document.getElementById('enoBoppBrilhoM2');
+    const elEbbFixo = document.getElementById('enoBoppBrilhoFixo');
+    const elEbfM2 = document.getElementById('enoBoppFoscaM2');
+    const elEbfFixo = document.getElementById('enoBoppFoscaFixo');
+    const elEvnM2 = document.getElementById('enoVernizM2');
+    const elEvnFixo = document.getElementById('enoVernizFixo');
 
-    databaseSacola.valoresAcabamento.cores['4x0'] =
-        cor4x0 ? Math.max(0, parseFloat(cor4x0.value) || 0) : 0;
-
-    databaseSacola.valoresAcabamento.cores['4x1'] =
-        cor4x1 ? Math.max(0, parseFloat(cor4x1.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.plastBrilhoM2 = elEpbM2 ? Math.max(0, parseFloat(elEpbM2.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.plastBrilhoFixo = elEpbFixo ? Math.max(0, parseFloat(elEpbFixo.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.plastFoscaM2 = elEpfM2 ? Math.max(0, parseFloat(elEpfM2.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.plastFoscaFixo = elEpfFixo ? Math.max(0, parseFloat(elEpfFixo.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.hotstampM2 = elEhsM2 ? Math.max(0, parseFloat(elEhsM2.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.hotstampFixo = elEhsFixo ? Math.max(0, parseFloat(elEhsFixo.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.boppBrilhoM2 = elEbbM2 ? Math.max(0, parseFloat(elEbbM2.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.boppBrilhoFixo = elEbbFixo ? Math.max(0, parseFloat(elEbbFixo.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.boppFoscaM2 = elEbfM2 ? Math.max(0, parseFloat(elEbfM2.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.boppFoscaFixo = elEbfFixo ? Math.max(0, parseFloat(elEbfFixo.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.vernizM2 = elEvnM2 ? Math.max(0, parseFloat(elEvnM2.value) || 0) : 0;
+    databaseSacola.valoresEnobrecimento.vernizFixo = elEvnFixo ? Math.max(0, parseFloat(elEvnFixo.value) || 0) : 0;
 }
 
 function salvarAlteracoesAdminLocais() {
-
     console.log("Iniciando salvamento");
-
     sincronizarFormularioObjetoAdmin();
-
     console.log("Após sincronização");
     
     if (typeof carregarMenusSacola === "function") carregarMenusSacola();
@@ -974,12 +1036,7 @@ function salvarAlteracoesAdminLocais() {
     if (typeof atualizarTaxaQuantidadeMao === "function") atualizarTaxaQuantidadeMao();
     
     let objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
-
-    localStorage.setItem(
-        'comvil_catalogo_cache',
-        JSON.stringify(objetoUnificado)
-    );
-
+    localStorage.setItem('comvil_catalogo_cache', JSON.stringify(objetoUnificado));
     console.log("Salvou no localStorage");
 
     alert("✓ Configurações aplicadas com sucesso!");
@@ -988,7 +1045,6 @@ function salvarAlteracoesAdminLocais() {
 
 function exportarJsonAdminAtualizado() {
     sincronizarFormularioObjetoAdmin();
-
     const objetoUnificado = {
         ...databaseSacola,
         ...databaseMao
@@ -1000,7 +1056,6 @@ function exportarJsonAdminAtualizado() {
     );
 
     const url = URL.createObjectURL(blob);
-
     const a = document.createElement("a");
     a.href = url;
     a.download = "dados.json";
@@ -1028,14 +1083,14 @@ objImgMinha.onerror = function() { objImgMinha.src = "https://placehold.co"; };
 
 const bancoReservaSacola = {
   "produtosConfigurados": [
-    { "id": 1, "nomeCompleto": "Sacola Offset 180g - 18x24x8", "precoBase": 0.78 },
-    { "id": 2, "nomeCompleto": "Sacola Offset 180g - 24x35x10", "precoBase": 0.95 }
+    { "id": 1, "nomeCompleto": "Sacola Offset 180g - 18x24x8", "precoBase": 0.78, "metroQuadrado": 0.1450 },
+    { "id": 2, "nomeCompleto": "Sacola Offset 180g - 24x35x10", "precoBase": 0.95, "metroQuadrado": 0.2200 }
   ],
   "cordoes": [
     { "nome": "Nylon", "preco": 0.20 }, 
     { "nome": "Gorgurão", "preco": 0.28 }
   ],
-  "quantidades": [500, 1000, 2000, 3000, 4000, 5000],
+  "quantidades":[],
   "valoresAcabamento": { 
     "ilhos": 0.20, 
     "furoLaco": 0.15, 
@@ -1050,7 +1105,6 @@ const bancoReservaSacola = {
     "vernizM2": 0.90,       "vernizFixo": 70.00
   }
 };
-
 
 const bancoReservaMao = {
   "modelosMao": [
@@ -1088,6 +1142,7 @@ window.onload = function() {
             processarDadosCarregados(null);
         });
 };
+
 function processarDadosCarregados(data) {
     if (data) {
         if (data.produtosConfigurados || data.valoresAcabamento || data.valoresEnobrecimento) { databaseSacola = data; } 
@@ -1099,8 +1154,10 @@ function processarDadosCarregados(data) {
         let logoDefinida = data.logoEmpresa || databaseSacola.logoEmpresa || databaseMao.logoEmpresa;
         if(logoDefinida && logoDefinida.trim() !== "") {
             objImgMinha.src = logoDefinida;
-            if(document.getElementById('img-minha-preview_sacola')) document.getElementById('img-minha-preview_sacola').src = logoDefinida;
-            if(document.getElementById('img-minha-preview_mao')) document.getElementById('img-minha-preview_mao').src = logoDefinida;
+            const elPrevSacola = document.getElementById('img-minha-preview_sacola');
+            const elPrevMao = document.getElementById('img-minha-preview_mao');
+            if(elPrevSacola) elPrevSacola.src = logoDefinida;
+            if(elPrevMao) elPrevMao.src = logoDefinida;
         }
     } else {
         databaseSacola = JSON.parse(JSON.stringify(bancoReservaSacola));
@@ -1110,7 +1167,6 @@ function processarDadosCarregados(data) {
     carregarMenusMao(); 
     atualizarTaxaQuantidadeMao();
 }
-
 function mascaraTelefone(input) {
     let v = input.value.replace(/\D/g, "");
     if (v.length > 11) v = v.substring(0, 11);
@@ -1132,7 +1188,7 @@ function carregarMenusSacola() {
     const produtoSel = document.getElementById("selectProdutoConfigurado_sacola");
     if(produtoSel) {
         produtoSel.innerHTML = '';
-        if(databaseSacola.produtosConfigurados) {
+        if(databaseSacola && databaseSacola.produtosConfigurados) {
             databaseSacola.produtosConfigurados.forEach((prod) => {
                 let opt = document.createElement("option");
                 opt.value = prod.id; opt.text = prod.nomeCompleto; 
@@ -1143,7 +1199,7 @@ function carregarMenusSacola() {
     const cordaoSel = document.getElementById("selectCordao_sacola");
     if(cordaoSel) {
         cordaoSel.innerHTML = '';
-        if(databaseSacola.cordoes) {
+        if(databaseSacola && databaseSacola.cordoes) {
             databaseSacola.cordoes.forEach((c) => {
                 let opt = document.createElement("option");
                 opt.value = c.nome; opt.text = c.nome; 
@@ -1154,7 +1210,7 @@ function carregarMenusSacola() {
     const qtdSel = document.getElementById("qtd_sacola");
     if(qtdSel) {
         qtdSel.innerHTML = '';
-        if(databaseSacola.quantidades) {
+        if(databaseSacola && databaseSacola.quantidades) {
             databaseSacola.quantidades.forEach((q) => {
                 let opt = new Option(q + " un", q);
                 qtdSel.add(opt);
@@ -1164,35 +1220,49 @@ function carregarMenusSacola() {
 }
 
 function calcularValoresAtuaisSacola() {
-    const idProdutoSelected = parseInt(document.getElementById("selectProdutoConfigurado_sacola").value);
-    const nomeCordaoSelected = document.getElementById("selectCordao_sacola").value;
-    const corSelecionada = document.getElementById("selectCores_sacola").value;
+    const elProd = document.getElementById("selectProdutoConfigurado_sacola");
+    const elCord = document.getElementById("selectCordao_sacola");
+    const elCores = document.getElementById("selectCores_sacola");
+    const elIlhos = document.getElementById("selectIlhos_sacola");
+    const elFuro = document.getElementById("selectFuroLaco_sacola");
+    const elQtd = document.getElementById("qtd_sacola");
+
+    const idProdutoSelected = elProd ? parseInt(elProd.value) : 0;
+    const nomeCordaoSelected = elCord ? elCord.value : "";
+    const corSelecionada = elCores ? elCores.value : "1x0";
     
-    const temIlhos = document.getElementById("selectIlhos_sacola").value === "Sim";
-    const temFuroLaco = document.getElementById("selectFuroLaco_sacola").value === "Sim";
-    const qtd = parseInt(document.getElementById("qtd_sacola").value) || 500;
+    const temIlhos = elIlhos ? elIlhos.value === "Sim" : false;
+    const temFuroLaco = elFuro ? elFuro.value === "Sim" : false;
+    const qtd = elQtd ? (parseInt(elQtd.value) || 500) : 500;
     
     // CAPTURA DOS CLICKBOXES DE ENOBRECIMENTO
-    const enoPlastBrilho = document.getElementById("eno_plastBrilho").checked;
-    const enoPlastFosca = document.getElementById("eno_plastFosca").checked;
-    const enoHotstamp = document.getElementById("eno_hotstamp").checked;
-    const enoBoppBrilho = document.getElementById("eno_boppBrilho").checked;
-    const enoBoppFosca = document.getElementById("eno_boppFosca").checked;
-    const enoVerniz = document.getElementById("eno_verniz").checked;
+    const elEpb = document.getElementById("eno_plastBrilho");
+    const elEpf = document.getElementById("eno_plastFosca");
+    const elEhs = document.getElementById("eno_hotstamp");
+    const elEbb = document.getElementById("eno_boppBrilho");
+    const elEbf = document.getElementById("eno_boppFosca");
+    const elEvn = document.getElementById("eno_verniz");
 
-    let produtoEncontrado = databaseSacola.produtosConfigurados.find(p => p.id === idProdutoSelected);
+    const enoPlastBrilho = elEpb ? elEpb.checked : false;
+    const enoPlastFosca = elEpf ? elEpf.checked : false;
+    const enoHotstamp = elEhs ? elEhs.checked : false;
+    const enoBoppBrilho = elEbb ? elEbb.checked : false;
+    const enoBoppFosca = elEbf ? elEbf.checked : false;
+    const enoVerniz = elEvn ? elEvn.checked : false;
+
+    let produtoEncontrado = databaseSacola && databaseSacola.produtosConfigurados ? databaseSacola.produtosConfigurados.find(p => p.id === idProdutoSelected) : null;
     let precoProdutoBase = produtoEncontrado ? parseFloat(produtoEncontrado.precoBase || 0) : 0;
     let metroQuadradoBase = produtoEncontrado ? parseFloat(produtoEncontrado.metroQuadrado || 0) : 0;
     let detalhesBase = produtoEncontrado ? produtoEncontrado.nomeCompleto : 'Nenhum produto';
     
-    let cordaoEncontrado = databaseSacola.cordoes.find(c => c.nome === nomeCordaoSelected);
+    let cordaoEncontrado = databaseSacola && databaseSacola.cordoes ? databaseSacola.cordoes.find(c => c.nome === nomeCordaoSelected) : null;
     let precoCordaoAlca = cordaoEncontrado ? parseFloat(cordaoEncontrado.preco || 0) : 0;
     
     let precoIlhos = temIlhos ? parseFloat(databaseSacola.valoresAcabamento?.ilhos || 0) : 0;
     let precoFuroLaco = temFuroLaco ? parseFloat(databaseSacola.valoresAcabamento?.furoLaco || 0) : 0;
-    let precoCoresFixo = parseFloat(databaseSacola.valoresAcabamento?.cores[corSelecionada] || 0);
+    let precoCoresFixo = (databaseSacola.valoresAcabamento && databaseSacola.valoresAcabamento.cores) ? parseFloat(databaseSacola.valoresAcabamento.cores[corSelecionada] || 0) : 0;
 
-    let dbEno = databaseSacola.valoresEnobrecimento || {};
+    let dbEno = (databaseSacola && databaseSacola.valoresEnobrecimento) ? databaseSacola.valoresEnobrecimento : {};
 
     // CÁLCULO DA PARTE UNITÁRIA DO METRO QUADRADO POR TIPO ATIVO
     let custoEnoUnitarioM2 = 0;
@@ -1211,7 +1281,6 @@ function calcularValoresAtuaisSacola() {
     if (enoBoppBrilho)  custoEnoFixoLote += parseFloat(dbEno.boppBrilhoFixo || 0);
     if (enoBoppFosca)   custoEnoFixoLote += parseFloat(dbEno.boppFoscaFixo || 0);
     if (enoVerniz)      custoEnoFixoLote += parseFloat(dbEno.vernizFixo || 0);
-
     // MONTAGEM FORMAL DA PARTE "A" CONFORME REQUISITADO:
     // A = valor base + cordão/alça + Furo + Ilhós + enobrecimento metro quadrado clickbox
     let parteA = precoProdutoBase + precoCordaoAlca + precoFuroLaco + precoIlhos + custoEnoUnitarioM2;
@@ -1245,7 +1314,8 @@ function calcularValoresAtuaisSacola() {
         temFuroLaco: temFuroLaco, temIlhos: temIlhos, enoTexto: enoTextoFinal
     };
 }
-function obterNumeroIdentificadorSacola() {
+
+function obtenerNumeroIdentificadorSacola() {
     if(numeroOrcamentoSacola) return numeroOrcamentoSacola;
     const d = new Date();
     numeroOrcamentoSacola = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
@@ -1253,24 +1323,37 @@ function obterNumeroIdentificadorSacola() {
 }
 
 function gerarVisualizacaoTelaSacola() {
-    const nome = document.getElementById("nomeCliente_sacola").value.trim();
-    const tel = document.getElementById("telCliente_sacola").value.trim();
+    const elNome = document.getElementById("nomeCliente_sacola");
+    const elTel = document.getElementById("telCliente_sacola");
+    if (!elNome || !elTel) return;
+
+    const nome = elNome.value.trim();
+    const tel = elTel.value.trim();
     if(!nome || !tel) { alert("Erro: Nome e Telefone são obrigatórios!"); return; }
 
     const dCom = calcularValoresAtuaisSacola();
-    const telVendedor = document.getElementById("telVendedor_sacola").value.trim();
+    const elVendedor = document.getElementById("telVendedor_sacola");
+    const telVendedor = elVendedor ? elVendedor.value.trim() : "";
     const numeroFinal = obterNumeroIdentificadorSacola();
     
-    document.getElementById("preview-numeracao-topo_sacola").innerText = "Nº " + numeroFinal;
-    document.getElementById("text-dados-cliente_sacola").innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
-    document.getElementById("text-dados-produto_sacola").innerHTML = `<strong>Base:</strong> ${dCom.detalhesBase}<br><strong>Cores:</strong> ${dCom.corSelecionada} | <strong>Ilhós:</strong> ${dCom.temIlhos ? 'Sim' : 'Não'}<br><strong>Alça:</strong> ${dCom.nomeCordao} | <strong>Furo Laço:</strong> ${dCom.temFuroLaco ? 'Sim' : 'Não'}<br><strong>Enobrecimento:</strong> ${dCom.enoTexto}`;
-    document.getElementById("text-dados-financeiro_sacola").innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
+    const elNumTopo = document.getElementById("preview-numeracao-topo_sacola");
+    const elDadosCli = document.getElementById("text-dados-cliente_sacola");
+    const elDadosProd = document.getElementById("text-dados-produto_sacola");
+    const elDadosFin = document.getElementById("text-dados-financeiro_sacola");
+    const elRodape = document.getElementById("preview-contato-rodape_sacola");
+    const elAreaOrc = document.getElementById("area-orcamento_sacola");
+    const elBlocoRes = document.getElementById("bloco-resultado_sacola");
+
+    if (elNumTopo) elNumTopo.innerText = "Nº " + numeroFinal;
+    if (elDadosCli) elDadosCli.innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
+    if (elDadosProd) elDadosProd.innerHTML = `<strong>Base:</strong> ${dCom.detalhesBase}<br><strong>Cores:</strong> ${dCom.corSelecionada} | <strong>Ilhós:</strong> ${dCom.temIlhos ? 'Sim' : 'Não'}<br><strong>Alça:</strong> ${dCom.nomeCordao} | <strong>Furo Laço:</strong> ${dCom.temFuroLaco ? 'Sim' : 'Não'}<br><strong>Enobrecimento:</strong> ${dCom.enoTexto}`;
+    if (elDadosFin) elDadosFin.innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
     
     let textoVendedor = telVendedor ? ` | 📞 Vendedor: ${telVendedor}` : '';
-    document.getElementById("preview-contato-rodape_sacola").innerHTML = `<strong>COMVIL BRINDES</strong><br>CNPJ: 36.206.286/0001-03 | ✉️ comvil@comvil.com.br<br>☎️ Fixo: 11 3461-0813 | 📱 WhatsApp: 11 97024-3064${textoVendedor}`;
+    if (elRodape) elRodape.innerHTML = `<strong>COMVIL BRINDES</strong><br>CNPJ: 36.206.286/0001-03 | ✉️ comvil@comvil.com.br<br>☎️ Fixo: 11 3461-0813 | 📱 WhatsApp: 11 97024-3064${textoVendedor}`;
 
-    document.getElementById("area-orcamento_sacola").style.display = "block";
-    document.getElementById("bloco-resultado_sacola").style.display = "block";
+    if (elAreaOrc) elAreaOrc.style.display = "block";
+    if (elBlocoRes) elBlocoRes.style.display = "block";
 }
 
 /* ==========================================================================
@@ -1280,7 +1363,7 @@ function carregarMenusMao() {
     const modeloSel = document.getElementById("selectModeloMao");
     if(modeloSel) {
         modeloSel.innerHTML = '';
-        if(databaseMao.modelosMao) {
+        if(databaseMao && databaseMao.modelosMao) {
             databaseMao.modelosMao.forEach((mod) => {
                 let opt = document.createElement("option");
                 opt.value = mod.id; opt.text = mod.nome; 
@@ -1291,7 +1374,7 @@ function carregarMenusMao() {
     const corSel = document.getElementById("selectCorEva");
     if(corSel) {
         corSel.innerHTML = '';
-        if(databaseMao.coresEva) {
+        if(databaseMao && databaseMao.coresEva) {
             databaseMao.coresEva.forEach((cor) => {
                 let opt = document.createElement("option");
                 opt.value = cor.nome; opt.text = cor.nome; 
@@ -1300,7 +1383,6 @@ function carregarMenusMao() {
         }
     }
 }
-
 function verificarQuantidadeVariavel(select) {
     const campoManual = document.getElementById("campoQtdVariavel");
     if(campoManual) {
@@ -1313,7 +1395,7 @@ function atualizarTaxaQuantidadeMao() {
     if(!selectElement) return;
     const selectQtd = selectElement.value;
     let taxaEncontrada = 0;
-    if(databaseMao.taxasQuantidade) {
+    if(databaseMao && databaseMao.taxasQuantidade) {
         if(selectQtd === "Variavel") {
             taxaEncontrada = parseFloat(databaseMao.taxasQuantidade["Variavel"] || 0);
         } else {
@@ -1327,26 +1409,32 @@ function atualizarTaxaQuantidadeMao() {
 }
 
 function calcularValoresAtuaisMao() {
-    const idModeloSelected = parseInt(document.getElementById("selectModeloMao").value);
-    const tipoEncaixe = document.getElementById("selectTipoEncaixe").value;
-    const nomeCorEvaSelected = document.getElementById("selectCorEva").value;
-    const selectQtd = document.getElementById("selectQuantidade").value;
+    const elMod = document.getElementById("selectModeloMao");
+    const elEnc = document.getElementById("selectTipoEncaixe");
+    const elCor = document.getElementById("selectCorEva");
+    const elQtd = document.getElementById("selectQuantidade");
+
+    const idModeloSelected = elMod ? parseInt(elMod.value) : 0;
+    const tipoEncaixe = elEnc ? elEnc.value : "Luva";
+    const nomeCorEvaSelected = elCor ? elCor.value : "";
+    const selectQtd = elQtd ? elQtd.value : "100";
     
     let qtd = 100;
     if (selectQtd === "Variavel") {
-        qtd = parseInt(document.getElementById("qtdManual").value) || 1;
+        const elManual = document.getElementById("qtdManual");
+        qtd = elManual ? (parseInt(elManual.value) || 1) : 1;
     } else {
         qtd = parseInt(selectQtd);
     }
 
-    let modeloEncontrado = databaseMao.modelosMao.find(m => m.id === idModeloSelected);
+    let modeloEncontrado = databaseMao && databaseMao.modelosMao ? databaseMao.modelosMao.find(m => m.id === idModeloSelected) : null;
     let precoModeloBase = modeloEncontrado ? parseFloat(modeloEncontrado.precoBase || 0) : 0;
     let detalhesBase = modeloEncontrado ? modeloEncontrado.nome : 'Nenhum modelo';
     
-    let corEncontrada = databaseMao.coresEva.find(c => c.nome === nomeCorEvaSelected);
+    let corEncontrada = databaseMao && databaseMao.coresEva ? databaseMao.coresEva.find(c => c.nome === nomeCorEvaSelected) : null;
     let precoAdicionalCor = corEncontrada ? parseFloat(corEncontrada.preco || 0) : 0;
     
-    let startLoteFixo = parseFloat(databaseMao.valorStartMao || 0);
+    let startLoteFixo = databaseMao ? parseFloat(databaseMao.valorStartMao || 0) : 0;
     
     let taxaQuantidadeAdicional = 0;
     const taxaOculta = document.getElementById("taxaOcultaQuantidadeMao");
@@ -1370,7 +1458,7 @@ function calcularValoresAtuaisMao() {
     };
 }
 
-function obterNumeroIdentificadorMao() {
+function obtenerNumeroIdentificadorMao() {
     if(numeroOrcamentoMao) return numeroOrcamentoMao;
     const d = new Date();
     numeroOrcamentoMao = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
@@ -1378,25 +1466,39 @@ function obterNumeroIdentificadorMao() {
 }
 
 function gerarVisualizacaoTelaMao() {
-    const nome = document.getElementById("nomeCliente_mao").value.trim();
-    const tel = document.getElementById("telCliente_mao").value.trim();
+    const elNome = document.getElementById("nomeCliente_mao");
+    const elTel = document.getElementById("telCliente_mao");
+    if (!elNome || !elTel) return;
+
+    const nome = elNome.value.trim();
+    const tel = elTel.value.trim();
     if(!nome || !tel) { alert("Erro: Nome e Telefone são obrigatórios!"); return; }
 
     const dCom = calcularValoresAtuaisMao();
-    const telVendedor = document.getElementById("telVendedor_mao").value.trim();
+    const elVendedor = document.getElementById("telVendedor_mao");
+    const telVendedor = elVendedor ? elVendedor.value.trim() : "";
     const numeroFinal = obterNumeroIdentificadorMao();
     
-    document.getElementById("preview-numeracao-topo_mao").innerText = "Nº " + numeroFinal;
-    document.getElementById("text-dados-cliente_mao").innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
-    document.getElementById("text-dados-produto_mao").innerHTML = `<strong>Modelo:</strong> ${dCom.detalhesBase}<br><strong>Encaixe:</strong> ${dCom.tipoEncaixe} | <strong>Cor/Estampa:</strong> ${dCom.corEva}`;
-    document.getElementById("text-dados-financeiro_mao").innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
+    const elNumTopo = document.getElementById("preview-numeracao-topo_mao");
+    const elDadosCli = document.getElementById("text-dados-cliente_mao");
+    const elDadosProd = document.getElementById("text-dados-produto_mao");
+    const elDadosFin = document.getElementById("text-dados-financeiro_mao");
+    const elRodape = document.getElementById("preview-contato-rodape_mao");
+    const elAreaOrc = document.getElementById("area-orcamento_mao");
+    const elBlocoRes = document.getElementById("bloco-resultado_mao");
+
+    if (elNumTopo) elNumTopo.innerText = "Nº " + numeroFinal;
+    if (elDadosCli) elDadosCli.innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
+    if (elDadosProd) elDadosProd.innerHTML = `<strong>Modelo:</strong> ${dCom.detalhesBase}<br><strong>Encaixe:</strong> ${dCom.tipoEncaixe} | <strong>Cor/Estampa:</strong> ${dCom.corEva}`;
+    if (elDadosFin) elDadosFin.innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
     
     let textoVendedor = telVendedor ? ` | 📞 Vendedor: ${telVendedor}` : '';
-    document.getElementById("preview-contato-rodape_mao").innerHTML = `<strong>COMVIL BRINDES</strong><br>CNPJ: 36.206.286/0001-03 | ✉️ comvil@comvil.com.br<br>☎️ Fixo: 11 3461-0813 | 📱 WhatsApp: 11 97024-3064${textoVendedor}`;
+    if (elRodape) elRodape.innerHTML = `<strong>COMVIL BRINDES</strong><br>CNPJ: 36.206.286/0001-03 | ✉️ comvil@comvil.com.br<br>☎️ Fixo: 11 3461-0813 | 📱 WhatsApp: 11 97024-3064${textoVendedor}`;
 
-    document.getElementById("area-orcamento_mao").style.display = "block";
-    document.getElementById("bloco-resultado_mao").style.display = "block";
+    if (elAreaOrc) elAreaOrc.style.display = "block";
+    if (elBlocoRes) elBlocoRes.style.display = "block";
 }
+
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     let words = text.split(' '); let line = ''; let currentY = y;
     for (let n = 0; n < words.length; n++) {
@@ -1410,12 +1512,17 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     ctx.fillText(line, x, currentY);
     return currentY + lineHeight;
 }
-
 function exportarOrcamentoGenerico(config) {
-    const nome = document.getElementById("nomeCliente_" + config.sufixo).value.trim();
-    const telFormulario = document.getElementById("telCliente_" + config.sufixo).value.trim();
-    const vendedor = document.getElementById("nomeVendedor_" + config.sufixo).value.trim();
-    const telVendedor = document.getElementById("telVendedor_" + config.sufixo).value.trim();
+    const elNome = document.getElementById("nomeCliente_" + config.sufixo);
+    const elTelForm = document.getElementById("telCliente_" + config.sufixo);
+    const elVend = document.getElementById("nomeVendedor_" + config.sufixo);
+    const elTelVend = document.getElementById("telVendedor_" + config.sufixo);
+    if (!elNome || !elTelForm) return;
+    
+    const nome = elNome.value.trim();
+    const telFormulario = elTelForm.value.trim();
+    const vendedor = elVend ? elVend.value.trim() : "";
+    const telVendedor = elTelVend ? elTelVend.value.trim() : "";
     
     if(!nome || !telFormulario) { 
         alert("Erro: Nome e Telefone do cliente são obrigatórios!"); 
@@ -1549,6 +1656,7 @@ function exportarOrcamentoGenerico(config) {
         novaAba.document.close();
     }
 }
+
 function abrirImagemNovaAbaSacola() {
     exportarOrcamentoGenerico({
         sufixo: "sacola", tituloProposta: "PROPOSTA COMERCIAL DE EMBALAGENS", prefixoArquivo: "Sacola",
@@ -1590,7 +1698,6 @@ function desenharCaixaPdf(ctx, x, y, w, h, titulo) {
     ctx.fillText(titulo.toUpperCase(), x + 15, y + 18);
     ctx.strokeStyle = "#0056b3"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h); ctx.stroke();
 }
-
 /* ==========================================================================
    LÓGICA E MOTOR GRÁFICO DO MOCKUP INTERATIVO (CANVAS)
    ========================================================================== */
@@ -1646,6 +1753,7 @@ function renderizarGradeCordoes() {
         elGrid.appendChild(box);
     });
 }
+
 function criarCamadaColorida(imgMascara, corHex) {
     const buffer = document.createElement('canvas');
     const canvasRef = document.getElementById('mockupCanvas');
@@ -1671,7 +1779,6 @@ function pontoDaZona(u, v) {
         y: lerp(lerp(tl.y, tr.y, u), lerp(bl.y, br.y, u), v)
     };
 }
-
 function canvasParaUV(cx, cy) {
     let u = 0.5, v = 0.5;
     for (let i = 0; i < 10; i++) {
@@ -1688,7 +1795,6 @@ function canvasParaUV(cx, cy) {
     }
     return { u: Math.max(0, Math.min(1, u)), v: Math.max(0, Math.min(1, v)) };
 }
-
 
 function calcularHV(hw) {
     if (!zonaImpressao || !imgLogo.naturalWidth) return hw;
@@ -1723,7 +1829,6 @@ function computarCantosLogo() {
         return offsets.map(({ du, dv }) => pontoDaZona(u + du, v + dv));
     }
 
-    // Rotação em espaço de superfície: logo gira como adesivo na sacola
     const cos = Math.cos(giroRad), sin = Math.sin(giroRad);
     return offsets.map(({ du, dv }) => {
         const sx = du * Wpx, sy = dv * Hpx;
@@ -1732,6 +1837,7 @@ function computarCantosLogo() {
         return pontoDaZona(u + rx / Wpx, v + ry / Hpx);
     });
 }
+
 function detectarZonaDeImpressao() {
     if (!imgFrente.complete || imgFrente.naturalWidth === 0) return null;
     const W = imgFrente.naturalWidth, H = imgFrente.naturalHeight;
@@ -1781,13 +1887,12 @@ function detectarZonaDeImpressao() {
         return null;
     }
 }
-
 function zonaFallbackPorModelo() {
     const elModelo = document.getElementById('modelo');
     const horizontal = elModelo && elModelo.value === 'horizontal';
     const W = imgBase.naturalWidth, H = imgBase.naturalHeight;
     const chave = horizontal ? 'horizontal' : 'vertical';
-    if (databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[chave]) {
+    if (databaseSacola && databaseSacola.zonasImpressao && databaseSacola.zonasImpressao[chave]) {
         const z = databaseSacola.zonasImpressao[chave];
         return {
             tl: { x: z.tl[0] * W, y: z.tl[1] * H },
@@ -1968,7 +2073,6 @@ function processarETingirMockup(incluirRodape = false) {
         ctxRef.restore();
     }
 }
-
 function resetarPosicaoLogoPadrao() {
     logoUV = { u: 0.5, v: 0.5 };
 }
@@ -2037,6 +2141,7 @@ if (elInputLogo) {
         }
     });
 }
+
 function obterCoordenadasPointer(e) {
     if (!canvasRef) return { x: 0, y: 0 };
     const rect = canvasRef.getBoundingClientRect();
@@ -2055,7 +2160,6 @@ function pontoNoPoly(px, py, pts) {
     }
     return inside;
 }
-
 // ==========================================================================
 // CAPTURA INTERATIVA DO MOUSE COM MATRIZ CORRIGIDA
 // ==========================================================================
@@ -2109,7 +2213,6 @@ if (canvasRef) {
     });
 }
 
-
 const btnGenerateJPEG = document.getElementById('btnGenerateJPEG');
 const btnDownloadLayout = document.getElementById('btnDownloadLayout');
 const elBtnKraft = document.getElementById('btnKraft');
@@ -2146,6 +2249,7 @@ if (elBtnKraft) {
         processarETingirMockup(false);
     });
 }
+
 if (elCorFrente) elCorFrente.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elCorLateral) elCorLateral.addEventListener('input', () => { modoKraftAtivo = false; if (elBtnKraft) elBtnKraft.classList.remove('active'); mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elLogoZoom) elLogoZoom.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
