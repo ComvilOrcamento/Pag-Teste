@@ -1235,7 +1235,6 @@ function calcularValoresAtuaisSacola() {
     const temFuroLaco = elFuro ? elFuro.value === "Sim" : false;
     const qtd = elQtd ? (parseInt(elQtd.value) || 500) : 500;
     
-    // CAPTURA DOS CLICKBOXES DE ENOBRECIMENTO
     const elEpb = document.getElementById("eno_plastBrilho");
     const elEpf = document.getElementById("eno_plastFosca");
     const elEhs = document.getElementById("eno_hotstamp");
@@ -1264,7 +1263,6 @@ function calcularValoresAtuaisSacola() {
 
     let dbEno = (databaseSacola && databaseSacola.valoresEnobrecimento) ? databaseSacola.valoresEnobrecimento : {};
 
-    // CÁLCULO DA PARTE UNITÁRIA DO METRO QUADRADO POR TIPO ATIVO
     let custoEnoUnitarioM2 = 0;
     if (enoPlastBrilho) custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.plastBrilhoM2 || 0));
     if (enoPlastFosca)  custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.plastFoscaM2 || 0));
@@ -1273,7 +1271,6 @@ function calcularValoresAtuaisSacola() {
     if (enoBoppFosca)   custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.boppFoscaM2 || 0));
     if (enoVerniz)      custoEnoUnitarioM2 += (metroQuadradoBase * parseFloat(dbEno.vernizM2 || 0));
 
-    // CÁLCULO DO VALOR FIXO POR LOGÍSTICA DE LOTE INDUSTRIAL
     let custoEnoFixoLote = 0;
     if (enoPlastBrilho) custoEnoFixoLote += parseFloat(dbEno.plastBrilhoFixo || 0);
     if (enoPlastFosca)  custoEnoFixoLote += parseFloat(dbEno.plastFoscaFixo || 0);
@@ -1281,12 +1278,8 @@ function calcularValoresAtuaisSacola() {
     if (enoBoppBrilho)  custoEnoFixoLote += parseFloat(dbEno.boppBrilhoFixo || 0);
     if (enoBoppFosca)   custoEnoFixoLote += parseFloat(dbEno.boppFoscaFixo || 0);
     if (enoVerniz)      custoEnoFixoLote += parseFloat(dbEno.vernizFixo || 0);
-    // MONTAGEM FORMAL DA PARTE "A" CONFORME REQUISITADO:
-    // A = valor base + cordão/alça + Furo + Ilhós + enobrecimento metro quadrado clickbox
+
     let parteA = precoProdutoBase + precoCordaoAlca + precoFuroLaco + precoIlhos + custoEnoUnitarioM2;
-    
-    // ENGENHARIA DO CUSTO DO LOTE CONSOLIDADO:
-    // Custo = (A * quantidade) + impressão + enobrecimento fixo
     let custoTotalFinalDoLote = (parteA * qtd) + precoCoresFixo + custoEnoFixoLote;
     
     if (qtd > 2000) {
@@ -1295,11 +1288,10 @@ function calcularValoresAtuaisSacola() {
         custoTotalFinalDoLote += (blocksDeMil * 50.00);
     }
     
-    // VALOR DE VENDA COM MARGEM DE LUCRO DE 70% (MULTIPLICADOR 1.70)
     let totalLoteComMargemLucro = custoTotalFinalDoLote * 1.70;
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
     
-    let listEno = [];
+        let listEno = [];
     if(enoPlastBrilho) listEno.push("Plast. Brilho");
     if(enoPlastFosca) listEno.push("Plast. Fosca");
     if(enoHotstamp) listEno.push("Hotstamp");
@@ -1315,7 +1307,7 @@ function calcularValoresAtuaisSacola() {
     };
 }
 
-function obtenerNumeroIdentificadorSacola() {
+function obterNumeroIdentificadorSacola() {
     if(numeroOrcamentoSacola) return numeroOrcamentoSacola;
     const d = new Date();
     numeroOrcamentoSacola = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
