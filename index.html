@@ -963,55 +963,54 @@ function sincronizarFormularioObjetoAdmin() {
 
 function salvarAlteracoesAdminLocais() {
 
-    console.log("Iniciando salvamento");
-
     sincronizarFormularioObjetoAdmin();
 
-    console.log("Após sincronização");
-    
+    const dados = {
+        sacola: structuredClone(databaseSacola),
+        mao: structuredClone(databaseMao)
+    };
+
+    localStorage.setItem(
+        "comvil_catalogo_cache",
+        JSON.stringify(dados)
+    );
+
     if (typeof carregarMenusSacola === "function") carregarMenusSacola();
     if (typeof carregarMenusMao === "function") carregarMenusMao();
     if (typeof atualizarTaxaQuantidadeMao === "function") atualizarTaxaQuantidadeMao();
-    
-    let objetoUnificado = Object.assign({}, databaseSacola, databaseMao);
 
-    localStorage.setItem(
-        'comvil_catalogo_cache',
-        JSON.stringify(objetoUnificado)
-    );
-
-    console.log("Salvou no localStorage");
-
-    alert("✓ Configurações aplicadas com sucesso!");
     renderAllAdmin();
+
+    alert("Configurações salvas com sucesso.");
 }
 
 function exportarJsonAdminAtualizado() {
+
     sincronizarFormularioObjetoAdmin();
 
     const objetoUnificado = {
-        ...databaseSacola,
-        ...databaseMao
+        sacola: structuredClone(databaseSacola),
+        mao: structuredClone(databaseMao),
+        dataExportacao: new Date().toISOString()
     };
 
     const blob = new Blob(
         [JSON.stringify(objetoUnificado, null, 2)],
-        { type: "application/json;charset=utf-8" }
+        {
+            type: "application/json;charset=utf-8"
+        }
     );
 
-    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "dados.json";
+    link.href = URL.createObjectURL(blob);
+    link.download = "dados.json";
 
-    document.body.appendChild(a);
-    a.click();
+    document.body.appendChild(link);
+    link.click();
 
-    setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }, 100);
+    URL.revokeObjectURL(link.href);
+    link.remove();
 }
 /* ==========================================================================
    BANCOS DE DADOS E CARREGAMENTO UNIFICADO (DADOS.JSON)
