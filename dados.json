@@ -139,5 +139,19 @@
         0.16000000000000003
       ]
     }
+  },
+  "valoresEnobrecimento": {
+    "plastBrilhoM2": 0.19,
+    "plastBrilhoFixo": 50,
+    "plastFoscaM2": 0.19,
+    "plastFoscaFixo": 50,
+    "hotstampM2": 0.14,
+    "hotstampFixo": 300,
+    "boppBrilhoM2": 0.22,
+    "boppBrilhoFixo": 50,
+    "boppFoscaM2": 0.22,
+    "boppFoscaFixo": 50,
+    "vernizM2": 0.18,
+    "vernizFixo": 190
   }
 }
