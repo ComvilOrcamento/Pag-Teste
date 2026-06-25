@@ -8,9 +8,69 @@
     },
     {
       "id": 2,
-      "nomeCompleto": "Sacola 17x18x8 - Duplex 180g",
+      "nomeCompleto": "Sacola 17x18x8 - Duplex 190g",
       "precoBase": 0.35,
       "metroQuadrado": 0.132
+    },
+    {
+      "id": 3,
+      "nomeCompleto": "Sacola 18x24x8 - Offset 180g",
+      "precoBase": 0.45,
+      "metroQuadrado": 0
+    },
+    {
+      "id": 4,
+      "nomeCompleto": "Sacola 18x24x8 - Duplex 190g",
+      "precoBase": 0.45,
+      "metroQuadrado": 0.173
+    },
+    {
+      "id": 5,
+      "nomeCompleto": "Sacola 20x25x8 - Offset 180g",
+      "precoBase": 0.51,
+      "metroQuadrado": 0
+    },
+    {
+      "id": 6,
+      "nomeCompleto": "Sacola 20x25x8 - Duplex 190g",
+      "precoBase": 0.51,
+      "metroQuadrado": 0.196
+    },
+    {
+      "id": 7,
+      "nomeCompleto": "Sacola 20x30x10- Offset 180g",
+      "precoBase": 0.75,
+      "metroQuadrado": 0
+    },
+    {
+      "id": 8,
+      "nomeCompleto": "Sacola 20x30x10 - Duplex 190g",
+      "precoBase": 0.75,
+      "metroQuadrado": 0.248
+    },
+    {
+      "id": 9,
+      "nomeCompleto": "Sacola 28x33x10- Offset 180g",
+      "precoBase": 0.92,
+      "metroQuadrado": 0
+    },
+    {
+      "id": 10,
+      "nomeCompleto": "Sacola 28x33x10 - Duplex 190g",
+      "precoBase": 0.92,
+      "metroQuadrado": 0.34
+    },
+    {
+      "id": 11,
+      "nomeCompleto": "Sacola 29x40x10 - Offset 180g",
+      "precoBase": 1,
+      "metroQuadrado": 0
+    },
+    {
+      "id": 12,
+      "nomeCompleto": "Sacola 29x40x10 - Duplex 190g",
+      "precoBase": 1,
+      "metroQuadrado": 0.4
     }
   ],
   "cordoes": [
