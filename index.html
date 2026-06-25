@@ -51,7 +51,7 @@
         .botoes-container { display: flex; gap: 15px; margin-top: 15px; width: 100%; }
         .btn-exportar { flex: 1; background: #0056b3; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; height: 42px; transition: background 0.2s; }
         .btn-exportar:hover { background: #004085; }
-        
+
         /* ÁREA DE PREVIEW RESPONSIVA */
         .area-orcamento { background: #ffffff; border: 1px solid #ddd; padding: 20px; margin-top: 15px; color: #333; border-radius: 6px; display: none; width: 100%; word-wrap: break-word; }
         .logos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #0056b3; padding-bottom: 15px; gap: 15px; }
@@ -192,6 +192,7 @@
                     </div>
                 </div>
             </div>
+
             <h2>Dados de Atendimento</h2>
             <div class="row">
                 <div class="field">
@@ -255,7 +256,6 @@
                     <select id="selectCorEva"></select>
                 </div>
             </div>
-            
             <div class="row">
                 <div class="field">
                     <label>Quantidade Mínima *</label>
@@ -275,7 +275,7 @@
                     <input type="number" id="qtdManual" min="1" placeholder="Ex: 750" oninput="atualizarTaxaQuantidadeMao()">
                 </div>
             </div>
-
+            
             <input type="hidden" id="taxaOcultaQuantidadeMao" value="0">
 
             <h2>Dados de Atendimento</h2>
@@ -434,7 +434,6 @@
                         <tbody></tbody>
                     </table>
                 </div>
-
                 <div style="font-size: 15px; margin: 15px 0 10px 0; color: #0f172a; font-weight: bold; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;">Custos de Acabamentos e Cores (Sacola)</div>
                 <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap; width: 100%;">
                     <div class="field" style="flex: 1; min-width: 0;"><label>Valor Adicional de Ilhós (R$)</label><input type="number" id="fixoIlhosAdmin" step="0.01" placeholder="0.20"></div>
@@ -577,6 +576,12 @@ function switchSubTab(e, idSubConteudo) {
         adminZonaInit();
     }
 }
+
+function atualizarTaxaInlineMaoAdmin(chave, valor) {
+    if (databaseMao && databaseMao.taxasQuantidade) {
+        databaseMao.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
+    }
+}
 function renderAllAdminParteDois() {
     // 4. PREENCHE TABELA DE CORES DE IMPRESSÃO DA MÃO (E.V.A)
     const tbodyCoresEva = document.querySelector('#tableCoresEvaAdmin tbody');
@@ -662,7 +667,6 @@ function renderAllAdminParteDois() {
         if (elEvnFixo) elEvnFixo.value = databaseSacola.valoresEnobrecimento.vernizFixo || 0;
     }
 }
-
 function renderAllAdmin() {
     // 1. PREENCHE TABELA DE PRODUTOS BASE DA SACOLA
     const tbodyProd = document.querySelector('#tableProdutosAdmin tbody');
@@ -711,10 +715,14 @@ function renderAllAdmin() {
     
     renderAllAdminParteDois();
 }
-
-function atualizarTaxaInlineMaoAdmin(chave, valor) {
-    if (databaseMao && databaseMao.taxasQuantidade) {
-        databaseMao.taxasQuantidade[chave] = Math.max(0, parseFloat(valor) || 0);
+function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
+    let db = (tipo === 'produtosConfigurados' || tipo === 'cordoes') ? databaseSacola : databaseMao;
+    if (!db || !db[tipo] || !db[tipo][index]) return;
+    
+    if (propriedade === 'precoBase' || propriedade === 'preco' || propriedade === 'metroQuadrado') {
+        db[tipo][index][propriedade] = Math.max(0, parseFloat(novoValor) || 0); 
+    } else {
+        db[tipo][index][propriedade] = novoValor.trim();
     }
 }
 
@@ -738,17 +746,6 @@ function resetarTaxaMaoAdmin(chave) {
     renderAllAdmin();
 }
 
-function atualizarDadosInlineAdmin(tipo, index, propriedade, novoValor) {
-    let db = (tipo === 'produtosConfigurados' || tipo === 'cordoes') ? databaseSacola : databaseMao;
-    if (!db || !db[tipo] || !db[tipo][index]) return;
-    
-    if (propriedade === 'precoBase' || propriedade === 'preco' || propriedade === 'metroQuadrado') {
-        db[tipo][index][propriedade] = Math.max(0, parseFloat(novoValor) || 0); 
-    } else {
-        db[tipo][index][propriedade] = novoValor.trim();
-    }
-}
-
 function adicionarProdutoAdmin() {
     const elNome = document.getElementById('prodNome');
     const elPreco = document.getElementById('prodPreco');
@@ -767,6 +764,7 @@ function adicionarProdutoAdmin() {
     elNome.value = ''; elPreco.value = ''; elM2.value = '';
     renderAllAdmin();
 }
+
 function adicionarCordaoAdmin() {
     const elNome = document.getElementById('cordaoNomeAdmin');
     const elPreco = document.getElementById('cordaoPrecoAdmin');
@@ -817,7 +815,6 @@ function removerItemAdmin(tipo, index) {
     }
     renderAllAdmin(); 
 }
-
 /* ==========================================================================
    EDITOR VISUAL DE ZONA DE IMPRESSÃO (PAINEL ADMIN)
    ========================================================================== */
@@ -898,7 +895,6 @@ function adminZonaDesenhar(canvas) {
     ctx.closePath(); ctx.stroke();
     ctx.setLineDash([]);
     ctx.restore();
-
     const LABELS = ['TL','TR','BL','BR'];
     const HR = Math.max(12, W * 0.028);
     adminZonaCorners.forEach((c, i) => {
@@ -963,7 +959,6 @@ function adminZonaSalvar() {
     localStorage.setItem('comvil_catalogo_cache', JSON.stringify(objetoUnificado));
     alert('Zona salva e aplicada ao mockup!');
 }
-
 function sincronizarFormularioObjetoAdmin() {
     if (!databaseMao || !databaseSacola) return;
 
@@ -1025,7 +1020,6 @@ function sincronizarFormularioObjetoAdmin() {
     databaseSacola.valoresEnobrecimento.vernizM2 = elEvnM2 ? Math.max(0, parseFloat(elEvnM2.value) || 0) : 0;
     databaseSacola.valoresEnobrecimento.vernizFixo = elEvnFixo ? Math.max(0, parseFloat(elEvnFixo.value) || 0) : 0;
 }
-
 function salvarAlteracoesAdminLocais() {
     console.log("Iniciando salvamento");
     sincronizarFormularioObjetoAdmin();
@@ -1080,7 +1074,6 @@ let numeroOrcamentoMao = "";
 let objImgMinha = new Image();
 objImgMinha.src = "logo-empresa.png";
 objImgMinha.onerror = function() { objImgMinha.src = "https://placehold.co"; };
-
 const bancoReservaSacola = {
   "produtosConfigurados": [
     { "id": 1, "nomeCompleto": "Sacola Offset 180g - 18x24x8", "precoBase": 0.78, "metroQuadrado": 0.1450 },
@@ -1218,7 +1211,6 @@ function carregarMenusSacola() {
         }
     }
 }
-
 function calcularValoresAtuaisSacola() {
     const elProd = document.getElementById("selectProdutoConfigurado_sacola");
     const elCord = document.getElementById("selectCordao_sacola");
@@ -1281,7 +1273,7 @@ function calcularValoresAtuaisSacola() {
 
     let parteA = precoProdutoBase + precoCordaoAlca + precoFuroLaco + precoIlhos + custoEnoUnitarioM2;
     let custoTotalFinalDoLote = (parteA * qtd) + precoCoresFixo + custoEnoFixoLote;
-    
+
     if (qtd > 2000) {
         let unidadesExcedentes = qtd - 2000;
         let blocksDeMil = Math.ceil(unidadesExcedentes / 1000); 
@@ -1291,7 +1283,7 @@ function calcularValoresAtuaisSacola() {
     let totalLoteComMargemLucro = custoTotalFinalDoLote * 1.70;
     let precoUnitarioDeVenda = totalLoteComMargemLucro / qtd;
     
-        let listEno = [];
+    let listEno = [];
     if(enoPlastBrilho) listEno.push("Plast. Brilho");
     if(enoPlastFosca) listEno.push("Plast. Fosca");
     if(enoHotstamp) listEno.push("Hotstamp");
@@ -1306,11 +1298,15 @@ function calcularValoresAtuaisSacola() {
         temFuroLaco: temFuroLaco, temIlhos: temIlhos, enoTexto: enoTextoFinal
     };
 }
-
 function obterNumeroIdentificadorSacola() {
     if(numeroOrcamentoSacola) return numeroOrcamentoSacola;
     const d = new Date();
-    numeroOrcamentoSacola = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    const milisegundos = String(d.getMilliseconds()).substring(0, 2);
+    
+    numeroOrcamentoSacola = ano + mes + dia + milisegundos;
     return numeroOrcamentoSacola;
 }
 
@@ -1347,10 +1343,11 @@ function gerarVisualizacaoTelaSacola() {
     if (elAreaOrc) elAreaOrc.style.display = "block";
     if (elBlocoRes) elBlocoRes.style.display = "block";
 }
-
 /* ==========================================================================
-   LÓGICA DA ABA MÃO DE TORCIDA
+   LÓGICA DA ABA MÃO DE TORCIDA (CORRIGIDA E HIGIENIZADA)
    ========================================================================== */
+
+// 1. CARREGAMENTO DOS MENUS DINÂMICOS DA ABA MÃO
 function carregarMenusMao() {
     const modeloSel = document.getElementById("selectModeloMao");
     if(modeloSel) {
@@ -1375,6 +1372,8 @@ function carregarMenusMao() {
         }
     }
 }
+
+// 2. EXIBIÇÃO DE CAMPOS E CONTROLE DE TAXAS ADICIONAIS POR LOTE
 function verificarQuantidadeVariavel(select) {
     const campoManual = document.getElementById("campoQtdVariavel");
     if(campoManual) {
@@ -1400,6 +1399,7 @@ function atualizarTaxaQuantidadeMao() {
     }
 }
 
+// 3. ENGENHARIA DE CÁLCULO DE CUSTOS E PREÇO DE VENDA DA MÃO
 function calcularValoresAtuaisMao() {
     const elMod = document.getElementById("selectModeloMao");
     const elEnc = document.getElementById("selectTipoEncaixe");
@@ -1450,13 +1450,20 @@ function calcularValoresAtuaisMao() {
     };
 }
 
-function obtenerNumeroIdentificadorMao() {
+// 4. GERADOR DE NUMERAÇÃO SERIAL EXCLUSIVA PARA PROPOSTAS DA MÃO
+function obterNumeroIdentificadorMao() {
     if(numeroOrcamentoMao) return numeroOrcamentoMao;
     const d = new Date();
-    numeroOrcamentoMao = d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + String(d.getMilliseconds()).substring(0,2);
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    const milisegundos = String(d.getMilliseconds()).substring(0, 2);
+    
+    numeroOrcamentoMao = ano + mes + dia + milisegundos;
     return numeroOrcamentoMao;
 }
 
+// 5. RENDERIZADOR DA PRÉ-VISUALIZAÇÃO INTERNA NA TELA DO SISTEMA
 function gerarVisualizacaoTelaMao() {
     const elNome = document.getElementById("nomeCliente_mao");
     const elTel = document.getElementById("telCliente_mao");
@@ -1464,7 +1471,7 @@ function gerarVisualizacaoTelaMao() {
 
     const nome = elNome.value.trim();
     const tel = elTel.value.trim();
-    if(!nome || !tel) { alert("Erro: Nome e Telefone são obrigatórios!"); return; }
+    if(!nome || !tel) { alert("Erro: Nome e Telefone do cliente são obrigatórios!"); return; }
 
     const dCom = calcularValoresAtuaisMao();
     const elVendedor = document.getElementById("telVendedor_mao");
@@ -1481,7 +1488,7 @@ function gerarVisualizacaoTelaMao() {
 
     if (elNumTopo) elNumTopo.innerText = "Nº " + numeroFinal;
     if (elDadosCli) elDadosCli.innerHTML = `<strong>Nome:</strong> ${nome} <br> <strong>Telefone:</strong> ${tel}`;
-    if (elDadosProd) elDadosProd.innerHTML = `<strong>Modelo:</strong> ${dCom.detalhesBase}<br><strong>Encaixe:</strong> ${dCom.tipoEncaixe} | <strong>Cor/Estampa:</strong> ${dCom.corEva}`;
+    if (elDadosProd) elDadosProd.innerHTML = `<strong>Modelo base:</strong> ${dCom.detalhesBase}<br><strong>Tipo de Encaixe:</strong> ${dCom.tipoEncaixe}<br><strong>Cor/Estampa:</strong> ${dCom.corEva}`;
     if (elDadosFin) elDadosFin.innerHTML = `<strong>Quantidade:</strong> ${dCom.qtd} un | <strong>Unitário de Venda:</strong> ${formatarMoeda(dCom.custoUnitario)} <br> <strong>Total do Lote: ${formatarMoeda(dCom.total)}</strong>`;
     
     let textoVendedor = telVendedor ? ` | 📞 Vendedor: ${telVendedor}` : '';
@@ -1489,20 +1496,6 @@ function gerarVisualizacaoTelaMao() {
 
     if (elAreaOrc) elAreaOrc.style.display = "block";
     if (elBlocoRes) elBlocoRes.style.display = "block";
-}
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-    let words = text.split(' '); let line = ''; let currentY = y;
-    for (let n = 0; n < words.length; n++) {
-        let testLine = line + words[n] + ' ';
-        let metrics = ctx.measureText(testLine);
-        if (metrics.width > maxWidth && n > 0) {
-            ctx.fillText(line, x, currentY);
-            line = words[n] + ' '; currentY += lineHeight;
-        } else { line = testLine; }
-    }
-    ctx.fillText(line, x, currentY);
-    return currentY + lineHeight;
 }
 function exportarOrcamentoGenerico(config) {
     const elNome = document.getElementById("nomeCliente_" + config.sufixo);
@@ -1520,7 +1513,7 @@ function exportarOrcamentoGenerico(config) {
         alert("Erro: Nome e Telefone do cliente são obrigatórios!"); 
         return; 
     }
-    
+
     const dadosComerciais = config.funcaoCalculo();
     const dataHoje = new Date();
     const dataValidade = new Date();
@@ -1556,7 +1549,6 @@ function exportarOrcamentoGenerico(config) {
     ctx.fillStyle = "#333333"; ctx.font = "12px Arial";
     ctx.fillText("Nome / Razão Social: " + nome, 50, 185); 
     ctx.fillText("Telefone: " + telFormulario, 50, 203);
-    
     desenharCaixaPdf(ctx, 35, 235, 530, 105, "Especificações Técnicas do Pedido");
     ctx.fillStyle = "#333333"; ctx.font = "bold 11px Arial"; ctx.fillText(config.labelModelo, 50, 270); ctx.font = "11px Arial";
     
@@ -1591,7 +1583,6 @@ function exportarOrcamentoGenerico(config) {
         if (i < condicoes.length - 1) startY = wrapText(ctx, texto, 45, startY, maxTextWidth, lineSpacing);
         else wrapText(ctx, texto, 45, startY, maxTextWidth, lineSpacing);
     });
-
     ctx.strokeStyle = "#dddddd"; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(35, 635); ctx.lineTo(565, 635); ctx.stroke();
     ctx.textAlign = "center";
     let nomeAssinaturaVendedor = vendedor || 'Equipe Comercial Comvil';
@@ -1613,7 +1604,7 @@ function exportarOrcamentoGenerico(config) {
             dataUrl = canvas.toDataURL("image/jpeg", 0.98);
         } catch(e) {
             novaAba.close();
-            alert("Erro ao exportar: o canvas foi contaminado por uma imagem externa.\nVerifique se o logotipo da empresa foi carregado via upload (não por caminho direto).");
+            alert("Erro ao exportar: o canvas foi contaminado por uma imagem externa.\nVerifique se o logotipo da empresa foi carregado via upload.");
             return;
         }
         const nomeArquivo = `Orcamento_${config.prefixoArquivo}_${numeroFinal}_${nome.replace(/\s+/g, '_')}.jpg`;
@@ -1648,7 +1639,6 @@ function exportarOrcamentoGenerico(config) {
         novaAba.document.close();
     }
 }
-
 function abrirImagemNovaAbaSacola() {
     exportarOrcamentoGenerico({
         sufixo: "sacola", tituloProposta: "PROPOSTA COMERCIAL DE EMBALAGENS", prefixoArquivo: "Sacola",
@@ -1683,6 +1673,20 @@ function abrirImagemNovaAbaMao() {
     });
 }
 
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    let words = text.split(' '); let line = ''; let currentY = y;
+    for (let n = 0; n < words.length; n++) {
+        let testLine = line + words[n] + ' ';
+        let metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+            ctx.fillText(line, x, currentY);
+            line = words[n] + ' '; currentY += lineHeight;
+        } else { line = testLine; }
+    }
+    ctx.fillText(line, x, currentY);
+    return currentY + lineHeight;
+}
+
 function desenharCaixaPdf(ctx, x, y, w, h, titulo) {
     ctx.fillStyle = "#fafafa"; ctx.fillRect(x, y, w, h);
     ctx.strokeStyle = "#dddddd"; ctx.lineWidth = 1; ctx.strokeRect(x, y, w, h);
@@ -1690,6 +1694,7 @@ function desenharCaixaPdf(ctx, x, y, w, h, titulo) {
     ctx.fillText(titulo.toUpperCase(), x + 15, y + 18);
     ctx.strokeStyle = "#0056b3"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h); ctx.stroke();
 }
+
 /* ==========================================================================
    LÓGICA E MOTOR GRÁFICO DO MOCKUP INTERATIVO (CANVAS)
    ========================================================================== */
@@ -1722,7 +1727,6 @@ const mostruarioCordao = [
 
 imgEmpresa.onload = function() { logoEmpresaPronta = true; };
 imgEmpresa.src = 'logo-empresa.png';
-
 function renderizarGradeCordoes() {
     const elGrid = document.getElementById('cordaoGrid');
     if(!elGrid) return;
@@ -1760,7 +1764,6 @@ function criarCamadaColorida(imgMascara, corHex) {
     }
     return buffer;
 }
-
 /* ---------- SISTEMA DE ZONA UV ---------- */
 function pontoDaZona(u, v) {
     if (!zonaImpressao) return { x: 0, y: 0 };
@@ -1771,6 +1774,7 @@ function pontoDaZona(u, v) {
         y: lerp(lerp(tl.y, tr.y, u), lerp(bl.y, br.y, u), v)
     };
 }
+
 function canvasParaUV(cx, cy) {
     let u = 0.5, v = 0.5;
     for (let i = 0; i < 10; i++) {
@@ -1829,7 +1833,6 @@ function computarCantosLogo() {
         return pontoDaZona(u + rx / Wpx, v + ry / Hpx);
     });
 }
-
 function detectarZonaDeImpressao() {
     if (!imgFrente.complete || imgFrente.naturalWidth === 0) return null;
     const W = imgFrente.naturalWidth, H = imgFrente.naturalHeight;
@@ -1879,6 +1882,7 @@ function detectarZonaDeImpressao() {
         return null;
     }
 }
+
 function zonaFallbackPorModelo() {
     const elModelo = document.getElementById('modelo');
     const horizontal = elModelo && elModelo.value === 'horizontal';
@@ -1933,7 +1937,6 @@ function desenharGridPerspectiva(ctx) {
     ctx.closePath(); ctx.stroke();
     ctx.restore();
 }
-
 function desenharTrianguloPerspectiva(ctx, img, x0,y0, x1,y1, x2,y2, u0,v0, u1,v1, u2,v2) {
     const denom = (u0*(v1-v2) + u1*(v2-v0) + u2*(v0-v1));
     if (Math.abs(denom) < 1e-10) return;
@@ -2001,7 +2004,6 @@ function processarETingirMockup(incluirRodape = false) {
         const camadaLateral = criarCamadaColorida(imgLateral, corFinalLateral);
         ctxRef.drawImage(camadaLateral, 0, 0);
     }
-
     if (!incluirRodape && zonaImpressao) {
         desenharGridPerspectiva(ctxRef);
     }
@@ -2065,6 +2067,7 @@ function processarETingirMockup(incluirRodape = false) {
         ctxRef.restore();
     }
 }
+
 function resetarPosicaoLogoPadrao() {
     logoUV = { u: 0.5, v: 0.5 };
 }
@@ -2084,7 +2087,9 @@ function resetarCanvas() {
     if (btnDownload) btnDownload.disabled = true;
     processarETingirMockup(false);
 }
-
+/* ==========================================================================
+   CORREÇÃO DE SINTAXE: MOTOR DE ARRASTO E CARREGAMENTO DO MOCKUP
+   ========================================================================== */
 function carregarArquivosDoServidor() {
     const elModelo = document.getElementById('modelo');
     if (!elModelo) return;
@@ -2152,9 +2157,7 @@ function pontoNoPoly(px, py, pts) {
     }
     return inside;
 }
-// ==========================================================================
-// CAPTURA INTERATIVA DO MOUSE COM MATRIZ CORRIGIDA
-// ==========================================================================
+
 if (canvasRef) {
     canvasRef.addEventListener('pointerdown', function(e) {
         if (!logoCarregada || !zonaImpressao) return;
@@ -2162,7 +2165,7 @@ if (canvasRef) {
         const cantos = computarCantosLogo();
         if (!cantos || cantos.length < 4) return;
         
-        // CORREÇÃO ABSOLUTA DA MATRIZ INDEXADA DOS 4 VÉRTICES (TL, TR, BR, BL)
+        // CORREÇÃO: Mapeia corretamente os 4 cantos distintos da imagem (TL, TR, BR, BL)
         const poly = [cantos[0], cantos[1], cantos[3], cantos[2]];
         
         if (pontoNoPoly(mouse.x, mouse.y, poly)) {
@@ -2249,12 +2252,10 @@ if (elLogoZoom) elLogoZoom.addEventListener('input', () => { mockupGeradoComRoda
 const elLogoGiro = document.getElementById('logo-giro');
 if (elLogoGiro) elLogoGiro.addEventListener('input', () => { mockupGeradoComRodape = false; if (btnDownloadLayout) btnDownloadLayout.disabled = true; processarETingirMockup(false); });
 if (elModelo) elModelo.addEventListener('change', carregarArquivosDoServidor);
-
 window.addEventListener('DOMContentLoaded', () => { 
     renderizarGradeCordoes(); 
     carregarArquivosDoServidor(); 
 });
-
 // FUNÇÃO GLOBAL DE TROCA DE ABAS SEGUIDA DE TRAVA DE SEGURANÇA POR SENHA PARA O ADMIN
 function switchTab(e, idConteudo) {
     if (idConteudo === 'tab-admin') {
