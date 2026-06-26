@@ -201,17 +201,17 @@
     }
   },
   "valoresEnobrecimento": {
-    "plastBrilhoM2": 0.19,
+    "plastBrilhoM2": 1.05,
     "plastBrilhoFixo": 50,
-    "plastFoscaM2": 0.19,
+    "plastFoscaM2": 1.05,
     "plastFoscaFixo": 50,
-    "hotstampM2": 0.14,
-    "hotstampFixo": 300,
-    "boppBrilhoM2": 0.22,
+    "hotstampM2": 0.2,
+    "hotstampFixo": 126,
+    "boppBrilhoM2": 1.35,
     "boppBrilhoFixo": 50,
-    "boppFoscaM2": 0.22,
+    "boppFoscaM2": 1.35,
     "boppFoscaFixo": 50,
-    "vernizM2": 0.18,
-    "vernizFixo": 190
+    "vernizM2": 0.2,
+    "vernizFixo": 200
   }
 }
