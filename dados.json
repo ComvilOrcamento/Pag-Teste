@@ -205,13 +205,13 @@
     "plastBrilhoFixo": 50,
     "plastFoscaM2": 1.05,
     "plastFoscaFixo": 50,
-    "hotstampM2": 1,
+    "hotstampM2": 0,8
     "hotstampFixo": 130,
     "boppBrilhoM2": 1.35,
     "boppBrilhoFixo": 50,
     "boppFoscaM2": 1.35,
     "boppFoscaFixo": 50,
-    "vernizM2": 1,
+    "vernizM2": 0,8
     "vernizFixo": 180
   }
 }
